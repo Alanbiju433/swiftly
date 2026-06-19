@@ -675,8 +675,10 @@ def api_me():
         result['store'] = dict(store) if store else None
     return jsonify(result)
 
+# Initialize DB on startup (runs whether gunicorn or python app.py)
+init_db()
+
 if __name__ == '__main__':
-    init_db()
     print("\nSwiftly is running!")
     print("   http://127.0.0.1:5000/\n")
     app.run(debug=False, port=5000, use_reloader=False)
