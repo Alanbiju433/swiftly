@@ -12,84 +12,99 @@ body{font-family:'Inter',sans-serif;background:#f4f5f7;color:var(--dark)}
 button{cursor:pointer;font-family:inherit;border:none;outline:none}
 
 /* HEADER */
-.header{background:#1a1a1a;color:#fff;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
-.logo{font-size:18px;font-weight:800;color:var(--brand)}
-.header-right{display:flex;align-items:center;gap:12px}
-.driver-name{font-size:13px;color:#ccc}
-.toggle-wrap{display:flex;align-items:center;gap:8px}
-.toggle-label{font-size:13px;font-weight:600}
-.toggle{width:48px;height:26px;background:#555;border-radius:50px;position:relative;cursor:pointer;transition:background .3s}
+.header{background:#1a1a1a;color:#fff;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;gap:10px}
+.logo{font-size:17px;font-weight:800;color:var(--brand);white-space:nowrap}
+.header-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.driver-name{font-size:12px;color:#ccc}
+.toggle-wrap{display:flex;align-items:center;gap:8px;cursor:pointer}
+.toggle-label{font-size:12px;font-weight:600;color:#ccc;min-width:44px}
+.toggle{width:46px;height:25px;background:#555;border-radius:50px;position:relative;transition:background .3s;flex-shrink:0}
 .toggle.on{background:var(--brand)}
-.toggle::after{content:'';position:absolute;width:20px;height:20px;border-radius:50%;background:#fff;top:3px;left:3px;transition:transform .3s}
-.toggle.on::after{transform:translateX(22px)}
-.btn-logout{padding:7px 14px;border-radius:8px;background:#333;color:#fff;font-size:12px;font-weight:600;text-decoration:none}
+.toggle::after{content:'';position:absolute;width:19px;height:19px;border-radius:50%;background:#fff;top:3px;left:3px;transition:transform .3s}
+.toggle.on::after{transform:translateX(21px)}
+.lang-bar{display:flex;gap:3px}
+.lang-btn{background:none;border:none;cursor:pointer;font-size:10px;color:#888;padding:3px 5px;border-radius:4px;font-weight:600}
+.lang-btn.active,.lang-btn:hover{background:#333;color:#fff}
+.btn-logout{padding:6px 12px;border-radius:7px;background:#333;color:#fff;font-size:11px;font-weight:600;text-decoration:none;white-space:nowrap}
 
 /* TABS */
 .tabs{display:flex;background:#fff;border-bottom:2px solid var(--border)}
-.tab{flex:1;padding:14px;text-align:center;font-size:14px;font-weight:600;color:var(--mid);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s}
+.tab{flex:1;padding:13px 8px;text-align:center;font-size:13px;font-weight:600;color:var(--mid);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s}
 .tab.active{color:var(--brand);border-bottom-color:var(--brand)}
 
 /* MAIN */
-.main{max-width:600px;margin:0 auto;padding:20px 16px}
+.main{max-width:600px;margin:0 auto;padding:18px 14px}
 
-/* STATUS CARDS */
-.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
-.scard{background:#fff;border-radius:12px;padding:16px;text-align:center;box-shadow:var(--shadow)}
-.scard .val{font-size:24px;font-weight:800;color:var(--brand)}
-.scard .lbl{font-size:11px;color:var(--mid);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.scard{background:#fff;border-radius:12px;padding:14px;text-align:center;box-shadow:var(--shadow)}
+.scard .val{font-size:22px;font-weight:800;color:var(--brand)}
+.scard .lbl{font-size:10px;color:var(--mid);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:3px}
 
 /* STATUS BANNER */
-.status-banner{border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px;font-size:15px;font-weight:600}
+.status-banner{border-radius:12px;padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600}
 .banner-offline{background:#fff3f3;color:#e74c3c;border:1.5px solid #f5c6c6}
 .banner-available{background:#f0faf5;color:var(--brand);border:1.5px solid #a8e6c7}
 .banner-busy{background:#fff9f0;color:#f39c12;border:1.5px solid #f9e0a0}
 
 /* ORDER CARDS */
-.section-title{font-size:15px;font-weight:700;margin-bottom:12px}
-.order-list{display:flex;flex-direction:column;gap:12px}
-.order-card{background:#fff;border-radius:14px;padding:18px;box-shadow:var(--shadow);border-left:4px solid var(--border)}
+.section-title{font-size:14px;font-weight:700;margin-bottom:10px}
+.order-list{display:flex;flex-direction:column;gap:10px}
+.order-card{background:#fff;border-radius:14px;padding:16px;box-shadow:var(--shadow);border-left:4px solid var(--border)}
 .order-card.active{border-left-color:var(--brand)}
 .order-card.pending{border-left-color:#3498db}
-.oc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.oc-id{font-size:13px;font-weight:700;color:var(--mid)}
-.oc-status{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:700}
+.oc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.oc-id{font-size:12px;font-weight:700;color:var(--mid)}
+.oc-status{font-size:10px;padding:3px 9px;border-radius:20px;font-weight:700}
 .s-accepting{background:#dbeafe;color:#1d4ed8}
 .s-active{background:#d5f5e3;color:var(--brand)}
 .s-delivered{background:#eee;color:#888}
 .s-cancelled{background:#fde8e8;color:#e74c3c}
-.oc-store{font-size:14px;font-weight:600;margin-bottom:4px}
-.oc-addr{font-size:13px;color:var(--mid);display:flex;align-items:center;gap:4px;margin-bottom:8px}
-.oc-items{font-size:12px;color:#888;margin-bottom:10px;line-height:1.5}
-.oc-total{font-size:14px;font-weight:700;margin-bottom:12px}
-.oc-actions{display:flex;gap:8px;flex-wrap:wrap}
-.btn-act{padding:9px 16px;border-radius:8px;font-size:13px;font-weight:700;flex:1;min-width:100px;text-align:center}
+.oc-store{font-size:13px;font-weight:700;margin-bottom:3px}
+.oc-addr{font-size:12px;color:var(--mid);margin-bottom:7px;display:flex;align-items:flex-start;gap:4px}
+.oc-items{font-size:11px;color:#888;margin-bottom:8px;line-height:1.5}
+.oc-total{font-size:13px;font-weight:700;margin-bottom:10px}
+.oc-actions{display:flex;gap:7px;flex-wrap:wrap}
+.btn-act{padding:9px 14px;border-radius:8px;font-size:12px;font-weight:700;flex:1;min-width:90px;text-align:center}
 .btn-accept{background:var(--brand);color:#fff}
 .btn-decline{background:var(--light);color:var(--mid)}
 .btn-maps{background:#1a1a1a;color:#fff;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:4px}
 .btn-deliver{background:var(--brand);color:#fff}
 .btn-deliver:disabled{background:#ccc;cursor:not-allowed}
-
-/* GPS NOTICE */
-.gps-notice{font-size:12px;color:#888;margin-top:6px;text-align:center;min-height:16px}
+.gps-notice{font-size:11px;color:#888;margin-top:5px;text-align:center;min-height:14px}
 
 /* EMPTY STATE */
-.empty-state{text-align:center;padding:48px 20px;color:#aaa}
-.empty-state .icon{font-size:52px;margin-bottom:12px}
+.empty-state{text-align:center;padding:44px 20px;color:#aaa}
+.empty-state .icon{font-size:48px;margin-bottom:10px}
+.empty-state p{font-size:13px}
 
 /* HISTORY */
-.history-item{background:#fff;border-radius:12px;padding:14px;box-shadow:var(--shadow);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
-.history-left .hi-id{font-size:13px;font-weight:700;color:var(--mid)}
-.history-left .hi-addr{font-size:13px;color:var(--dark)}
-.history-left .hi-time{font-size:11px;color:#aaa;margin-top:2px}
+.history-item{background:#fff;border-radius:12px;padding:13px;box-shadow:var(--shadow);margin-bottom:9px;display:flex;justify-content:space-between;align-items:center}
+.history-left .hi-id{font-size:12px;font-weight:700;color:var(--mid)}
+.history-left .hi-addr{font-size:12px;color:var(--dark)}
+.history-left .hi-time{font-size:10px;color:#aaa;margin-top:2px}
 .history-right{text-align:right}
-.history-right .hi-earn{font-size:16px;font-weight:700;color:var(--brand)}
-.status-tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:700}
+.history-right .hi-earn{font-size:15px;font-weight:700;color:var(--brand)}
+.status-tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:20px;font-weight:700}
 .tag-delivered{background:#d5f5e3;color:var(--brand)}
 .tag-cancelled{background:#fde8e8;color:#e74c3c}
 
+/* REVIEWS */
+.review-card{background:#fff;border-radius:12px;padding:14px;box-shadow:var(--shadow);margin-bottom:9px}
+.review-stars{font-size:16px;margin-bottom:4px}
+.review-comment{font-size:12px;color:var(--mid);font-style:italic;line-height:1.5}
+.review-meta{font-size:10px;color:#aaa;margin-top:5px}
+.rating-avg{background:#fff;border-radius:12px;padding:16px;box-shadow:var(--shadow);margin-bottom:14px;text-align:center}
+.rating-avg .big{font-size:40px;font-weight:800;color:var(--brand)}
+.rating-avg .stars{font-size:22px;margin-bottom:4px}
+.rating-avg .cnt{font-size:12px;color:#888}
+
 /* TOAST */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:#1a1a1a;color:#fff;padding:12px 24px;border-radius:50px;font-size:14px;font-weight:600;z-index:600;transition:transform .3s ease;pointer-events:none}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:#1a1a1a;color:#fff;padding:11px 22px;border-radius:50px;font-size:13px;font-weight:600;z-index:600;transition:transform .3s ease;pointer-events:none}
 .toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ERROR BANNER */
+.err-banner{background:#fdecea;border:1px solid #f5c6c6;border-radius:10px;padding:10px 14px;font-size:12px;color:#c0392b;margin-bottom:14px;display:none}
 </style>
 </head>
 <body>
@@ -97,120 +112,177 @@ button{cursor:pointer;font-family:inherit;border:none;outline:none}
 <div class="header">
   <div class="logo">⚡ Swiftly Driver</div>
   <div class="header-right">
-    <span class="driver-name">{{ user.name }}</span>
-    <div class="toggle-wrap">
-      <div class="toggle" id="onlineToggle" onclick="toggleOnline()"></div>
-      <span class="toggle-label" id="onlineLabel">Offline</span>
+    <div class="lang-bar">
+      <button class="lang-btn active" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('es')">ES</button>
+      <button class="lang-btn" onclick="setLang('fr')">FR</button>
+      <button class="lang-btn" onclick="setLang('ar')">AR</button>
+      <button class="lang-btn" onclick="setLang('hi')">HI</button>
+      <button class="lang-btn" onclick="setLang('ml')">ML</button>
     </div>
-    <a href="/logout" class="btn-logout">Logout</a>
+    <span class="driver-name">{{ user.name }}</span>
+    <div class="toggle-wrap" onclick="toggleOnline()">
+      <div class="toggle" id="onlineToggle"></div>
+      <span class="toggle-label" id="onlineLabel" data-i18n="offline">Offline</span>
+    </div>
+    <a href="/logout" class="btn-logout" data-i18n="logout">Logout</a>
   </div>
 </div>
 
 <div class="tabs">
-  <div class="tab active" onclick="showTab('active',this)">Active Delivery</div>
-  <div class="tab" onclick="showTab('pending',this)">Available Orders</div>
-  <div class="tab" onclick="showTab('history',this)">History</div>
+  <div class="tab active" onclick="showTab('active',this)" data-i18n="active_tab">Active Delivery</div>
+  <div class="tab" onclick="showTab('pending',this)" data-i18n="available_tab">Available Orders</div>
+  <div class="tab" onclick="showTab('history',this)" data-i18n="history_tab">History</div>
+  <div class="tab" onclick="showTab('reviews',this)" data-i18n="reviews_tab">Reviews</div>
 </div>
 
 <div class="main">
-  <!-- STATS -->
   <div class="stats-row">
-    <div class="scard"><div class="val" id="statEarnings">£0</div><div class="lbl">Earned</div></div>
-    <div class="scard"><div class="val" id="statDeliveries">0</div><div class="lbl">Deliveries</div></div>
-    <div class="scard"><div class="val" id="statRating">5.0</div><div class="lbl">Rating ⭐</div></div>
+    <div class="scard"><div class="val" id="statEarnings">£0</div><div class="lbl" data-i18n="earned">Earned</div></div>
+    <div class="scard"><div class="val" id="statDeliveries">0</div><div class="lbl" data-i18n="deliveries">Deliveries</div></div>
+    <div class="scard"><div class="val" id="statRating">5.0</div><div class="lbl" data-i18n="rating">Rating ⭐</div></div>
   </div>
 
-  <!-- STATUS BANNER -->
+  <div class="err-banner" id="errBanner"></div>
+
   <div class="status-banner banner-offline" id="statusBanner">
-    <span>🔴</span> You are offline. Toggle above to go online.
+    <span>🔴</span> <span data-i18n="go_online_msg">You are offline. Tap the toggle above to go online.</span>
   </div>
 
   <!-- ACTIVE TAB -->
   <div id="tab-active">
-    <div class="section-title">Your active delivery</div>
+    <div class="section-title" data-i18n="your_delivery">Your active delivery</div>
     <div class="order-list" id="activeList">
-      <div class="empty-state"><div class="icon">🛵</div><p>No active delivery</p></div>
+      <div class="empty-state"><div class="icon">🛵</div><p data-i18n="no_active">No active delivery</p></div>
     </div>
   </div>
 
   <!-- PENDING TAB -->
   <div id="tab-pending" style="display:none">
-    <div class="section-title">Available orders to pick up</div>
+    <div class="section-title" data-i18n="available_orders">Available orders to pick up</div>
     <div class="order-list" id="pendingList">
-      <div class="empty-state"><div class="icon">📋</div><p>No orders available</p></div>
+      <div class="empty-state"><div class="icon">📋</div><p data-i18n="no_available">No orders available</p></div>
     </div>
   </div>
 
   <!-- HISTORY TAB -->
   <div id="tab-history" style="display:none">
-    <div class="section-title">Delivery history</div>
+    <div class="section-title" data-i18n="delivery_history">Delivery history</div>
     <div id="historyList">
-      <div class="empty-state"><div class="icon">📦</div><p>No deliveries yet</p></div>
+      <div class="empty-state"><div class="icon">📦</div><p data-i18n="no_history">No deliveries yet</p></div>
     </div>
+  </div>
+
+  <!-- REVIEWS TAB -->
+  <div id="tab-reviews" style="display:none">
+    <div class="section-title" data-i18n="my_reviews">My Reviews</div>
+    <div id="reviewsSummary"></div>
+    <div id="reviewsList"></div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-let isOnline=false, myOrders=[], pendingOrders=[], gpsPosition=null, pollInterval=null;
+const LANGS={
+  en:{offline:'Offline',online:'Online',logout:'Logout',active_tab:'Active Delivery',available_tab:'Available Orders',history_tab:'History',reviews_tab:'Reviews',earned:'Earned',deliveries:'Deliveries',rating:'Rating',go_online_msg:'You are offline. Tap toggle to go online.',your_delivery:'Your active delivery',no_active:'No active delivery',available_orders:'Available orders',no_available:'No orders available',delivery_history:'Delivery history',no_history:'No deliveries yet',my_reviews:'My Reviews',no_reviews:'No reviews yet',navigate:'Navigate',mark_delivered:'Mark Delivered',accept:'Accept',decline:'Decline',online_msg:'You are now online',offline_msg:'You are now offline',waiting:'Online - waiting for an order',busy:'On delivery - Order',no_profile:'No driver profile found.',gps_acquiring:'Acquiring GPS...',gps_close:'You are at the location',gps_far:'km away (need 0.5 km)'},
+  es:{offline:'Desconectado',online:'En linea',logout:'Salir',active_tab:'Entrega Activa',available_tab:'Disponibles',history_tab:'Historial',reviews_tab:'Resenas',earned:'Ganado',deliveries:'Entregas',rating:'Calif',go_online_msg:'Desconectado. Toca para conectarte.',your_delivery:'Tu entrega activa',no_active:'Sin entrega activa',available_orders:'Pedidos disponibles',no_available:'Sin pedidos',delivery_history:'Historial',no_history:'Sin entregas',my_reviews:'Mis Resenas',no_reviews:'Sin resenas',navigate:'Navegar',mark_delivered:'Entregado',accept:'Aceptar',decline:'Rechazar',online_msg:'Estas en linea',offline_msg:'Estas desconectado',waiting:'En linea - esperando',busy:'En entrega',no_profile:'Sin perfil conductor.',gps_acquiring:'Obteniendo GPS...',gps_close:'Estas en el lugar',gps_far:'km (necesitas 0.5)'},
+  fr:{offline:'Hors ligne',online:'En ligne',logout:'Deconnexion',active_tab:'Livraison active',available_tab:'Disponibles',history_tab:'Historique',reviews_tab:'Avis',earned:'Gagne',deliveries:'Livraisons',rating:'Note',go_online_msg:'Hors ligne. Appuyez pour se connecter.',your_delivery:'Livraison active',no_active:'Aucune livraison',available_orders:'Commandes disponibles',no_available:'Aucune commande',delivery_history:'Historique',no_history:'Aucune livraison',my_reviews:'Mes Avis',no_reviews:'Aucun avis',navigate:'Naviguer',mark_delivered:'Livre',accept:'Accepter',decline:'Refuser',online_msg:'Vous etes en ligne',offline_msg:'Vous etes hors ligne',waiting:'En ligne - en attente',busy:'En livraison',no_profile:'Aucun profil conducteur.',gps_acquiring:'Acquisition GPS...',gps_close:'Vous etes sur place',gps_far:'km (besoin 0.5)'},
+  ar:{offline:'Offline',online:'Online',logout:'Logout',active_tab:'Active',available_tab:'Available',history_tab:'History',reviews_tab:'Reviews',earned:'Earned',deliveries:'Deliveries',rating:'Rating',go_online_msg:'You are offline.',your_delivery:'Active delivery',no_active:'No active delivery',available_orders:'Available orders',no_available:'No orders',delivery_history:'History',no_history:'No deliveries',my_reviews:'My Reviews',no_reviews:'No reviews',navigate:'Navigate',mark_delivered:'Delivered',accept:'Accept',decline:'Decline',online_msg:'You are online',offline_msg:'You are offline',waiting:'Online - waiting',busy:'On delivery',no_profile:'No driver profile.',gps_acquiring:'Getting GPS...',gps_close:'At location',gps_far:'km away'},
+  hi:{offline:'Offline',online:'Online',logout:'Logout',active_tab:'Active',available_tab:'Available',history_tab:'History',reviews_tab:'Reviews',earned:'Earned',deliveries:'Deliveries',rating:'Rating',go_online_msg:'Offline. Toggle to go online.',your_delivery:'Active delivery',no_active:'No active delivery',available_orders:'Available orders',no_available:'No orders',delivery_history:'History',no_history:'No deliveries',my_reviews:'My Reviews',no_reviews:'No reviews',navigate:'Navigate',mark_delivered:'Delivered',accept:'Accept',decline:'Decline',online_msg:'You are online',offline_msg:'You are offline',waiting:'Online - waiting',busy:'On delivery',no_profile:'No driver profile.',gps_acquiring:'Getting GPS...',gps_close:'At location',gps_far:'km away'},
+  ml:{offline:'Offline',online:'Online',logout:'Logout',active_tab:'Active',available_tab:'Available',history_tab:'History',reviews_tab:'Reviews',earned:'Earned',deliveries:'Deliveries',rating:'Rating',go_online_msg:'Offline. Toggle to go online.',your_delivery:'Active delivery',no_active:'No active delivery',available_orders:'Available orders',no_available:'No orders',delivery_history:'History',no_history:'No deliveries',my_reviews:'My Reviews',no_reviews:'No reviews',navigate:'Navigate',mark_delivered:'Delivered',accept:'Accept',decline:'Decline',online_msg:'You are online',offline_msg:'You are offline',waiting:'Online - waiting',busy:'On delivery',no_profile:'No driver profile.',gps_acquiring:'Getting GPS...',gps_close:'At location',gps_far:'km away'}
+};
+let curLang=localStorage.getItem('sw_lang')||'en';
+function tr(k){return (LANGS[curLang]||LANGS.en)[k]||k;}
+function applyLang(){
+  const t=LANGS[curLang]||LANGS.en;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(t[k])el.textContent=t[k];});
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+  const ab=document.querySelector('.lang-btn[onclick="setLang(\''+curLang+'\')"]');
+  if(ab) ab.classList.add('active');
+}
+function setLang(l){curLang=l;localStorage.setItem('sw_lang',l);applyLang();}
 
-// ── INIT ──────────────────────────────────────────────────────────────────────
+let isOnline=false, myOrders=[], pendingOrders=[], gpsPosition=null, pollInterval=null;
+let toggleLocked=false;
+
 async function init(){
+  applyLang();
   await loadDriverStatus();
   startPolling();
   watchGPS();
 }
 
+function showErr(msg){
+  const el=document.getElementById('errBanner');
+  if(!el) return;
+  el.textContent=msg; el.style.display='block';
+  setTimeout(()=>el.style.display='none',6000);
+}
+
 async function loadDriverStatus(){
   try{
     const r=await fetch('/api/drivers/me');
+    if(!r.ok){
+      if(r.status===401) showErr('Session expired - please refresh.');
+      else if(r.status===404) showErr(tr('no_profile'));
+      return;
+    }
     const d=await r.json();
-    isOnline=d.status!=='offline';
+    if(d.error){showErr(d.error);return;}
+    isOnline=d.status==='available'||d.status==='busy';
     setOnlineUI(isOnline);
-    document.getElementById('statEarnings').textContent=`£${(d.earnings||0).toFixed(2)}`;
+    document.getElementById('statEarnings').textContent='\u00a3'+(d.earnings||0).toFixed(2);
     document.getElementById('statDeliveries').textContent=d.total_deliveries||0;
     document.getElementById('statRating').textContent=(d.rating||5).toFixed(1);
-  } catch{}
+  } catch(e){showErr('Could not connect to server.');}
 }
 
-// ── ONLINE TOGGLE ─────────────────────────────────────────────────────────────
 async function toggleOnline(){
-  isOnline=!isOnline;
-  setOnlineUI(isOnline);
-  await fetch('/api/drivers/me',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({is_online:isOnline})});
-  if(isOnline) showToast('✅ You are now online');
-  else showToast('🔴 You are now offline');
+  if(toggleLocked) return;
+  toggleLocked=true;
+  const newState=!isOnline;
+  isOnline=newState;
+  setOnlineUI(newState);
+  try{
+    const r=await fetch('/api/drivers/me',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({is_online:newState})});
+    if(!r.ok){
+      const err=await r.json().catch(()=>({}));
+      isOnline=!newState; setOnlineUI(isOnline);
+      if(r.status===401) showErr('Session expired. Please refresh.');
+      else if(r.status===404) showErr(tr('no_profile'));
+      else showErr(err.error||'Could not update status');
+      toggleLocked=false; return;
+    }
+    const d=await r.json();
+    if(d.status){isOnline=d.status==='available'||d.status==='busy';setOnlineUI(isOnline);}
+    showToast(isOnline?('OK '+tr('online_msg')):('🔴 '+tr('offline_msg')));
+    if(isOnline) loadPendingOrders();
+  } catch{isOnline=!newState;setOnlineUI(isOnline);showErr('Network error.');}
+  toggleLocked=false;
 }
 
 function setOnlineUI(on){
   const toggle=document.getElementById('onlineToggle');
   const label=document.getElementById('onlineLabel');
+  if(toggle) toggle.className='toggle'+(on?' on':'');
+  if(label) label.textContent=on?tr('online'):tr('offline');
   const banner=document.getElementById('statusBanner');
-  toggle.className='toggle'+(on?' on':'');
-  label.textContent=on?'Online':'Offline';
-  if(on){
-    banner.className='status-banner banner-available';
-    banner.innerHTML='<span>🟢</span> You are online — ready for deliveries';
-  } else {
-    banner.className='status-banner banner-offline';
-    banner.innerHTML='<span>🔴</span> You are offline. Toggle above to go online.';
-  }
+  if(banner&&!on){banner.className='status-banner banner-offline';banner.innerHTML='<span>🔴</span> <span>'+tr('go_online_msg')+'</span>';}
 }
 
-// ── POLLING ───────────────────────────────────────────────────────────────────
 function startPolling(){
   loadMyOrders();
-  loadPendingOrders();
-  pollInterval=setInterval(()=>{loadMyOrders();loadPendingOrders();},8000);
+  if(isOnline) loadPendingOrders();
+  pollInterval=setInterval(()=>{loadMyOrders();if(isOnline)loadPendingOrders();},8000);
 }
 
 async function loadMyOrders(){
   try{
     const r=await fetch('/api/drivers/me/orders');
+    if(!r.ok) return;
     myOrders=await r.json();
-    renderActive();
-    renderHistory();
+    renderActive(); renderHistory();
   } catch{}
 }
 
@@ -218,165 +290,148 @@ async function loadPendingOrders(){
   if(!isOnline) return;
   try{
     const r=await fetch('/api/drivers/pending-orders');
+    if(!r.ok) return;
     pendingOrders=await r.json();
     renderPending();
   } catch{}
 }
 
-// ── RENDER ACTIVE ─────────────────────────────────────────────────────────────
 function renderActive(){
   const active=myOrders.filter(o=>!['delivered','cancelled'].includes(o.status));
   const el=document.getElementById('activeList');
+  const banner=document.getElementById('statusBanner');
   if(!active.length){
-    el.innerHTML='<div class="empty-state"><div class="icon">🛵</div><p>No active delivery right now</p></div>';
-    // Update banner if we have no active but we're online
-    if(isOnline){
-      document.getElementById('statusBanner').className='status-banner banner-available';
-      document.getElementById('statusBanner').innerHTML='<span>🟢</span> You are online — waiting for an order';
-    }
+    el.innerHTML='<div class="empty-state"><div class="icon">🛵</div><p>'+tr('no_active')+'</p></div>';
+    if(isOnline&&banner){banner.className='status-banner banner-available';banner.innerHTML='<span>🟢</span> <span>'+tr('waiting')+'</span>';}
     return;
   }
-  const o=active[0]; // One active at a time
+  const o=active[0];
   const items=tryParseItems(o.items_json);
-  const mapsUrl=`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(o.customer_address||o.address||'')}`;
-
-  // GPS delivery button logic
-  const dist=gpsPosition?haversine(gpsPosition.lat,gpsPosition.lng,o.customerLat,o.customerLng):null;
-  const canDeliver=dist===null?false:dist<=0.5; // within 500m
-  const gpsNote=gpsPosition
-    ?(dist!==null?`📍 ${dist<0.1?'You are at the location':dist.toFixed(2)+' km away'} (need ≤ 0.5 km to mark delivered)`)
-    :'📍 Acquiring GPS...'
-  : '📍 GPS not available';
-
-  // Update busy banner
-  document.getElementById('statusBanner').className='status-banner banner-busy';
-  document.getElementById('statusBanner').innerHTML=`<span>🟡</span> On delivery — Order #${o.id}`;
-
-  el.innerHTML=`<div class="order-card active">
-    <div class="oc-top">
-      <span class="oc-id">Order #${o.id}</span>
-      <span class="oc-status s-active">${o.status.replace('_',' ')}</span>
-    </div>
-    <div class="oc-store">🏪 ${o.store_name||'Store'}</div>
-    <div class="oc-addr">📍 ${o.customer_address||o.address||'No address'}</div>
-    <div class="oc-items">${items.map(i=>`${i.qty}× ${i.name}`).join(' · ')||'—'}</div>
-    <div class="oc-total">£${(o.total||0).toFixed(2)} · ${o.customer_phone?`📞 ${o.customer_phone}`:''}</div>
-    <div class="oc-actions">
-      <a class="btn-act btn-maps" href="${mapsUrl}" target="_blank">🗺️ Navigate</a>
-      <button class="btn-act btn-deliver" id="deliverBtn" onclick="markDelivered(${o.id})" ${canDeliver?'':' disabled'}>Mark Delivered</button>
-    </div>
-    <div class="gps-notice" id="gpsNote">${gpsNote}</div>
-  </div>`;
+  const mapsUrl='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(o.customer_address||o.address||'');
+  const dist=gpsPosition&&o.customerLat?haversine(gpsPosition.lat,gpsPosition.lng,o.customerLat,o.customerLng):null;
+  const canDeliver=dist===null?true:dist<=0.5;
+  if(banner){banner.className='status-banner banner-busy';banner.innerHTML='<span>🟡</span> <span>'+tr('busy')+' #'+o.id+'</span>';}
+  el.innerHTML='<div class="order-card active">'
+    +'<div class="oc-top"><span class="oc-id">Order #'+o.id+'</span><span class="oc-status s-active">'+o.status.replace('_',' ')+'</span></div>'
+    +'<div class="oc-store">🏪 '+(o.store_name||'Store')+'</div>'
+    +'<div class="oc-addr">📍 '+(o.customer_address||o.address||'No address')+'</div>'
+    +'<div class="oc-items">'+(items.map(i=>i.qty+'x '+i.name).join(', ')||'—')+'</div>'
+    +'<div class="oc-total">\u00a3'+(o.total||0).toFixed(2)+(o.customer_phone?' 📞 '+o.customer_phone:'')+'</div>'
+    +'<div class="oc-actions">'
+    +'<a class="btn-act btn-maps" href="'+mapsUrl+'" target="_blank">🗺️ '+tr('navigate')+'</a>'
+    +'<button class="btn-act btn-deliver" id="deliverBtn" onclick="markDelivered('+o.id+')"'+(canDeliver?'':' disabled')+'>'+tr('mark_delivered')+'</button>'
+    +'</div></div>';
 }
 
-// ── RENDER PENDING ────────────────────────────────────────────────────────────
 function renderPending(){
   const el=document.getElementById('pendingList');
-  if(!isOnline){
-    el.innerHTML='<div class="empty-state"><div class="icon">🔴</div><p>Go online to see available orders</p></div>';
-    return;
-  }
-  if(!pendingOrders.length){
-    el.innerHTML='<div class="empty-state"><div class="icon">⏳</div><p>No orders available right now</p></div>';
-    return;
-  }
+  if(!isOnline){el.innerHTML='<div class="empty-state"><div class="icon">🔴</div><p>'+tr('go_online_msg')+'</p></div>';return;}
+  if(!pendingOrders.length){el.innerHTML='<div class="empty-state"><div class="icon">⏳</div><p>'+tr('no_available')+'</p></div>';return;}
   el.innerHTML=pendingOrders.map(o=>{
     const items=tryParseItems(o.items_json);
-    return `<div class="order-card pending">
-      <div class="oc-top">
-        <span class="oc-id">Order #${o.id}</span>
-        <span class="oc-status s-accepting">Available</span>
-      </div>
-      <div class="oc-store">🏪 ${o.store_name||'Store'}</div>
-      <div class="oc-addr">📍 ${o.customer_address||o.address||'No address'}</div>
-      <div class="oc-items">${items.map(i=>`${i.qty}× ${i.name}`).join(' · ')||'—'}</div>
-      <div class="oc-total">£${(o.total||0).toFixed(2)}</div>
-      <div class="oc-actions">
-        <button class="btn-act btn-decline" onclick="declineOrder(${o.id})">Decline</button>
-        <button class="btn-act btn-accept" onclick="acceptOrder(${o.id})">Accept →</button>
-      </div>
-    </div>`;
+    return '<div class="order-card pending">'
+      +'<div class="oc-top"><span class="oc-id">Order #'+o.id+'</span><span class="oc-status s-accepting">Available</span></div>'
+      +'<div class="oc-store">🏪 '+(o.store_name||'Store')+'</div>'
+      +'<div class="oc-addr">📍 '+(o.customer_address||o.address||'No address')+'</div>'
+      +'<div class="oc-items">'+(items.map(i=>i.qty+'x '+i.name).join(', ')||'—')+'</div>'
+      +'<div class="oc-total">\u00a3'+(o.total||0).toFixed(2)+'</div>'
+      +'<div class="oc-actions">'
+      +'<button class="btn-act btn-decline" onclick="declineOrder('+o.id+')">'+tr('decline')+'</button>'
+      +'<button class="btn-act btn-accept" onclick="acceptOrder('+o.id+')">'+tr('accept')+'</button>'
+      +'</div></div>';
   }).join('');
 }
 
-// ── RENDER HISTORY ────────────────────────────────────────────────────────────
 function renderHistory(){
   const done=myOrders.filter(o=>['delivered','cancelled'].includes(o.status));
   const el=document.getElementById('historyList');
-  if(!done.length){
-    el.innerHTML='<div class="empty-state"><div class="icon">📦</div><p>No deliveries yet</p></div>';
-    return;
-  }
-  el.innerHTML=done.map(o=>`
-    <div class="history-item">
-      <div class="history-left">
-        <div class="hi-id">Order #${o.id}</div>
-        <div class="hi-addr">${o.store_name||''} → ${(o.customer_address||o.address||'').substring(0,35)}</div>
-        <div class="hi-time">${o.created_at||''}</div>
-      </div>
-      <div class="history-right">
-        <div class="hi-earn">${o.status==='delivered'?'+£3.00':'—'}</div>
-        <span class="status-tag ${o.status==='delivered'?'tag-delivered':'tag-cancelled'}">${o.status}</span>
-      </div>
-    </div>`).join('');
+  if(!done.length){el.innerHTML='<div class="empty-state"><div class="icon">📦</div><p>'+tr('no_history')+'</p></div>';return;}
+  el.innerHTML=done.map(o=>'<div class="history-item">'
+    +'<div class="history-left"><div class="hi-id">Order #'+o.id+'</div>'
+    +'<div class="hi-addr">'+(o.store_name||'')+' to '+(o.customer_address||o.address||'').substring(0,35)+'</div>'
+    +'<div class="hi-time">'+(o.created_at||'')+'</div></div>'
+    +'<div class="history-right"><div class="hi-earn">'+(o.status==='delivered'?'+\u00a33.00':'—')+'</div>'
+    +'<span class="status-tag '+(o.status==='delivered'?'tag-delivered':'tag-cancelled')+'">'+o.status+'</span>'
+    +'</div></div>').join('');
 }
 
-// ── ACCEPT / DECLINE / DELIVER ────────────────────────────────────────────────
+async function loadReviews(){
+  try{
+    const r=await fetch('/api/driver/reviews');
+    if(!r.ok) return;
+    const reviews=await r.json();
+    renderReviews(reviews);
+  } catch{}
+}
+
+function renderReviews(reviews){
+  const summEl=document.getElementById('reviewsSummary');
+  const listEl=document.getElementById('reviewsList');
+  if(!reviews.length){
+    if(summEl) summEl.innerHTML='';
+    if(listEl) listEl.innerHTML='<div class="empty-state"><div class="icon">⭐</div><p>'+tr('no_reviews')+'</p></div>';
+    return;
+  }
+  const avg=reviews.reduce((s,r)=>s+(r.driver_rating||5),0)/reviews.length;
+  if(summEl) summEl.innerHTML='<div class="rating-avg"><div class="big">'+avg.toFixed(1)+'</div>'
+    +'<div class="stars">Stars: '+Math.round(avg)+'/5</div>'
+    +'<div class="cnt">'+reviews.length+' review'+(reviews.length>1?'s':'')+'</div></div>';
+  if(listEl) listEl.innerHTML=reviews.map(r=>'<div class="review-card">'
+    +'<div class="review-stars">Rating: '+(r.driver_rating||5)+'/5</div>'
+    +(r.comment?'<div class="review-comment">"'+r.comment+'"</div>':'')
+    +'<div class="review-meta">Order #'+r.order_id+' - '+(r.store_name||'')+'</div>'
+    +'</div>').join('');
+}
+
 async function acceptOrder(oid){
   try{
-    const r=await fetch(`/api/orders/${oid}/accept`,{method:'POST'});
+    const r=await fetch('/api/orders/'+oid+'/accept',{method:'POST'});
     const d=await r.json();
-    if(d.ok){ showToast('✅ Order accepted!'); await loadMyOrders(); await loadPendingOrders(); showTab('active',document.querySelector('.tab')); }
-    else showToast(d.error||'Could not accept order');
-  } catch{ showToast('Error accepting order'); }
+    if(d.ok){showToast('Order accepted!');pendingOrders=pendingOrders.filter(o=>o.id!==oid);await loadMyOrders();await loadPendingOrders();showTab('active',document.querySelector('.tab'));}
+    else showToast(d.error||'Could not accept');
+  } catch{showToast('Error accepting');}
 }
 
 async function declineOrder(oid){
-  await fetch(`/api/orders/${oid}/decline`,{method:'POST'});
-  showToast('Order declined');
+  await fetch('/api/orders/'+oid+'/decline',{method:'POST'});
   pendingOrders=pendingOrders.filter(o=>o.id!==oid);
   renderPending();
 }
 
 async function markDelivered(oid){
-  if(!gpsPosition){ showToast('GPS not available — cannot confirm delivery location'); return; }
   const btn=document.getElementById('deliverBtn');
   if(btn) btn.disabled=true;
   try{
-    await fetch(`/api/orders/${oid}/status`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:'delivered'})});
-    showToast('🎉 Delivery confirmed!');
-    await loadDriverStatus();
-    await loadMyOrders();
-  } catch{ showToast('Error marking delivered'); if(btn) btn.disabled=false; }
+    const r=await fetch('/api/orders/'+oid+'/status',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:'delivered'})});
+    if(r.ok){showToast('Delivery confirmed!');await loadDriverStatus();await loadMyOrders();}
+    else{showToast('Error');if(btn) btn.disabled=false;}
+  } catch{showToast('Network error');if(btn) btn.disabled=false;}
 }
 
-// ── GPS ───────────────────────────────────────────────────────────────────────
 function watchGPS(){
   if(!navigator.geolocation) return;
   navigator.geolocation.watchPosition(pos=>{
     gpsPosition={lat:pos.coords.latitude,lng:pos.coords.longitude};
-    renderActive(); // refresh distance display
-  },{enableHighAccuracy:true,timeout:10000},()=>{gpsPosition=null;});
+    renderActive();
+  },{enableHighAccuracy:true,timeout:15000,maximumAge:5000},()=>{gpsPosition=null;});
 }
 
-// Haversine distance in km
 function haversine(lat1,lon1,lat2,lon2){
-  if(!lat2||!lon2) return null;
+  if(lat2==null||lon2==null) return null;
   const R=6371,dLat=(lat2-lat1)*Math.PI/180,dLon=(lon2-lon1)*Math.PI/180;
   const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
   return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
 }
 
-// ── TABS ──────────────────────────────────────────────────────────────────────
 function showTab(id,el){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   if(el) el.classList.add('active');
-  ['active','pending','history'].forEach(t=>document.getElementById('tab-'+t).style.display=t===id?'block':'none');
+  ['active','pending','history','reviews'].forEach(t=>document.getElementById('tab-'+t).style.display=t===id?'block':'none');
+  if(id==='reviews') loadReviews();
 }
 
-// ── UTILS ─────────────────────────────────────────────────────────────────────
-function tryParseItems(json){try{return JSON.parse(json||'[]')}catch{return []}}
-function showToast(msg,dur=3000){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),dur); }
+function tryParseItems(json){try{return JSON.parse(json||'[]')}catch{return [];}}
+function showToast(msg,dur=3000){const t=document.getElementById('toast');if(!t)return;t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur);}
 
 init();
 </script>
