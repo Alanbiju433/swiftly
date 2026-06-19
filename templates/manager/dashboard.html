@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en" id="html-root">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Manager – Swiftly</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f6f6f6;color:#111;min-height:100vh}
+nav{background:#000;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo{font-size:1.4rem;font-weight:800;color:#fff;letter-spacing:-.5px}.logo span{color:#FF6B35}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-store{color:#aaa;font-size:.82rem}
+.nav-btn{background:none;border:1px solid #333;color:#fff;border-radius:20px;padding:7px 16px;font-size:.82rem;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center}
+.nav-btn:hover,.nav-btn.active{background:#fff;color:#000;border-color:#fff}
+.lang-mini{display:flex;gap:2px}
+.lm{background:none;border:none;color:#666;font-size:.72rem;cursor:pointer;padding:3px 5px;border-radius:4px}
+.lm:hover,.lm.active{background:#222;color:#fff}
+main{max-width:960px;margin:0 auto;padding:28px 24px 80px}
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
+.stat-card{background:#fff;border-radius:16px;padding:20px;border:1px solid #f0f0f0}
+.stat-label{font-size:.75rem;color:#888;font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
+.stat-val{font-size:1.8rem;font-weight:800;color:#111}
+.stat-sub{font-size:.75rem;color:#aaa;margin-top:3px}
+/* TABS */
+.order-tabs{display:flex;background:#fff;border-radius:12px;padding:4px;gap:4px;margin-bottom:20px;border:1px solid #f0f0f0;overflow-x:auto}
+.ot{flex:1;padding:10px 12px;border:none;background:none;border-radius:10px;font-size:.82rem;font-weight:600;color:#888;cursor:pointer;white-space:nowrap;text-align:center}
+.ot.active{background:#000;color:#fff}
+.ot:hover:not(.active){background:#f6f6f6;color:#333}
+/* ORDER CARDS */
+.order-list{display:flex;flex-direction:column;gap:12px}
+.order-card{background:#fff;border-radius:14px;padding:18px 20px;border:1px solid #f0f0f0;transition:box-shadow .2s}
+.order-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.07)}
+.oc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+.oc-id{font-size:.75rem;color:#aaa}
+.oc-store{font-weight:800;font-size:.95rem;margin-top:2px}
+.status-chip{font-size:.72rem;font-weight:700;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.4px}
+.sc-placed{background:#fff3ee;color:#c54a00}
+.sc-accepted{background:#eff6ff;color:#1d4ed8}
+.sc-preparing{background:#fffbeb;color:#92400e}
+.sc-picked_up{background:#f5f3ff;color:#6d28d9}
+.sc-delivered{background:#f0fdf4;color:#15803d}
+.sc-cancelled{background:#fff1f2;color:#be123c}
+.oc-items{font-size:.8rem;color:#777;margin-bottom:12px;line-height:1.5}
+.oc-foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.oc-addr{font-size:.78rem;color:#aaa;flex:1}
+.oc-total{font-weight:800;font-size:.95rem}
+.oc-actions{display:flex;gap:8px}
+.btn-sm{border:none;border-radius:8px;padding:7px 14px;font-size:.78rem;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-accept{background:#000;color:#fff}
+.btn-accept:hover{background:#333}
+.btn-ready{background:#FF6B35;color:#fff}
+.btn-ready:hover{background:#e55a28}
+.btn-assign{background:#f0f0f0;color:#111}
+.btn-assign:hover{background:#e0e0e0}
+.btn-cancel{background:#fff1f2;color:#be123c}
+.btn-cancel:hover{background:#fce7e7}
+/* EMPTY */
+.empty-state{text-align:center;padding:60px 0;color:#ccc}
+.empty-state .big{font-size:3rem;margin-bottom:10px}
+/* ASSIGN MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:#fff;border-radius:20px;padding:28px;width:420px;max-width:95vw}
+.modal h2{font-size:1.1rem;font-weight:800;margin-bottom:18px}
+.drv-option{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border:1.5px solid #eee;border-radius:12px;cursor:pointer;margin-bottom:8px;transition:all .2s}
+.drv-option:hover,.drv-option.selected{border-color:#000;background:#f9f9f9}
+.drv-info h4{font-size:.9rem;font-weight:700}
+.drv-info p{font-size:.75rem;color:#888}
+.drv-status{font-size:.72rem;font-weight:700;padding:3px 8px;border-radius:20px}
+.ds-online{background:#f0fdf4;color:#15803d}
+.ds-busy{background:#fff3ee;color:#c54a00}
+.modal-actions{display:flex;gap:10px;margin-top:18px}
+.btn-sec{flex:1;background:#f0f0f0;border:none;border-radius:10px;padding:12px;font-weight:600;cursor:pointer}
+.btn-pri{flex:2;background:#000;color:#fff;border:none;border-radius:10px;padding:12px;font-weight:700;cursor:pointer}
+/* STORE SETTINGS BAR */
+.store-bar{background:#fff;border-radius:14px;padding:16px 20px;border:1px solid #f0f0f0;margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.store-emoji-big{font-size:2.4rem}
+.store-bar-info{flex:1}
+.store-bar-name{font-weight:800;font-size:1.1rem}
+.store-bar-meta{font-size:.78rem;color:#888;margin-top:2px}
+.open-toggle{display:flex;align-items:center;gap:8px;margin-left:auto}
+.toggle-label{font-size:.82rem;font-weight:600;color:#666}
+.toggle{width:44px;height:24px;background:#ccc;border-radius:12px;cursor:pointer;position:relative;transition:background .3s;border:none}
+.toggle.on{background:#22C55E}
+.toggle::after{content:'';position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;top:3px;left:3px;transition:left .3s}
+.toggle.on::after{left:23px}
+.page-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.page-head h1{font-size:1.3rem;font-weight:800}
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(120px);background:#111;color:#fff;padding:13px 24px;border-radius:12px;font-weight:600;z-index:999;transition:transform .4s;font-size:.88rem}
+.toast.show{transform:translateX(-50%) translateY(0)}
+@media(max-width:640px){.stats{grid-template-columns:1fr 1fr}.oc-actions{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo">Swift<span>ly</span></div>
+  <div class="nav-right">
+    <div class="lang-mini">
+      <button class="lm active" onclick="setLang('en')">EN</button>
+      <button class="lm" onclick="setLang('es')">ES</button>
+      <button class="lm" onclick="setLang('fr')">FR</button>
+      <button class="lm" onclick="setLang('ar')">AR</button>
+      <button class="lm" onclick="setLang('hi')">HI</button>
+      <button class="lm" onclick="setLang('ml')">ML</button>
+    </div>
+    <span class="nav-store" id="nav-store-name"></span>
+    <a href="/manager/products" class="nav-btn" data-i18n="products">Products</a>
+    <a href="/logout" class="nav-btn" data-i18n="logout">Log out</a>
+  </div>
+</nav>
+
+<main>
+  <div class="page-head">
+    <h1 data-i18n="dashboard">Dashboard</h1>
+    <button class="btn-sm btn-accept" onclick="loadAll()" data-i18n="refresh">↻ Refresh</button>
+  </div>
+
+  <!-- Store bar -->
+  <div class="store-bar" id="store-bar" style="display:none">
+    <div class="store-emoji-big" id="sb-emoji">🏪</div>
+    <div class="store-bar-info">
+      <div class="store-bar-name" id="sb-name">Your Store</div>
+      <div class="store-bar-meta" id="sb-meta"></div>
+    </div>
+    <div class="open-toggle">
+      <span class="toggle-label" data-i18n="store_open">Store open</span>
+      <button class="toggle" id="open-toggle" onclick="toggleOpen()"></button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat-card"><div class="stat-label" data-i18n="total_orders">Total Orders</div><div class="stat-val" id="s-total">–</div><div class="stat-sub" data-i18n="all_time">All time</div></div>
+    <div class="stat-card"><div class="stat-label" data-i18n="pending">Pending</div><div class="stat-val" id="s-pending">–</div><div class="stat-sub" data-i18n="needs_action">Needs action</div></div>
+    <div class="stat-card"><div class="stat-label" data-i18n="delivered">Delivered</div><div class="stat-val" id="s-delivered">–</div><div class="stat-sub" data-i18n="completed">Completed</div></div>
+    <div class="stat-card"><div class="stat-label" data-i18n="revenue">Revenue</div><div class="stat-val" id="s-revenue">–</div><div class="stat-sub" data-i18n="gross">Gross</div></div>
+  </div>
+
+  <!-- Orders -->
+  <div class="order-tabs" id="order-tabs">
+    <button class="ot active" onclick="setTab('placed',this)" data-i18n="tab_new">New</button>
+    <button class="ot" onclick="setTab('accepted',this)" data-i18n="tab_accepted">Accepted</button>
+    <button class="ot" onclick="setTab('preparing',this)" data-i18n="tab_preparing">Preparing</button>
+    <button class="ot" onclick="setTab('picked_up',this)" data-i18n="tab_picked_up">Picked up</button>
+    <button class="ot" onclick="setTab('delivered',this)" data-i18n="tab_delivered">Delivered</button>
+    <button class="ot" onclick="setTab('all',this)" data-i18n="tab_all">All</button>
+  </div>
+  <div class="order-list" id="order-list"></div>
+</main>
+
+<!-- ASSIGN DRIVER MODAL -->
+<div class="modal-bg" id="assign-modal">
+  <div class="modal">
+    <h2 data-i18n="assign_driver">Assign a driver</h2>
+    <div id="drv-list"></div>
+    <div class="modal-actions">
+      <button class="btn-sec" onclick="closeAssign()" data-i18n="cancel">Cancel</button>
+      <button class="btn-pri" onclick="confirmAssign()" data-i18n="assign">Assign</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const T={
+  en:{dashboard:'Dashboard',products:'Products',logout:'Log out',refresh:'↻ Refresh',total_orders:'Total Orders',pending:'Pending',delivered:'Delivered',revenue:'Revenue',all_time:'All time',needs_action:'Needs action',completed:'Completed',gross:'Gross',tab_new:'New',tab_accepted:'Accepted',tab_preparing:'Preparing',tab_picked_up:'On the way',tab_delivered:'Delivered',tab_all:'All Orders',store_open:'Store open',assign_driver:'Assign a driver',assign:'Assign',cancel:'Cancel',no_orders:'No orders here',accept:'Accept',mark_ready:'Mark ready',assign_btn:'Assign driver',cancel_order:'Cancel'},
+  es:{dashboard:'Panel',products:'Productos',logout:'Salir',refresh:'↻ Actualizar',total_orders:'Total Pedidos',pending:'Pendiente',delivered:'Entregado',revenue:'Ingresos',all_time:'Todo el tiempo',needs_action:'Requiere acción',completed:'Completados',gross:'Bruto',tab_new:'Nuevo',tab_accepted:'Aceptado',tab_preparing:'Preparando',tab_picked_up:'En camino',tab_delivered:'Entregado',tab_all:'Todos',store_open:'Tienda abierta',assign_driver:'Asignar conductor',assign:'Asignar',cancel:'Cancelar',no_orders:'Sin pedidos',accept:'Aceptar',mark_ready:'Listo',assign_btn:'Asignar',cancel_order:'Cancelar'},
+  fr:{dashboard:'Tableau de bord',products:'Produits',logout:'Déconnexion',refresh:'↻ Rafraîchir',total_orders:'Total commandes',pending:'En attente',delivered:'Livré',revenue:'Revenus',all_time:'Tout le temps',needs_action:'Action requise',completed:'Terminées',gross:'Brut',tab_new:'Nouvelles',tab_accepted:'Acceptées',tab_preparing:'En préparation',tab_picked_up:'En route',tab_delivered:'Livrées',tab_all:'Toutes',store_open:'Boutique ouverte',assign_driver:'Assigner un livreur',assign:'Assigner',cancel:'Annuler',no_orders:'Aucune commande',accept:'Accepter',mark_ready:'Prêt',assign_btn:'Assigner',cancel_order:'Annuler'},
+  ar:{dashboard:'لوحة التحكم',products:'المنتجات',logout:'خروج',total_orders:'إجمالي الطلبات',pending:'قيد الانتظار',delivered:'تم التسليم',revenue:'الإيرادات',tab_new:'جديد',tab_accepted:'مقبول',tab_preparing:'يُحضَّر',tab_picked_up:'في الطريق',tab_delivered:'تم التسليم',tab_all:'الكل',store_open:'المتجر مفتوح',assign_driver:'تعيين سائق',assign:'تعيين',cancel:'إلغاء',accept:'قبول',mark_ready:'جاهز',cancel_order:'إلغاء'},
+  hi:{dashboard:'डैशबोर्ड',products:'उत्पाद',logout:'लॉग आउट',total_orders:'कुल ऑर्डर',pending:'लंबित',delivered:'डिलीवर',revenue:'राजस्व',tab_new:'नया',tab_accepted:'स्वीकृत',tab_preparing:'तैयार हो रहा है',tab_picked_up:'रास्ते में',tab_delivered:'डिलीवर',tab_all:'सभी',store_open:'दुकान खुली',assign_driver:'ड्राइवर असाइन करें',assign:'असाइन',cancel:'रद्द',accept:'स्वीकार',mark_ready:'तैयार',cancel_order:'रद्द करें'},
+  ml:{dashboard:'ഡാഷ്‌ബോർഡ്',products:'ഉൽ‌പ്പന്നങ്ങൾ',logout:'ലോഗ് ഔട്ട്',total_orders:'ആകെ ഓർഡറുകൾ',pending:'നിലനിൽക്കുന്നു',delivered:'ഡെലിവർ ചെയ്‌തു',revenue:'വരുമാനം',tab_new:'പുതിയത്',tab_accepted:'സ്വീകരിച്ചു',tab_preparing:'തയ്യാറാകുന്നു',tab_picked_up:'വഴിക്ക്',tab_delivered:'ഡെലിവർ',tab_all:'എല്ലാം',store_open:'സ്റ്റോർ തുറന്നു',assign_driver:'ഡ്രൈവർ നിയോഗിക്കൂ',assign:'നിയോഗിക്കൂ',cancel:'റദ്ദ്',accept:'സ്വീകരിക്കൂ',mark_ready:'തയ്യാർ',cancel_order:'റദ്ദ്'}
+};
+let lang=localStorage.getItem('sw_lang')||'en';
+function t(k){return (T[lang]||T.en)[k]||k;}
+function applyLang(){
+  const tr=T[lang]||T.en;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(tr[k])el.textContent=tr[k];});
+  document.querySelectorAll('.lm').forEach(b=>b.classList.remove('active'));
+  const lb=document.querySelector(`.lm[onclick="setLang('${lang}')"]`);if(lb)lb.classList.add('active');
+  document.getElementById('html-root').dir=lang==='ar'?'rtl':'ltr';
+}
+function setLang(l){lang=l;localStorage.setItem('sw_lang',l);applyLang();}
+
+let currentTab='placed',orders=[],drivers=[],myStore=null,assignOrderId=null,assignDrvId=null;
+let storeOpen=true;
+
+async function loadAll(){await Promise.all([loadStore(),loadStats(),loadOrders(),loadDrivers()]);}
+async function loadStore(){
+  const r=await fetch('/api/me');const me=await r.json();
+  if(me.store){
+    myStore=me.store;
+    document.getElementById('nav-store-name').textContent=me.store.name;
+    document.getElementById('sb-emoji').textContent=me.store.emoji||'🏪';
+    document.getElementById('sb-name').textContent=me.store.name;
+    document.getElementById('sb-meta').textContent=`${me.store.category} · ${me.store.address||''}`;
+    storeOpen=me.store.is_open!==false;
+    updateToggle();
+    document.getElementById('store-bar').style.display='flex';
+  }
+}
+function updateToggle(){
+  const tog=document.getElementById('open-toggle');
+  tog.classList.toggle('on',storeOpen);
+}
+async function toggleOpen(){
+  storeOpen=!storeOpen;
+  updateToggle();
+  await fetch(`/api/stores/${myStore.id}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({is_open:storeOpen})});
+  showToast(storeOpen?'Store is now open ✓':'Store is now closed');
+}
+async function loadStats(){
+  const r=await fetch('/api/stats');const d=await r.json();
+  document.getElementById('s-total').textContent=d.total||0;
+  document.getElementById('s-pending').textContent=d.pending||0;
+  document.getElementById('s-delivered').textContent=d.delivered||0;
+  document.getElementById('s-revenue').textContent=`£${(d.revenue||0).toFixed(2)}`;
+}
+async function loadOrders(){
+  const r=await fetch('/api/orders');orders=await r.json();
+  renderOrders();
+}
+async function loadDrivers(){
+  const r=await fetch('/api/drivers');drivers=await r.json();
+}
+function setTab(tab,el){
+  currentTab=tab;
+  document.querySelectorAll('.ot').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  renderOrders();
+}
+function renderOrders(){
+  const filtered=currentTab==='all'?orders:orders.filter(o=>o.status===currentTab);
+  const el=document.getElementById('order-list');
+  if(!filtered.length){el.innerHTML=`<div class="empty-state"><div class="big">📋</div><p>${t('no_orders')}</p></div>`;return;}
+  el.innerHTML=filtered.map(o=>{
+    const items=JSON.parse(o.items_json||'[]');
+    const actions=getActions(o);
+    return`<div class="order-card">
+      <div class="oc-top">
+        <div><div class="oc-id">#${o.id} · ${new Date(o.created_at).toLocaleString()}</div><div class="oc-store">${o.customer_name||'Customer'}</div></div>
+        <span class="status-chip sc-${o.status}">${o.status.replace('_',' ')}</span>
+      </div>
+      <div class="oc-items">${items.map(i=>`${i.emoji||'📦'} ${i.name} ×${i.qty}`).join(' · ')}</div>
+      <div class="oc-foot">
+        <div class="oc-addr">📍 ${o.address||'–'}${o.driver_name?` &nbsp;🏍️ ${o.driver_name}`:''}</div>
+        <strong class="oc-total">£${o.total.toFixed(2)}</strong>
+        <div class="oc-actions">${actions}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function getActions(o){
+  const s=o.status;
+  if(s==='placed')return`<button class="btn-sm btn-accept" onclick="updateStatus(${o.id},'accepted')">${t('accept')}</button><button class="btn-sm btn-cancel" onclick="updateStatus(${o.id},'cancelled')">${t('cancel_order')}</button>`;
+  if(s==='accepted')return`<button class="btn-sm btn-ready" onclick="updateStatus(${o.id},'preparing')">${t('mark_ready')}</button>`;
+  if(s==='preparing')return`<button class="btn-sm btn-assign" onclick="openAssign(${o.id})">${t('assign_btn')}</button>`;
+  return '';
+}
+async function updateStatus(id,status){
+  const r=await fetch(`/api/orders/${id}/status`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status})});
+  const d=await r.json();
+  if(d.ok){showToast(`Order #${id} → ${status}`);loadOrders();loadStats();}
+  else showToast(d.error||'Error');
+}
+function openAssign(oid){
+  assignOrderId=oid;assignDrvId=null;
+  document.getElementById('drv-list').innerHTML=drivers.length?drivers.map(d=>`
+    <div class="drv-option" id="drv-opt-${d.id}" onclick="selectDrv(${d.id})">
+      <div class="drv-info"><h4>🏍️ ${d.name}</h4><p>${d.vehicle||''} ${d.license_plate?'· '+d.license_plate:''}</p></div>
+      <span class="drv-status ${d.is_online?'ds-online':'ds-busy'}">${d.is_online?'Online':'Busy'}</span>
+    </div>`).join(''):'<p style="color:#aaa;text-align:center;padding:20px">No drivers available</p>';
+  document.getElementById('assign-modal').classList.add('open');
+}
+function selectDrv(id){
+  assignDrvId=id;
+  document.querySelectorAll('.drv-option').forEach(el=>el.classList.remove('selected'));
+  document.getElementById(`drv-opt-${id}`)?.classList.add('selected');
+}
+function closeAssign(){document.getElementById('assign-modal').classList.remove('open');}
+async function confirmAssign(){
+  if(!assignDrvId){showToast('Select a driver');return;}
+  const r=await fetch(`/api/orders/${assignOrderId}/status`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:'picked_up',driver_id:assignDrvId})});
+  const d=await r.json();
+  if(d.ok){closeAssign();showToast('Driver assigned!');loadOrders();}
+  else showToast(d.error||'Error');
+}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
+
+loadAll();
+applyLang();
+// Auto-refresh every 30s
+setInterval(()=>{loadOrders();loadStats();},30000);
+</script>
+</body>
+</html>
