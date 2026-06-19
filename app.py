@@ -117,6 +117,18 @@ def init_db():
         created_at TEXT DEFAULT CURRENT_TIMESTAMP,
         updated_at TEXT DEFAULT CURRENT_TIMESTAMP
     );
+    CREATE TABLE IF NOT EXISTS reviews (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        order_id INTEGER UNIQUE,
+        customer_id INTEGER,
+        customer_name TEXT,
+        store_id INTEGER,
+        driver_id INTEGER,
+        store_rating INTEGER DEFAULT 5,
+        driver_rating INTEGER DEFAULT 5,
+        comment TEXT DEFAULT '',
+        created_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%S','now'))
+    );
     """)
     conn.commit()
     # Seed demo data only if empty
@@ -481,7 +493,9 @@ def api_orders():
     if role == 'customer':
         rows = conn.execute(
             "SELECT o.*, u.name as driver_name, u.phone as driver_phone "
-            "FROM orders o LEFT JOIN users u ON o.driver_id=u.id "
+            "FROM orders o "
+            "LEFT JOIN drivers drv ON o.driver_id=drv.id "
+            "LEFT JOIN users u ON drv.user_id=u.id "
             "WHERE o.customer_id=? ORDER BY o.created_at DESC", (uid,)).fetchall()
 
     elif role == 'manager':
@@ -493,13 +507,15 @@ def api_orders():
         if status and status != 'all':
             rows = conn.execute(
                 "SELECT o.*, u.name as driver_name FROM orders o "
-                "LEFT JOIN users u ON o.driver_id=u.id "
+                "LEFT JOIN drivers drv ON o.driver_id=drv.id "
+                "LEFT JOIN users u ON drv.user_id=u.id "
                 "WHERE o.store_id=? AND o.status=? ORDER BY o.created_at DESC",
                 (store['id'], status)).fetchall()
         else:
             rows = conn.execute(
                 "SELECT o.*, u.name as driver_name FROM orders o "
-                "LEFT JOIN users u ON o.driver_id=u.id "
+                "LEFT JOIN drivers drv ON o.driver_id=drv.id "
+                "LEFT JOIN users u ON drv.user_id=u.id "
                 "WHERE o.store_id=? ORDER BY o.created_at DESC",
                 (store['id'],)).fetchall()
 
@@ -553,7 +569,10 @@ def api_order(oid):
     conn = get_db()
     row  = conn.execute(
         "SELECT o.*, u.name as driver_name, u.phone as driver_phone "
-        "FROM orders o LEFT JOIN users u ON o.driver_id=u.id WHERE o.id=?", (oid,)).fetchone()
+        "FROM orders o "
+        "LEFT JOIN drivers drv ON o.driver_id=drv.id "
+        "LEFT JOIN users u ON drv.user_id=u.id "
+        "WHERE o.id=?", (oid,)).fetchone()
     conn.close()
     if not row:
         return jsonify({'error': 'Not found'}), 404
@@ -655,7 +674,7 @@ def api_driver_orders():
     for r in results:
         r['address'] = r.get('customer_address', '')
         r['customer_phone'] = r.get('customer_phone', '')
-    return jsonify(results)
+        return jsonify(results)
 
 # ── API: DRIVER PENDING ORDERS ────────────────────────────────────────────────
 
@@ -681,7 +700,6 @@ def api_driver_pending_orders():
 @app.route('/api/orders/<int:oid>/accept', methods=['POST'])
 @login_required(roles=['driver'])
 def api_driver_accept_order(oid):
-    """Driver claims an unassigned order."""
     conn = get_db()
     drv = conn.execute("SELECT id FROM drivers WHERE user_id=?", (session['uid'],)).fetchone()
     if not drv:
@@ -706,46 +724,98 @@ def api_driver_accept_order(oid):
 @app.route('/api/orders/<int:oid>/decline', methods=['POST'])
 @login_required(roles=['driver'])
 def api_driver_decline_order(oid):
-    """Driver explicitly declines — just a no-op acknowledgement (order stays unassigned)."""
     return jsonify({'ok': True, 'order_id': oid})
 
-# ── API: STATS ────────────────────────────────────────────────────────────────
+# ── API: REVIEWS ──────────────────────────────────────────────────────────────
+
+@app.route('/api/orders/<int:oid>/review', methods=['POST'])
+@login_required(roles=['customer'])
+def api_review_order(oid):
+    data = request.json or {}
+    conn = get_db()
+    order = conn.execute("SELECT * FROM orders WHERE id=? AND customer_id=?",
+                         (oid, session['uid'])).fetchone()
+    if not order:
+        conn.close()
+        return jsonify({'error': 'Order not found'}), 404
+    user = conn.execute("SELECT name FROM users WHERE id=?", (session['uid'],)).fetchone()
+    cname = user['name'] if user else 'Customer'
+    conn.execute("""
+        INSERT OR REPLACE INTO reviews
+          (order_id,customer_id,customer_name,store_id,driver_id,store_rating,driver_rating,comment)
+        VALUES (?,?,?,?,?,?,?,?)
+    """, (oid, session['uid'], cname, order['store_id'], order['driver_id'],
+            int(data.get('store_rating', 5)), int(data.get('driver_rating', 5)),
+            data.get('comment', '')))
+    # Update store rating
+    conn.execute("UPDATE stores SET rating=(SELECT AVG(CAST(store_rating AS REAL)) FROM reviews WHERE store_id=?) WHERE id=?",
+                 (order['store_id'], order['store_id']))
+    # Update driver rating
+    if order['driver_id']:
+        conn.execute("UPDATE drivers SET rating=(SELECT AVG(CAST(driver_rating AS REAL)) FROM reviews WHERE driver_id=?) WHERE id=?",
+                     (order['driver_id'], order['driver_id']))
+    conn.commit()
+    conn.close()
+    return jsonify({'ok': True})
+
+@app.route('/api/reviews')
+@login_required(roles=['manager'])
+def api_reviews():
+    conn = get_db()
+    store = conn.execute("SELECT id FROM stores WHERE manager_id=?", (session['uid'],)).fetchone()
+    if not store:
+        conn.close()
+        return jsonify([])
+    rows = conn.execute("""
+        SELECT r.*, o.total, o.items_json, o.created_at as order_date
+        FROM reviews r
+        JOIN orders o ON r.order_id=o.id
+        WHERE r.store_id=?
+        ORDER BY r.created_at DESC
+    """, (store['id'],)).fetchall()
+    conn.close()
+    return jsonify([dict(r) for r in rows])
+
+@app.route('/api/driver/reviews')
+@login_required(roles=['driver'])
+def api_driver_reviews():
+    conn = get_db()
+    drv = conn.execute("SELECT id FROM drivers WHERE user_id=?", (session['uid'],)).fetchone()
+    if not drv:
+        conn.close()
+        return jsonify([])
+    rows = conn.execute("""
+        SELECT r.*, o.store_name, o.created_at as order_date
+        FROM reviews r
+        JOIN orders o ON r.order_id=o.id
+        WHERE r.driver_id=?
+        ORDER BY r.created_at DESC
+    """, (drv['id'],)).fetchall()
+    conn.close()
+    return jsonify([dict(r) for r in rows])
 
 @app.route('/api/stats')
 @login_required(roles=['manager'])
 def api_stats():
-    conn  = get_db()
+    conn = get_db()
     store = conn.execute("SELECT id FROM stores WHERE manager_id=?", (session['uid'],)).fetchone()
     if not store:
         conn.close()
-        return jsonify({})
+        return jsonify({'revenue':0,'pending':0,'total':0,'delivered':0})
     sid = store['id']
-    total     = conn.execute("SELECT COUNT(*) FROM orders WHERE store_id=?", (sid,)).fetchone()[0]
+    today = datetime.utcnow().strftime('%Y-%m-%d')
+    revenue = conn.execute(
+        "SELECT COALESCE(SUM(total),0) FROM orders WHERE store_id=? AND status='delivered' AND created_at LIKE ?",
+        (sid, today+'%')).fetchone()[0]
+    pending = conn.execute(
+        "SELECT COUNT(*) FROM orders WHERE store_id=? AND status NOT IN ('delivered','cancelled')",
+        (sid,)).fetchone()[0]
+    total = conn.execute("SELECT COUNT(*) FROM orders WHERE store_id=?", (sid,)).fetchone()[0]
     delivered = conn.execute("SELECT COUNT(*) FROM orders WHERE store_id=? AND status='delivered'", (sid,)).fetchone()[0]
-    pending   = conn.execute("SELECT COUNT(*) FROM orders WHERE store_id=? AND status IN ('placed','accepted','preparing','picked_up')", (sid,)).fetchone()[0]
-    revenue   = conn.execute("SELECT COALESCE(SUM(total),0) FROM orders WHERE store_id=? AND status='delivered'", (sid,)).fetchone()[0]
     conn.close()
-    return jsonify({'total': total, 'delivered': delivered, 'pending': pending, 'revenue': round(revenue, 2)})
+    return jsonify({'revenue':revenue,'pending':pending,'total':total,'delivered':delivered})
 
-# ── API: SESSION INFO ─────────────────────────────────────────────────────────
-
-@app.route('/api/me')
-def api_me():
-    if 'uid' not in session:
-        return jsonify({'logged_in': False})
-    result = {'logged_in': True, 'uid': session['uid'], 'role': session['role'], 'name': session['name']}
-    # Include store info for managers
-    if session.get('role') == 'manager':
-        conn = get_db()
-        store = conn.execute("SELECT * FROM stores WHERE manager_id=?", (session['uid'],)).fetchone()
-        conn.close()
-        result['store'] = dict(store) if store else None
-    return jsonify(result)
-
-# Initialize DB on startup (runs whether gunicorn or python app.py)
 init_db()
 
 if __name__ == '__main__':
-    print("\nSwiftly is running!")
-    print("   http://127.0.0.1:5000/\n")
-    app.run(debug=False, port=5000, use_reloader=False)
+    app.run(debug=False, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
