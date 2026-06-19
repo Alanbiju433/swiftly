@@ -541,67 +541,65 @@ nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid va
 <div class="toast" id="toast"></div>
 
 <script>
-// ── TRANSLATION ───────────────────────────────────────────────────────────────
 const LANGS={
-  en:{hero_title:'Delivery you can count on',hero_sub:'Food, groceries, medicine — delivered fast',search:'Search',search_ph:'🔍 Search anything...',my_orders:'📦 My Orders',cart:'Cart',logout:'Log out',checkout:'Checkout',clear_cart:'Clear cart',your_cart:'Your Cart',cart_empty:'Your cart is empty',subtotal:'Subtotal',delivery_fee:'Delivery fee',total:'Total',delivery_address:'Delivery address',special_instructions:'Special instructions',payment:'Payment method',pay_cash:'Cash on Delivery',pay_card:'Card',order_summary:'Order summary',place_order:'🚀 Place Order',order_placed:'Order placed! 🎉',step_placed:'Placed',step_accepted:'Accepted',step_preparing:'Preparing',step_onway:'On the way',step_delivered:'Delivered',close:'Close',cat_all:'🍽️ All',cat_food:'🍔 Food',cat_grocery:'🛒 Grocery',cat_medicine:'💊 Pharmacy',cat_general:'📦 General'},
-  es:{hero_title:'Entrega en la que puedes contar',hero_sub:'Comida, supermercado, medicina — entregado rápido',search:'Buscar',search_ph:'🔍 Busca algo...',my_orders:'📦 Mis Pedidos',cart:'Carrito',logout:'Cerrar sesión',checkout:'Pagar',clear_cart:'Vaciar carrito',your_cart:'Tu Carrito',cart_empty:'Tu carrito está vacío',subtotal:'Subtotal',delivery_fee:'Costo de envío',total:'Total',delivery_address:'Dirección de entrega',special_instructions:'Instrucciones especiales',payment:'Método de pago',pay_cash:'Contra entrega',pay_card:'Tarjeta',order_summary:'Resumen del pedido',place_order:'🚀 Hacer Pedido',order_placed:'¡Pedido realizado! 🎉',step_placed:'Enviado',step_accepted:'Aceptado',step_preparing:'Preparando',step_onway:'En camino',step_delivered:'Entregado',close:'Cerrar',cat_all:'🍽️ Todo',cat_food:'🍔 Comida',cat_grocery:'🛒 Supermercado',cat_medicine:'💊 Farmacia',cat_general:'📦 General'},
-  fr:{hero_title:'Livraison sur laquelle vous pouvez compter',hero_sub:'Nourriture, courses, médicaments — livrés vite',search:'Chercher',search_ph:'🔍 Rechercher...',my_orders:'📦 Mes Commandes',cart:'Panier',logout:'Se déconnecter',checkout:'Commander',clear_cart:'Vider le panier',your_cart:'Votre Panier',cart_empty:'Votre panier est vide',subtotal:'Sous-total',delivery_fee:'Frais de livraison',total:'Total',delivery_address:'Adresse de livraison',special_instructions:'Instructions spéciales',payment:'Mode de paiement',pay_cash:'Paiement à la livraison',pay_card:'Carte',order_summary:'Récapitulatif',place_order:'🚀 Commander',order_placed:'Commande passée ! 🎉',step_placed:'Passée',step_accepted:'Acceptée',step_preparing:'Préparation',step_onway:'En route',step_delivered:'Livrée',close:'Fermer',cat_all:'🍽️ Tout',cat_food:'🍔 Nourriture',cat_grocery:'🛒 Courses',cat_medicine:'💊 Pharmacie',cat_general:'📦 Général'},
-  ar:{hero_title:'توصيل يمكنك الاعتماد عليه',hero_sub:'طعام، بقالة، دواء — توصيل سريع',search:'بحث',search_ph:'🔍 ابحث عن أي شيء...',my_orders:'📦 طلباتي',cart:'سلة',logout:'تسجيل الخروج',checkout:'الدفع',clear_cart:'إفراغ السلة',your_cart:'سلتك',cart_empty:'سلتك فارغة',subtotal:'المجموع الفرعي',delivery_fee:'رسوم التوصيل',total:'الإجمالي',delivery_address:'عنوان التوصيل',special_instructions:'تعليمات خاصة',payment:'طريقة الدفع',pay_cash:'الدفع عند الاستلام',pay_card:'بطاقة',order_summary:'ملخص الطلب',place_order:'🚀 تأكيد الطلب',order_placed:'تم تقديم طلبك! 🎉',step_placed:'مُقدَّم',step_accepted:'مقبول',step_preparing:'يُحضَّر',step_onway:'في الطريق',step_delivered:'تم التسليم',close:'إغلاق',cat_all:'🍽️ الكل',cat_food:'🍔 طعام',cat_grocery:'🛒 بقالة',cat_medicine:'💊 صيدلية',cat_general:'📦 عام'},
-  hi:{hero_title:'भरोसेमंद डिलीवरी',hero_sub:'खाना, किराना, दवाई — तेज़ डिलीवरी',search:'खोजें',search_ph:'🔍 कुछ भी खोजें...',my_orders:'📦 मेरे ऑर्डर',cart:'कार्ट',logout:'लॉग आउट',checkout:'चेकआउट',clear_cart:'कार्ट खाली करें',your_cart:'आपकी कार्ट',cart_empty:'कार्ट खाली है',subtotal:'उप-योग',delivery_fee:'डिलीवरी शुल्क',total:'कुल',delivery_address:'डिलीवरी पता',special_instructions:'विशेष निर्देश',payment:'भुगतान विधि',pay_cash:'कैश ऑन डिलीवरी',pay_card:'कार्ड',order_summary:'ऑर्डर सारांश',place_order:'🚀 ऑर्डर दें',order_placed:'ऑर्डर हो गया! 🎉',step_placed:'रखा गया',step_accepted:'स्वीकार',step_preparing:'तैयारी',step_onway:'रास्ते में',step_delivered:'डिलीवर',close:'बंद करें',cat_all:'🍽️ सभी',cat_food:'🍔 खाना',cat_grocery:'🛒 किराना',cat_medicine:'💊 फार्मेसी',cat_general:'📦 सामान्य'},
-  ml:{hero_title:'വിശ്വസനീയ ഡെലിവറി',hero_sub:'ഭക്ഷണം, ഗ്രോസറി, മരുന്ന് — വേഗത്തിൽ',search:'തിരയുക',search_ph:'🔍 എന്തും തിരയുക...',my_orders:'📦 എന്റെ ഓർഡറുകൾ',cart:'കാർട്ട്',logout:'ലോഗ് ഔട്ട്',checkout:'ചെക്കൗട്ട്',clear_cart:'കാർട്ട് ഒഴിവാക്കുക',your_cart:'നിങ്ങളുടെ കാർട്ട്',cart_empty:'കാർട്ട് ശൂന്യമാണ്',subtotal:'ഉപ-ആകെ',delivery_fee:'ഡെലിവറി ഫീ',total:'ആകെ',delivery_address:'ഡെലിവറി വിലാസം',special_instructions:'പ്രത്യേക നിർദ്ദേശങ്ങൾ',payment:'പേയ്‌മെന്റ് രീതി',pay_cash:'ഡെലിവറിയിൽ പണം',pay_card:'കാർഡ്',order_summary:'ഓർഡർ സംഗ്രഹം',place_order:'🚀 ഓർഡർ ചെയ്യുക',order_placed:'ഓർഡർ ചെയ്തു! 🎉',step_placed:'ചെയ്തു',step_accepted:'സ്വീകരിച്ചു',step_preparing:'തയ്യാറാക്കുന്നു',step_onway:'വഴിയിൽ',step_delivered:'ഡെലിവർ',close:'അടയ്ക്കുക',cat_all:'🍽️ എല്ലാം',cat_food:'🍔 ഭക്ഷണം',cat_grocery:'🛒 ഗ്രോസറി',cat_medicine:'💊 ഫാർമസി',cat_general:'📦 പൊതു'}
+  en:{hero_title:'Delivery you can count on',hero_sub:'Food, groceries, medicine — delivered fast',search:'Search',search_ph:'Search anything...',my_orders:'My Orders',cart:'Cart',logout:'Log out',your_cart:'Your Cart',cart_empty:'Your cart is empty',subtotal:'Subtotal',delivery_fee:'Delivery fee',total:'Total',checkout:'Checkout',clear_cart:'Clear cart',delivery_address:'Delivery address',special_instructions:'Special instructions',payment:'Payment method',pay_cash:'Cash on Delivery',pay_card:'Card',order_summary:'Order summary',place_order:'Place Order',order_placed:'Order placed!',step_placed:'Placed',step_accepted:'Accepted',step_preparing:'Preparing',step_onway:'On the way',step_delivered:'Delivered',close:'Close',cat_all:'All',cat_food:'Food',cat_grocery:'Grocery',cat_medicine:'Pharmacy',cat_general:'General'},
+  es:{hero_title:'Entrega en la que puedes contar',hero_sub:'Comida, supermercado, medicina — entregado rapido',search:'Buscar',search_ph:'Busca cualquier cosa...',my_orders:'Mis pedidos',cart:'Carrito',logout:'Salir',your_cart:'Tu carrito',cart_empty:'Tu carrito esta vacio',subtotal:'Subtotal',delivery_fee:'Costo de envio',total:'Total',checkout:'Pagar',clear_cart:'Vaciar carrito',delivery_address:'Direccion de entrega',special_instructions:'Instrucciones especiales',payment:'Metodo de pago',pay_cash:'Pago en efectivo',pay_card:'Tarjeta',order_summary:'Resumen del pedido',place_order:'Hacer pedido',order_placed:'Pedido realizado!',step_placed:'Pedido',step_accepted:'Aceptado',step_preparing:'Preparando',step_onway:'En camino',step_delivered:'Entregado',close:'Cerrar',cat_all:'Todo',cat_food:'Comida',cat_grocery:'Supermercado',cat_medicine:'Farmacia',cat_general:'General'},
+  fr:{hero_title:'Une livraison fiable',hero_sub:'Nourriture, courses, medicaments — livres rapidement',search:'Chercher',search_ph:'Rechercher...',my_orders:'Mes commandes',cart:'Panier',logout:'Deconnexion',your_cart:'Votre panier',cart_empty:'Votre panier est vide',subtotal:'Sous-total',delivery_fee:'Frais de livraison',total:'Total',checkout:'Commander',clear_cart:'Vider le panier',delivery_address:'Adresse de livraison',special_instructions:'Instructions speciales',payment:'Mode de paiement',pay_cash:'Paiement a la livraison',pay_card:'Carte',order_summary:'Resume',place_order:'Passer la commande',order_placed:'Commande passee!',step_placed:'Passee',step_accepted:'Acceptee',step_preparing:'Preparation',step_onway:'En route',step_delivered:'Livree',close:'Fermer',cat_all:'Tout',cat_food:'Nourriture',cat_grocery:'Epicerie',cat_medicine:'Pharmacie',cat_general:'General'},
+  ar:{hero_title:'توصيل يمكنك الاعتماد عليه',hero_sub:'طعام، بقالة، دواء — يوصل بسرعة',search:'بحث',search_ph:'ابحث عن اي شيء...',my_orders:'طلباتي',cart:'سلة',logout:'تسجيل الخروج',your_cart:'سلتك',cart_empty:'سلتك فارغة',subtotal:'المجموع الفرعي',delivery_fee:'رسوم التوصيل',total:'الاجمالي',checkout:'الدفع',clear_cart:'مسح السلة',delivery_address:'عنوان التوصيل',special_instructions:'تعليمات خاصة',payment:'طريقة الدفع',pay_cash:'الدفع عند الاستلام',pay_card:'بطاقة',order_summary:'ملخص الطلب',place_order:'تاكيد الطلب',order_placed:'تم الطلب!',step_placed:'تم الطلب',step_accepted:'مقبول',step_preparing:'قيد التحضير',step_onway:'في الطريق',step_delivered:'تم التسليم',close:'اغلاق',cat_all:'الكل',cat_food:'طعام',cat_grocery:'بقالة',cat_medicine:'صيدلية',cat_general:'عام'},
+  hi:{hero_title:'Bharosemand Delivery',hero_sub:'Khana, kirana, dawai — jaldi delivery',search:'Khojein',search_ph:'Kuch bhi khojein...',my_orders:'Mere Orders',cart:'Cart',logout:'Log Out',your_cart:'Aapki Cart',cart_empty:'Cart khali hai',subtotal:'Subtotal',delivery_fee:'Delivery shulk',total:'Kul',checkout:'Checkout',clear_cart:'Cart saaf karein',delivery_address:'Delivery pata',special_instructions:'Vishesh nirdesh',payment:'Bhugtan vidhi',pay_cash:'Cash on Delivery',pay_card:'Card',order_summary:'Order savransh',place_order:'Order karein',order_placed:'Order ho gaya!',step_placed:'Rakha gaya',step_accepted:'Svikrit',step_preparing:'Taiyari ho rahi hai',step_onway:'Raste mein',step_delivered:'Deliver',close:'Band karein',cat_all:'Sab',cat_food:'Khana',cat_grocery:'Kirana',cat_medicine:'Pharmacy',cat_general:'Samanya'},
+  ml:{hero_title:'Vishvasaneeya Delivery',hero_sub:'Bakshanam, palacarak, marul — vegam delivery',search:'Tirayuka',search_ph:'Entum tirayuka...',my_orders:'Ente Orders',cart:'Cart',logout:'Log Out',your_cart:'Ningalute Cart',cart_empty:'Cart sunnyamanu',subtotal:'Upa-ake',delivery_fee:'Delivery fee',total:'Ake',checkout:'Checkout',clear_cart:'Cart maykyuka',delivery_address:'Delivery vilasam',special_instructions:'Prayeka nirdeshangal',payment:'Panamadaykkal',pay_cash:'Cash on Delivery',pay_card:'Card',order_summary:'Order sangrahm',place_order:'Order cheyyuka',order_placed:'Order cheytu!',step_placed:'Order cheytu',step_accepted:'Svikariccu',step_preparing:'Tayyaredukkunnu',step_onway:'Vaziyil',step_delivered:'Deliver cheytu',close:'Adaykkuka',cat_all:'Ellam',cat_food:'Bakshanam',cat_grocery:'Palacarak',cat_medicine:'Pharmacy',cat_general:'Potu'},
 };
+
 let curLang=localStorage.getItem('sw_lang')||'en';
+function t(k){return(LANGS[curLang]||LANGS.en)[k]||k;}
 function applyLang(){
-  const t=LANGS[curLang]||LANGS.en;
-  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(t[k])el.textContent=t[k];});
-  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{const k=el.getAttribute('data-i18n-ph');if(t[k])el.placeholder=t[k];});
-  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
-  const ab=document.querySelector(`.lang-btn[onclick="setLang('${curLang}')"]`);
-  if(ab) ab.classList.add('active');
-  document.documentElement.setAttribute('dir',curLang==='ar'?'rtl':'ltr');
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k=el.getAttribute('data-i18n');
+    if(el.tagName==='INPUT'||el.tagName==='TEXTAREA') el.placeholder=t(k);
+    else el.textContent=t(k);
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>el.placeholder=t(el.getAttribute('data-i18n-ph')));
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===curLang.toUpperCase()));
 }
 function setLang(l){curLang=l;localStorage.setItem('sw_lang',l);applyLang();}
 
-// ── STORES ────────────────────────────────────────────────────────────────────
-let allStores=[], currentCategory='all';
-let cart={storeId:null,storeName:'',deliveryFee:2.99,items:{}};
-let currentPayment='cash', currentOrderId=null, trackerInterval=null;
-let ratingOrderId=null, storeRating=5, driverRating=5;
-let pendingOrderTotal=0;
+// STATE
+let allStores=[],currentCategory='all',currentStore=null;
+let cart=[],cartStore=null,cartDeliveryFee=2.99;
+let currentPayment='cash';
+let trackerInterval=null,currentOrderId=null;
+let ratingOrderId=null,storeRating=5,driverRating=5;
+let _pendingAddr='';
 
-const NAME_IMAGES={
-  'Pizza Palace':'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&h=300&fit=crop',
-  'Burger Barn':'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&h=300&fit=crop',
-  'Tokyo Kitchen':'https://images.unsplash.com/photo-1559410545-0bdcd187e0a6?w=600&h=300&fit=crop',
-  'FreshMart':'https://images.unsplash.com/photo-1542838132-92c53300491e?w=600&h=300&fit=crop',
-  'QuickPharm':'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600&h=300&fit=crop',
-  'TechDrop':'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=600&h=300&fit=crop',
-};
-const CAT_IMAGES={food:'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&h=300&fit=crop',grocery:'https://images.unsplash.com/photo-1542838132-92c53300491e?w=600&h=300&fit=crop',medicine:'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600&h=300&fit=crop',general:'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=600&h=300&fit=crop'};
-function getStoreImg(s){return NAME_IMAGES[s.name]||s.image_url||CAT_IMAGES[s.category]||CAT_IMAGES.food;}
-
+// STORES
 async function loadStores(){
-  const res=await fetch('/api/stores');
-  allStores=await res.json();
-  renderStores(allStores);
+  try{
+    const r=await fetch('/api/stores');
+    allStores=await r.json();
+    renderStores(allStores);
+  }catch(e){
+    document.getElementById('storesGrid').innerHTML='<div class="loading-state" style="grid-column:1/-1">Failed to load stores. Refresh to try again.</div>';
+  }
 }
 
 function renderStores(stores){
   const grid=document.getElementById('storesGrid');
-  document.getElementById('gridTitle').textContent=stores.length?`${stores.length} place${stores.length>1?'s':''} near you`:'No results';
-  if(!stores.length){grid.innerHTML='<div class="loading-state" style="grid-column:1/-1;font-size:48px;padding:60px">🔍<p style="font-size:16px;margin-top:8px">No results found</p></div>';return;}
-  grid.innerHTML=stores.map(s=>{
-    const img=getStoreImg(s);
-    return `<div class="store-card${s.is_open?'':' store-closed'}" onclick="openStore(${s.id})">
-      <img class="store-img" src="${img}" alt="${s.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-      <div class="store-img-placeholder" style="display:none">${s.emoji||'🏪'}</div>
+  if(!stores.length){grid.innerHTML='<div class="loading-state" style="grid-column:1/-1">No stores found.</div>';return;}
+  grid.innerHTML=stores.map(s=>`
+    <div class="store-card${s.is_open?'':' store-closed'}" onclick="openStore(${s.id})">
+      ${s.image_url?`<img class="store-img" src="${s.image_url}" alt="${esc(s.name)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:``}
+      <div class="store-img-placeholder" style="${s.image_url?'display:none':''}">${s.emoji||'🏪'}</div>
       <div class="store-info">
-        <div class="store-name">${s.name}${s.is_open?'':' <span style="color:#e74c3c;font-size:11px">(Closed)</span>'}</div>
-        <div class="store-meta"><span>⭐ ${(s.rating||5).toFixed(1)}</span><span>🕐 ${s.delivery_time||'20-35'} min</span><span>🚗 £${(s.delivery_fee||2.99).toFixed(2)}</span></div>
+        <div class="store-name">${s.name}</div>
+        <div class="store-meta">
+          <span>⭐ ${s.rating?Number(s.rating).toFixed(1):'5.0'}</span>
+          <span>🕐 ${s.delivery_time||'20-35'} min</span>
+          <span>£${Number(s.delivery_fee||0).toFixed(2)} delivery</span>
+        </div>
         <div class="store-desc">${s.description||''}</div>
       </div>
-    </div>`;
-  }).join('');
+    </div>
+  `).join('');
 }
 
 function setCategory(cat,el){
@@ -612,334 +610,381 @@ function setCategory(cat,el){
 }
 
 function filterStores(){
-  const q=(document.getElementById('navSearch').value||document.getElementById('heroSearch').value).toLowerCase().trim();
-  let r=allStores;
-  if(currentCategory!=='all') r=r.filter(s=>s.category===currentCategory);
-  if(q) r=r.filter(s=>s.name.toLowerCase().includes(q)||(s.description||'').toLowerCase().includes(q));
-  renderStores(r);
+  const q=(document.getElementById('navSearch').value||document.getElementById('heroSearch').value||'').toLowerCase().trim();
+  let filtered=allStores;
+  if(currentCategory!=='all') filtered=filtered.filter(s=>s.category===currentCategory);
+  if(q) filtered=filtered.filter(s=>s.name.toLowerCase().includes(q)||(s.description||'').toLowerCase().includes(q));
+  renderStores(filtered);
 }
-function syncSearch(){document.getElementById('navSearch').value=document.getElementById('heroSearch').value;filterStores();}
 
-// ── STORE MODAL ───────────────────────────────────────────────────────────────
-let currentStore=null;
+function syncSearch(){
+  document.getElementById('navSearch').value=document.getElementById('heroSearch').value;
+  filterStores();
+}
+
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// STORE MODAL
 async function openStore(sid){
   currentStore=allStores.find(s=>s.id===sid);
-  if(!currentStore) return;
-  const img=getStoreImg(currentStore);
-  document.getElementById('modalHeroImg').innerHTML=`<img src="${img}" class="modal-hero-img" alt="${currentStore.name}" onerror="this.outerHTML='<div class=modal-hero-placeholder>${currentStore.emoji||'🏪'}</div>'">`;
+  if(!currentStore)return;
   document.getElementById('modalName').textContent=currentStore.name;
-  document.getElementById('modalSub').innerHTML=`<span>⭐ ${(currentStore.rating||5).toFixed(1)}</span><span>🕐 ${currentStore.delivery_time||'20-35'} min</span><span>🚗 £${(currentStore.delivery_fee||2.99).toFixed(2)} delivery</span>`;
-  document.getElementById('storeOverlay').classList.add('open');
+  document.getElementById('modalSub').innerHTML=`
+    <span>⭐ ${currentStore.rating?Number(currentStore.rating).toFixed(1):'5.0'}</span>
+    <span>🕐 ${currentStore.delivery_time||'20-35'} min</span>
+    <span>£${Number(currentStore.delivery_fee||0).toFixed(2)} delivery</span>
+    ${currentStore.address?`<span>${currentStore.address}</span>`:''}
+  `;
+  const heroDiv=document.getElementById('modalHeroImg');
+  heroDiv.innerHTML=currentStore.image_url
+    ?`<img class="modal-hero-img" src="${currentStore.image_url}" alt="${esc(currentStore.name)}">`
+    :`<div class="modal-hero-placeholder">${currentStore.emoji||'🏪'}</div>`;
   document.getElementById('productList').innerHTML='<div class="loading-state"><div class="spinner"></div></div>';
-  const res=await fetch(`/api/stores/${sid}/products`);
-  const products=await res.json();
-  renderProducts(products,currentStore);
+  document.getElementById('storeOverlay').classList.add('open');
+  try{
+    const r=await fetch(`/api/stores/${sid}/products`);
+    const products=await r.json();
+    renderProducts(products);
+  }catch(e){
+    document.getElementById('productList').innerHTML='<div class="loading-state">Failed to load menu.</div>';
+  }
 }
 
-function renderProducts(products,store){
-  if(!products.length){document.getElementById('productList').innerHTML='<p style="text-align:center;color:#888;padding:32px">No items available</p>';return;}
+function renderProducts(products){
+  if(!products.length){document.getElementById('productList').innerHTML='<div class="loading-state">No items available.</div>';return;}
   document.getElementById('productList').innerHTML=products.map(p=>{
-    const key=`${store.id}_${p.id}`;
-    const inCart=cart.items[key];
-    const ctrl=inCart
-      ?`<div class="qty-ctrl"><button onclick="chQty(event,${store.id},'${esc(store.name)}',${store.delivery_fee},${p.id},'${esc(p.name)}',${p.price},-1)">−</button><span class="qty">${inCart.qty}</span><button onclick="chQty(event,${store.id},'${esc(store.name)}',${store.delivery_fee},${p.id},'${esc(p.name)}',${p.price},1)">+</button></div>`
-      :`<button class="add-btn" onclick="chQty(event,${store.id},'${esc(store.name)}',${store.delivery_fee},${p.id},'${esc(p.name)}',${p.price},1)">Add</button>`;
-    const imgHtml=p.image_url?`<img src="${p.image_url}" class="product-img" alt="${p.name}" onerror="this.outerHTML='<span class=product-emoji>${p.emoji||'📦'}</span>'">`:`<span class="product-emoji">${p.emoji||'📦'}</span>`;
-    return `<div class="product-item" id="pi_${store.id}_${p.id}">
-      ${imgHtml}
-      <div class="product-details">
-        <div class="product-name">${p.name}</div>
-        <div class="product-desc">${p.description||''}</div>
-        <div class="product-price">£${p.price.toFixed(2)}</div>
-      </div>
-      <div id="ctrl_${store.id}_${p.id}">${ctrl}</div>
-    </div>`;
+    const inCart=cart.find(c=>c.id===p.id);
+    const qty=inCart?inCart.qty:0;
+    return `
+      <div class="product-item">
+        <div class="product-emoji">${p.emoji||'📦'}</div>
+        <div class="product-details">
+          <div class="product-name">${p.name}</div>
+          <div class="product-desc">${p.description||''}</div>
+          <div class="product-price">£${Number(p.price).toFixed(2)}</div>
+        </div>
+        <div id="pc-${p.id}">
+          ${qty===0
+            ?`<button class="add-btn" onclick="addToCart(${p.id},'${(p.name||'').replace(/'/g,"\\'")}',${p.price},'${p.emoji||'📦'}')">Add</button>`
+            :`<div class="qty-ctrl"><button onclick="changeQty(${p.id},-1)">−</button><span class="qty">${qty}</span><button onclick="changeQty(${p.id},1)">+</button></div>`
+          }
+        </div>
+      </div>`;
   }).join('');
 }
 
-function closeStore(e){if(e.target===document.getElementById('storeOverlay')) closeStoreModal();}
+function closeStore(e){if(e.target===document.getElementById('storeOverlay'))closeStoreModal();}
 function closeStoreModal(){document.getElementById('storeOverlay').classList.remove('open');}
 
-// ── CART ──────────────────────────────────────────────────────────────────────
-function chQty(e,storeId,storeName,deliveryFee,pid,pname,price,delta){
-  e.stopPropagation();
-  if(cart.storeId&&cart.storeId!==storeId&&Object.keys(cart.items).length){
-    if(!confirm(`Clear cart from ${cart.storeName} and start new?`)) return;
-    cart.items={};
+// CART
+function addToCart(id,name,price,emoji){
+  if(cartStore&&cartStore.id!==currentStore.id){
+    if(!confirm('Your cart has items from another store. Clear it?'))return;
+    cart=[];
   }
-  cart.storeId=storeId; cart.storeName=storeName; cart.deliveryFee=deliveryFee;
-  const key=`${storeId}_${pid}`;
-  if(!cart.items[key]) cart.items[key]={pid,name:pname,price,qty:0};
-  cart.items[key].qty=Math.max(0,cart.items[key].qty+delta);
-  if(cart.items[key].qty===0) delete cart.items[key];
-  const item=cart.items[key];
-  const ctrl=document.getElementById(`ctrl_${storeId}_${pid}`);
-  if(ctrl) ctrl.innerHTML=item
-    ?`<div class="qty-ctrl"><button onclick="chQty(event,${storeId},'${esc(storeName)}',${deliveryFee},${pid},'${esc(pname)}',${price},-1)">−</button><span class="qty">${item.qty}</span><button onclick="chQty(event,${storeId},'${esc(storeName)}',${deliveryFee},${pid},'${esc(pname)}',${price},1)">+</button></div>`
-    :`<button class="add-btn" onclick="chQty(event,${storeId},'${esc(storeName)}',${deliveryFee},${pid},'${esc(pname)}',${price},1)">Add</button>`;
+  cartStore=currentStore;
+  cartDeliveryFee=Number(currentStore.delivery_fee||2.99);
+  const ex=cart.find(c=>c.id===id);
+  if(ex)ex.qty++;
+  else cart.push({id,name,price:Number(price),emoji,qty:1});
   updateCartUI();
+  refreshProdCtrl(id);
+  showToast(name+' added to cart');
+}
+
+function changeQty(id,delta){
+  const item=cart.find(c=>c.id===id);
+  if(!item)return;
+  item.qty+=delta;
+  if(item.qty<=0)cart=cart.filter(c=>c.id!==id);
+  updateCartUI();
+  refreshProdCtrl(id);
+}
+
+function refreshProdCtrl(id){
+  const ctrl=document.getElementById('pc-'+id);
+  if(!ctrl)return;
+  const item=cart.find(c=>c.id===id);
+  if(!item||item.qty===0){
+    ctrl.innerHTML=`<button class="add-btn" onclick="addToCart(${id},'${(item&&item.name||'').replace(/'/g,"\\'")}',0,'📦')">Add</button>`;
+    // Re-render whole product list to get name/price right
+    fetch(`/api/stores/${currentStore.id}/products`).then(r=>r.json()).then(renderProducts).catch(()=>{});
+    return;
+  }
+  ctrl.innerHTML=`<div class="qty-ctrl"><button onclick="changeQty(${id},-1)">−</button><span class="qty">${item.qty}</span><button onclick="changeQty(${id},1)">+</button></div>`;
 }
 
 function updateCartUI(){
-  const items=Object.values(cart.items);
-  document.getElementById('cartBadge').textContent=items.reduce((s,i)=>s+i.qty,0);
-  const sub=items.reduce((s,i)=>s+i.price*i.qty,0);
-  const dfee=cart.deliveryFee||2.99;
-  document.getElementById('cartSubtotal').textContent=`£${sub.toFixed(2)}`;
-  document.getElementById('cartDelivery').textContent=`£${dfee.toFixed(2)}`;
-  document.getElementById('cartTotal').textContent=`£${(sub+dfee).toFixed(2)}`;
-  document.getElementById('cartFooter').style.display=items.length?'':'none';
-  document.getElementById('cartItems').innerHTML=items.length
-    ?items.map(i=>`<div class="cart-item"><div class="cart-item-emoji">📦</div><div class="cart-item-details"><div class="cart-item-name">${i.name}</div><div class="cart-item-price">£${i.price.toFixed(2)} × ${i.qty}</div></div><div style="font-weight:700">£${(i.price*i.qty).toFixed(2)}</div></div>`).join('')
-    :'<div class="cart-empty"><div class="ce-icon">🛒</div><p>Your cart is empty</p></div>';
+  const sub=cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const count=cart.reduce((s,i)=>s+i.qty,0);
+  document.getElementById('cartBadge').textContent=count;
+  const itemsDiv=document.getElementById('cartItems');
+  const footer=document.getElementById('cartFooter');
+  if(!cart.length){
+    itemsDiv.innerHTML='<div class="cart-empty"><div class="ce-icon">🛒</div><p>Your cart is empty</p></div>';
+    footer.style.display='none';
+    return;
+  }
+  itemsDiv.innerHTML=cart.map(i=>`
+    <div class="cart-item">
+      <div class="cart-item-emoji">${i.emoji}</div>
+      <div class="cart-item-details">
+        <div class="cart-item-name">${i.name}</div>
+        <div class="cart-item-price">£${(i.price*i.qty).toFixed(2)} (x${i.qty})</div>
+      </div>
+      <div class="qty-ctrl" style="gap:6px">
+        <button onclick="changeQty(${i.id},-1)" style="width:24px;height:24px;font-size:13px">−</button>
+        <span style="font-size:13px;font-weight:700;min-width:14px;text-align:center">${i.qty}</span>
+        <button onclick="changeQty(${i.id},1)" style="width:24px;height:24px;font-size:13px">+</button>
+      </div>
+    </div>`).join('');
+  document.getElementById('cartSubtotal').textContent='£'+sub.toFixed(2);
+  document.getElementById('cartDelivery').textContent='£'+cartDeliveryFee.toFixed(2);
+  document.getElementById('cartTotal').textContent='£'+(sub+cartDeliveryFee).toFixed(2);
+  footer.style.display='block';
 }
 
+function clearCart(){cart=[];cartStore=null;updateCartUI();}
 function toggleCart(){document.getElementById('cartDrawer').classList.toggle('open');}
-function clearCart(){cart={storeId:null,storeName:'',deliveryFee:2.99,items:{}};updateCartUI();}
 
-// ── CHECKOUT ──────────────────────────────────────────────────────────────────
-function selectPay(m,el){
-  currentPayment=m;
-  document.querySelectorAll('.pay-opt').forEach(o=>o.classList.remove('selected'));
-  el.classList.add('selected');
-}
-
+// CHECKOUT
 function openCheckout(){
-  if(!Object.keys(cart.items).length){showToast('Your cart is empty');return;}
+  if(!cart.length){showToast('Cart is empty');return;}
   document.getElementById('cartDrawer').classList.remove('open');
-  const items=Object.values(cart.items);
-  const sub=items.reduce((s,i)=>s+i.price*i.qty,0);
-  const dfee=cart.deliveryFee||2.99;
-  pendingOrderTotal=sub+dfee;
+  const sub=cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const total=sub+cartDeliveryFee;
   document.getElementById('coSummary').innerHTML=`
     <div class="row"><span>Subtotal</span><span>£${sub.toFixed(2)}</span></div>
-    <div class="row"><span>Delivery</span><span>£${dfee.toFixed(2)}</span></div>
-    <div class="row total"><span>Total</span><span>£${(sub+dfee).toFixed(2)}</span></div>`;
+    <div class="row"><span>Delivery</span><span>£${cartDeliveryFee.toFixed(2)}</span></div>
+    <div class="row total"><span>Total</span><span>£${total.toFixed(2)}</span></div>`;
   document.getElementById('checkoutOverlay').classList.add('open');
 }
 function closeCheckout(){document.getElementById('checkoutOverlay').classList.remove('open');}
 
+function selectPay(method,el){
+  currentPayment=method;
+  document.querySelectorAll('.pay-opt').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
 async function placeOrder(){
   const addr=document.getElementById('coAddress').value.trim();
   if(!addr){showToast('Please enter your delivery address');return;}
-
-  // Payment method flows
+  _pendingAddr=addr;
+  closeCheckout();
+  const total=cart.reduce((s,i)=>s+i.price*i.qty,0)+cartDeliveryFee;
   if(currentPayment==='card'){
-    closeCheckout();
-    document.getElementById('cardPayAmt').textContent=`£${pendingOrderTotal.toFixed(2)}`;
+    document.getElementById('cardPayAmt').textContent='£'+total.toFixed(2);
     document.getElementById('cardOverlay').classList.add('open');
-    return;
-  }
-  if(currentPayment==='gpay'){
-    closeCheckout();
-    document.getElementById('gpayAmt').textContent=`£${pendingOrderTotal.toFixed(2)}`;
+  }else if(currentPayment==='gpay'){
+    document.getElementById('gpayAmt').textContent='£'+total.toFixed(2);
     document.getElementById('gpayOverlay').classList.add('open');
-    return;
-  }
-  if(currentPayment==='applepay'){
-    closeCheckout();
-    const items=Object.values(cart.items);
-    const sub=items.reduce((s,i)=>s+i.price*i.qty,0);
-    const dfee=cart.deliveryFee||2.99;
-    document.getElementById('apSubtotal').textContent=`£${sub.toFixed(2)}`;
-    document.getElementById('apDelivery').textContent=`£${dfee.toFixed(2)}`;
-    document.getElementById('apTotal').textContent=`£${(sub+dfee).toFixed(2)}`;
+  }else if(currentPayment==='applepay'){
+    const sub=cart.reduce((s,i)=>s+i.price*i.qty,0);
+    document.getElementById('apSubtotal').textContent='£'+sub.toFixed(2);
+    document.getElementById('apDelivery').textContent='£'+cartDeliveryFee.toFixed(2);
+    document.getElementById('apTotal').textContent='£'+total.toFixed(2);
     document.getElementById('applepayOverlay').classList.add('open');
-    return;
+  }else{
+    await doPlaceOrder(addr);
   }
-  await doPlaceOrder(addr);
 }
 
 async function doPlaceOrder(addr){
-  addr=addr||document.getElementById('coAddress').value.trim();
-  const btn=document.getElementById('btnPlace');
-  if(btn){btn.disabled=true;btn.textContent='Placing order...';}
-  const items=Object.values(cart.items).map(i=>({id:i.pid,name:i.name,price:i.price,qty:i.qty}));
+  const notes=(document.getElementById('coNotes')||{}).value||'';
+  const payload={
+    store_id:cartStore?cartStore.id:null,
+    items:cart.map(i=>({id:i.id,name:i.name,price:i.price,qty:i.qty,emoji:i.emoji})),
+    address:addr,notes,payment_method:currentPayment
+  };
   try{
-    const res=await fetch('/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({store_id:cart.storeId,items,address:addr,notes:document.getElementById('coNotes')?.value?.trim()||'',payment_method:currentPayment})});
-    const data=await res.json();
-    if(data.ok){
-      currentOrderId=data.order_id;
-      clearCart();
-      closeCheckout();
-      closeCard();
-      closeGpay();
-      closeApplePay();
-      openTracker(data.order_id,data.total);
-    } else showToast('Could not place order. Try again.');
-  } catch{showToast('Network error. Please retry.');}
-  finally{if(btn){btn.disabled=false;btn.textContent='🚀 Place Order';}}
+    const r=await fetch('/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const data=await r.json();
+    if(data.order_id){
+      const savedTotal=data.total;
+      cart=[];cartStore=null;
+      updateCartUI();
+      showToast('Order placed!');
+      openTracker(data.order_id,savedTotal);
+    }else{
+      showToast('Failed: '+(data.error||'Try again'));
+    }
+  }catch(e){
+    showToast('Network error. Please try again.');
+  }
 }
 
-// ── CARD PAYMENT ──────────────────────────────────────────────────────────────
-function fmtCard(el){
-  let v=el.value.replace(/\D/g,'').substring(0,16);
-  el.value=v.replace(/(.{4})/g,'$1 ').trim();
-}
-function fmtExpiry(el){
-  let v=el.value.replace(/\D/g,'');
-  if(v.length>=2) v=v.substring(0,2)+'/'+v.substring(2,4);
-  el.value=v;
-}
+// CARD PAYMENT
+function fmtCard(el){let v=el.value.replace(/\D/g,'').substring(0,16);el.value=v.replace(/(.{4})/g,'$1 ').trim();}
+function fmtExpiry(el){let v=el.value.replace(/\D/g,'').substring(0,4);if(v.length>2)v=v.substring(0,2)+'/'+v.substring(2);el.value=v;}
 function closeCard(){document.getElementById('cardOverlay').classList.remove('open');}
 async function confirmCard(){
   const num=document.getElementById('cardNumber').value.replace(/\s/g,'');
   const exp=document.getElementById('cardExpiry').value;
   const cvv=document.getElementById('cardCvv').value;
   const name=document.getElementById('cardName').value.trim();
-  if(num.length<16||!exp.includes('/')||cvv.length<3||!name){showToast('Please fill in all card details');return;}
+  if(num.length<16||!exp||cvv.length<3||!name){showToast('Please fill in all card details');return;}
   const btn=document.getElementById('btnPayCard');
   btn.textContent='Processing...';btn.disabled=true;
-  await new Promise(r=>setTimeout(r,1500)); // simulate processing
-  await doPlaceOrder(document.getElementById('coAddress').value||'Saved address');
-  btn.textContent=`Pay £${pendingOrderTotal.toFixed(2)}`;btn.disabled=false;
+  await new Promise(r=>setTimeout(r,1500));
+  btn.textContent='Approved!';btn.style.background='#059954';
+  await new Promise(r=>setTimeout(r,600));
+  btn.textContent='Pay';btn.disabled=false;btn.style.background='';
+  closeCard();
+  await doPlaceOrder(_pendingAddr);
 }
 
-// ── GPAY ──────────────────────────────────────────────────────────────────────
+// GPAY
 function closeGpay(){document.getElementById('gpayOverlay').classList.remove('open');}
 async function confirmGpay(){
   const btn=document.querySelector('.btn-gpay');
   btn.textContent='Processing...';btn.disabled=true;
   await new Promise(r=>setTimeout(r,1200));
-  await doPlaceOrder(document.getElementById('coAddress').value||'Saved address');
-  btn.innerHTML='<span style="font-weight:800;font-size:18px">G</span> Pay with Google';btn.disabled=false;
+  btn.innerHTML='<span style="font-weight:800;font-size:18px">G</span> Pay with Google';
+  btn.disabled=false;
+  closeGpay();
+  await doPlaceOrder(_pendingAddr);
 }
 
-// ── APPLE PAY ─────────────────────────────────────────────────────────────────
+// APPLE PAY
 function closeApplePay(){document.getElementById('applepayOverlay').classList.remove('open');}
 async function confirmApplePay(){
   const btn=document.querySelector('.btn-applepay');
   btn.textContent='Processing...';btn.disabled=true;
-  await new Promise(r=>setTimeout(r,1400));
-  await doPlaceOrder(document.getElementById('coAddress').value||'Saved address');
-  btn.innerHTML=' Pay';btn.disabled=false;
+  await new Promise(r=>setTimeout(r,1200));
+  btn.textContent=' Pay';btn.disabled=false;
+  closeApplePay();
+  await doPlaceOrder(_pendingAddr);
 }
 
-// ── ORDER TRACKER ─────────────────────────────────────────────────────────────
+// ORDER TRACKER
 const STATUS_STEPS={placed:0,accepted:1,preparing:2,picked_up:3,delivered:4};
-const STATUS_LABELS=['Order placed','Restaurant confirmed','Preparing your order','Driver on the way','Delivered! 🎉'];
+const STATUS_FILL={placed:'0%',accepted:'25%',preparing:'50%',picked_up:'75%',delivered:'100%'};
 
 function openTracker(orderId,total){
-  document.getElementById('trackerSub').textContent=`Order #${orderId} · £${(total||0).toFixed(2)}`;
+  currentOrderId=orderId;
+  document.getElementById('trackerSub').textContent='Order #'+orderId+' · £'+Number(total).toFixed(2);
   document.getElementById('trackerOverlay').classList.add('open');
-  updateTrackerStep(0);
-  if(trackerInterval) clearInterval(trackerInterval);
-  trackerInterval=setInterval(()=>pollOrder(orderId),5000);
-  pollOrder(orderId);
+  updateTrackerSteps('placed');
+  if(trackerInterval)clearInterval(trackerInterval);
+  pollOrder(orderId,total);
+  trackerInterval=setInterval(()=>pollOrder(orderId,total),5000);
 }
 
-async function pollOrder(orderId){
+function closeTracker(){
+  document.getElementById('trackerOverlay').classList.remove('open');
+  if(trackerInterval){clearInterval(trackerInterval);trackerInterval=null;}
+}
+
+async function pollOrder(orderId,total){
   try{
-    const res=await fetch(`/api/orders/${orderId}`);
-    const o=await res.json();
-    const step=STATUS_STEPS[o.status]??0;
-    updateTrackerStep(step);
-    document.getElementById('trackerInfo').innerHTML=`<p><strong>Status:</strong> ${STATUS_LABELS[step]}</p>${o.driver_name?`<p><strong>Driver:</strong> ${o.driver_name}</p>`:''} ${o.driver_phone?`<p><strong>Driver phone:</strong> ${o.driver_phone}</p>`:''}`;
+    const r=await fetch('/api/orders/'+orderId);
+    const o=await r.json();
+    if(o.error)return;
+    updateTrackerSteps(o.status);
+    document.getElementById('trackerInfo').innerHTML=`
+      <p>📍 Delivering to: ${o.customer_address||'—'}</p>
+      <p>📦 Status: <strong>${(o.status||'').replace('_',' ')}</strong></p>
+      ${o.driver_name?`<p>🛵 Driver: ${o.driver_name}</p>`:''}
+    `;
     if(o.status==='delivered'){
-      clearInterval(trackerInterval);
-      setTimeout(()=>{closeTracker();openRate(orderId);},1000);
+      clearInterval(trackerInterval);trackerInterval=null;
+      setTimeout(()=>{closeTracker();openRate(orderId);},1200);
     }
-    if(o.status==='cancelled') clearInterval(trackerInterval);
-  } catch{}
+    if(o.status==='cancelled'){
+      clearInterval(trackerInterval);trackerInterval=null;
+      showToast('Order was cancelled.');
+      setTimeout(closeTracker,2000);
+    }
+  }catch(e){}
 }
 
-function updateTrackerStep(step){
-  for(let i=0;i<=4;i++){const el=document.getElementById(`ts${i}`);if(el){if(i<=step)el.classList.add('done');else el.classList.remove('done');}}
-  document.getElementById('trackFill').style.width=step===0?'0%':`${(step/4)*80}%`;
+function updateTrackerSteps(status){
+  const step=STATUS_STEPS[status]||0;
+  for(let i=0;i<=4;i++)document.getElementById('ts'+i).classList.toggle('done',i<=step);
+  document.getElementById('trackFill').style.width=STATUS_FILL[status]||'0%';
 }
 
-function closeTracker(){document.getElementById('trackerOverlay').classList.remove('open');if(trackerInterval)clearInterval(trackerInterval);}
-
-// ── MY ORDERS ─────────────────────────────────────────────────────────────────
+// MY ORDERS
 async function openOrders(){
   document.getElementById('ordersDrawer').classList.add('open');
   document.getElementById('ordersBody').innerHTML='<div class="loading-state"><div class="spinner"></div></div>';
   try{
-    const res=await fetch('/api/orders');
-    const orders=await res.json();
+    const r=await fetch('/api/orders');
+    const orders=await r.json();
     renderOrders(orders);
-  } catch{document.getElementById('ordersBody').innerHTML='<p style="padding:20px;color:#888">Failed to load orders</p>';}
+  }catch(e){
+    document.getElementById('ordersBody').innerHTML='<div class="loading-state">Failed to load orders.</div>';
+  }
 }
+
 function closeOrders(){document.getElementById('ordersDrawer').classList.remove('open');}
 
 function renderOrders(orders){
-  const el=document.getElementById('ordersBody');
-  if(!orders.length){el.innerHTML='<div class="loading-state"><div class="icon">📦</div><p>No orders yet</p></div>';return;}
-  el.innerHTML=orders.map(o=>{
-    let items=[];try{items=JSON.parse(o.items_json||'[]')}catch{}
-    const itemStr=items.slice(0,2).map(i=>`${i.qty}× ${i.name}`).join(', ')+(items.length>2?'…':'');
-    const statusClass=`sp-${o.status}`;
+  const body=document.getElementById('ordersBody');
+  if(!orders.length){body.innerHTML='<div class="loading-state">No orders yet.</div>';return;}
+  body.innerHTML=orders.map(o=>{
+    let items=[];try{items=JSON.parse(o.items_json||'[]');}catch(e){}
+    const itemStr=items.map(i=>(i.emoji||'📦')+' '+i.name).slice(0,2).join(', ')+(items.length>2?'...':'');
     const isActive=!['delivered','cancelled'].includes(o.status);
     const canRate=o.status==='delivered';
-    const payIcon={cash:'💵',card:'💳',gpay:'🟢',applepay:'🍎'}[o.payment_method]||'💵';
-    return `<div class="order-item" onclick="${isActive?`reopenTracker(${o.id},${o.total})`:canRate?`openRate(${o.id})`:'void(0)'}">
-      <div class="order-item-top">
-        <span class="order-item-id">#${o.id} ${payIcon}</span>
-        <span class="order-item-time">${timeSince(o.created_at)}</span>
-      </div>
-      <div class="order-item-store">🏪 ${o.store_name||'Store'}</div>
-      <div class="order-item-items">${itemStr||'Items'}</div>
-      <div class="order-item-footer">
-        <span class="order-item-total">£${(o.total||0).toFixed(2)}</span>
-        <div style="display:flex;align-items:center;gap:6px">
-          ${canRate?`<button class="order-item-rate" onclick="event.stopPropagation();openRate(${o.id})">⭐ Rate</button>`:''}
-          <span class="status-pill ${statusClass}">${o.status.replace('_',' ')}</span>
+    const date=o.created_at?new Date((o.created_at||'').replace(' ','T')).toLocaleString():'';
+    return `
+      <div class="order-item" onclick="${isActive?`reopenTracker(${o.id},${o.total})`:''}">
+        <div class="order-item-top">
+          <span class="order-item-id">#${o.id}</span>
+          <span class="order-item-time">${date}</span>
         </div>
-      </div>
-    </div>`;
+        <div class="order-item-store">${o.store_name||'Store'}</div>
+        <div class="order-item-items">${itemStr}</div>
+        <div class="order-item-footer">
+          <span class="order-item-total">£${Number(o.total||0).toFixed(2)}</span>
+          <div style="display:flex;gap:6px;align-items:center">
+            <span class="status-pill sp-${o.status}">${(o.status||'').replace('_',' ')}</span>
+            ${canRate?`<button class="order-item-rate" onclick="event.stopPropagation();closeOrders();openRate(${o.id})">⭐ Rate</button>`:''}
+          </div>
+        </div>
+      </div>`;
   }).join('');
 }
 
-function reopenTracker(orderId,total){
-  closeOrders();
-  currentOrderId=orderId;
-  openTracker(orderId,total);
-}
+function reopenTracker(orderId,total){closeOrders();openTracker(orderId,total);}
 
-function timeSince(ts){
-  if(!ts) return '';
-  const sec=Math.floor((Date.now()-new Date(ts.includes('Z')?ts:ts+'Z').getTime())/1000);
-  if(isNaN(sec)||sec<0) return '';
-  if(sec<60) return `${sec}s ago`;
-  if(sec<3600) return `${Math.floor(sec/60)}m ago`;
-  if(sec<86400) return `${Math.floor(sec/3600)}h ago`;
-  return `${Math.floor(sec/86400)}d ago`;
-}
-
-// ── RATINGS ───────────────────────────────────────────────────────────────────
+// RATING
 function openRate(orderId){
-  ratingOrderId=orderId; storeRating=5; driverRating=5;
-  setRating('store',5); setRating('driver',5);
+  ratingOrderId=orderId;storeRating=5;driverRating=5;
+  updateStars('store',5);updateStars('driver',5);
   document.getElementById('rateComment').value='';
   document.getElementById('rateOverlay').classList.add('open');
 }
 function closeRate(){document.getElementById('rateOverlay').classList.remove('open');}
-
 function setRating(type,val){
-  if(type==='store') storeRating=val;
-  else driverRating=val;
-  const container=document.getElementById(type==='store'?'storeStars':'driverStars');
-  container.querySelectorAll('.star').forEach((s,i)=>{
-    s.classList.toggle('on',i<val);
-  });
+  if(type==='store')storeRating=val;else driverRating=val;
+  updateStars(type,val);
 }
-
+function updateStars(type,val){
+  document.getElementById(type+'Stars').querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('on',i<val));
+}
 async function submitRate(){
-  if(!ratingOrderId) return;
   try{
-    await fetch(`/api/orders/${ratingOrderId}/review`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({store_rating:storeRating,driver_rating:driverRating,comment:document.getElementById('rateComment').value.trim()})});
-    showToast('⭐ Thanks for your review!');
-  } catch{}
+    await fetch('/api/orders/'+ratingOrderId+'/review',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({store_rating:storeRating,driver_rating:driverRating,comment:document.getElementById('rateComment').value})
+    });
+    showToast('Thanks for your review!');
+  }catch(e){showToast('Could not submit review.');}
   closeRate();
 }
 
-// ── UTILS ─────────────────────────────────────────────────────────────────────
-function showToast(msg,dur=2500){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur);}
-function esc(s){return String(s).replace(/'/g,"&#39;").replace(/"/g,'&quot;');}
+// TOAST
+function showToast(msg,dur=3000){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),dur);
+}
 
-// ── INIT ──────────────────────────────────────────────────────────────────────
-loadStores();
 applyLang();
+loadStores();
 </script>
 </body>
 </html>
