@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 
 app = Flask(__name__)
-app.secret_key = os.environ.get('SECRET_KEY', secrets.token_hex(32))
+app.secret_key = os.environ.get('SECRET_KEY', 'swiftly-stable-secret-key-2024-change-on-render')
 app.permanent_session_lifetime = timedelta(days=30)
 DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'swiftly.db')
 
