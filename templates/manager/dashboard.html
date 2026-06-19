@@ -1,297 +1,390 @@
 <!DOCTYPE html>
-<html lang="en" id="html-root">
+<html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Manager – Swiftly</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Swiftly Manager</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f6f6f6;color:#111;min-height:100vh}
-nav{background:#000;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.logo{font-size:1.4rem;font-weight:800;color:#fff;letter-spacing:-.5px}.logo span{color:#FF6B35}
-.nav-right{display:flex;align-items:center;gap:12px}
-.nav-store{color:#aaa;font-size:.82rem}
-.nav-btn{background:none;border:1px solid #333;color:#fff;border-radius:20px;padding:7px 16px;font-size:.82rem;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center}
-.nav-btn:hover,.nav-btn.active{background:#fff;color:#000;border-color:#fff}
-.lang-mini{display:flex;gap:2px}
-.lm{background:none;border:none;color:#666;font-size:.72rem;cursor:pointer;padding:3px 5px;border-radius:4px}
-.lm:hover,.lm.active{background:#222;color:#fff}
-main{max-width:960px;margin:0 auto;padding:28px 24px 80px}
-/* STATS */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
-.stat-card{background:#fff;border-radius:16px;padding:20px;border:1px solid #f0f0f0}
-.stat-label{font-size:.75rem;color:#888;font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
-.stat-val{font-size:1.8rem;font-weight:800;color:#111}
-.stat-sub{font-size:.75rem;color:#aaa;margin-top:3px}
-/* TABS */
-.order-tabs{display:flex;background:#fff;border-radius:12px;padding:4px;gap:4px;margin-bottom:20px;border:1px solid #f0f0f0;overflow-x:auto}
-.ot{flex:1;padding:10px 12px;border:none;background:none;border-radius:10px;font-size:.82rem;font-weight:600;color:#888;cursor:pointer;white-space:nowrap;text-align:center}
-.ot.active{background:#000;color:#fff}
-.ot:hover:not(.active){background:#f6f6f6;color:#333}
-/* ORDER CARDS */
-.order-list{display:flex;flex-direction:column;gap:12px}
-.order-card{background:#fff;border-radius:14px;padding:18px 20px;border:1px solid #f0f0f0;transition:box-shadow .2s}
-.order-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.07)}
-.oc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
-.oc-id{font-size:.75rem;color:#aaa}
-.oc-store{font-weight:800;font-size:.95rem;margin-top:2px}
-.status-chip{font-size:.72rem;font-weight:700;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.4px}
-.sc-placed{background:#fff3ee;color:#c54a00}
-.sc-accepted{background:#eff6ff;color:#1d4ed8}
-.sc-preparing{background:#fffbeb;color:#92400e}
-.sc-picked_up{background:#f5f3ff;color:#6d28d9}
-.sc-delivered{background:#f0fdf4;color:#15803d}
-.sc-cancelled{background:#fff1f2;color:#be123c}
-.oc-items{font-size:.8rem;color:#777;margin-bottom:12px;line-height:1.5}
-.oc-foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
-.oc-addr{font-size:.78rem;color:#aaa;flex:1}
-.oc-total{font-weight:800;font-size:.95rem}
-.oc-actions{display:flex;gap:8px}
-.btn-sm{border:none;border-radius:8px;padding:7px 14px;font-size:.78rem;font-weight:700;cursor:pointer;transition:all .2s}
-.btn-accept{background:#000;color:#fff}
-.btn-accept:hover{background:#333}
-.btn-ready{background:#FF6B35;color:#fff}
-.btn-ready:hover{background:#e55a28}
-.btn-assign{background:#f0f0f0;color:#111}
-.btn-assign:hover{background:#e0e0e0}
-.btn-cancel{background:#fff1f2;color:#be123c}
-.btn-cancel:hover{background:#fce7e7}
-/* EMPTY */
-.empty-state{text-align:center;padding:60px 0;color:#ccc}
-.empty-state .big{font-size:3rem;margin-bottom:10px}
-/* ASSIGN MODAL */
-.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;align-items:center;justify-content:center}
-.modal-bg.open{display:flex}
-.modal{background:#fff;border-radius:20px;padding:28px;width:420px;max-width:95vw}
-.modal h2{font-size:1.1rem;font-weight:800;margin-bottom:18px}
-.drv-option{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border:1.5px solid #eee;border-radius:12px;cursor:pointer;margin-bottom:8px;transition:all .2s}
-.drv-option:hover,.drv-option.selected{border-color:#000;background:#f9f9f9}
-.drv-info h4{font-size:.9rem;font-weight:700}
-.drv-info p{font-size:.75rem;color:#888}
-.drv-status{font-size:.72rem;font-weight:700;padding:3px 8px;border-radius:20px}
-.ds-online{background:#f0fdf4;color:#15803d}
-.ds-busy{background:#fff3ee;color:#c54a00}
-.modal-actions{display:flex;gap:10px;margin-top:18px}
-.btn-sec{flex:1;background:#f0f0f0;border:none;border-radius:10px;padding:12px;font-weight:600;cursor:pointer}
-.btn-pri{flex:2;background:#000;color:#fff;border:none;border-radius:10px;padding:12px;font-weight:700;cursor:pointer}
-/* STORE SETTINGS BAR */
-.store-bar{background:#fff;border-radius:14px;padding:16px 20px;border:1px solid #f0f0f0;margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.store-emoji-big{font-size:2.4rem}
-.store-bar-info{flex:1}
-.store-bar-name{font-weight:800;font-size:1.1rem}
-.store-bar-meta{font-size:.78rem;color:#888;margin-top:2px}
-.open-toggle{display:flex;align-items:center;gap:8px;margin-left:auto}
-.toggle-label{font-size:.82rem;font-weight:600;color:#666}
-.toggle{width:44px;height:24px;background:#ccc;border-radius:12px;cursor:pointer;position:relative;transition:background .3s;border:none}
-.toggle.on{background:#22C55E}
-.toggle::after{content:'';position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;top:3px;left:3px;transition:left .3s}
-.toggle.on::after{left:23px}
-.page-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
-.page-head h1{font-size:1.3rem;font-weight:800}
-.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(120px);background:#111;color:#fff;padding:13px 24px;border-radius:12px;font-weight:600;z-index:999;transition:transform .4s;font-size:.88rem}
-.toast.show{transform:translateX(-50%) translateY(0)}
-@media(max-width:640px){.stats{grid-template-columns:1fr 1fr}.oc-actions{flex-wrap:wrap}}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--brand:#06c167;--dark:#1a1a1a;--mid:#545454;--light:#f6f6f6;--border:#e8e8e8;--shadow:0 2px 12px rgba(0,0,0,.08)}
+body{font-family:'Inter',sans-serif;background:#f4f5f7;color:var(--dark)}
+button{cursor:pointer;font-family:inherit;border:none;outline:none}
+
+/* SIDEBAR */
+.layout{display:flex;min-height:100vh}
+.sidebar{width:220px;background:#1a1a1a;color:#fff;flex-shrink:0;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
+.sidebar-logo{padding:24px 20px;font-size:20px;font-weight:800;color:var(--brand);letter-spacing:-1px;border-bottom:1px solid #333}
+.sidebar-nav{flex:1;padding:16px 0}
+.nav-item{display:flex;align-items:center;gap:10px;padding:12px 20px;font-size:14px;font-weight:500;color:#aaa;cursor:pointer;transition:all .2s;border-left:3px solid transparent}
+.nav-item:hover,.nav-item.active{color:#fff;background:rgba(255,255,255,.06);border-left-color:var(--brand)}
+.sidebar-footer{padding:16px 20px;border-top:1px solid #333}
+.sidebar-user{font-size:13px;color:#aaa;margin-bottom:8px}
+.sidebar-user span{color:#fff;display:block;font-weight:600}
+.btn-logout{display:block;padding:8px 12px;background:#333;color:#fff;border-radius:8px;font-size:13px;font-weight:600;text-align:center;text-decoration:none}
+
+/* MAIN */
+.main{flex:1;overflow-x:hidden}
+.topbar{background:#fff;border-bottom:1px solid var(--border);padding:0 28px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.topbar h1{font-size:18px;font-weight:700}
+.store-badge{background:#f0faf5;color:var(--brand);padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600}
+.page{padding:24px 28px;display:none}
+.page.active{display:block}
+
+/* STAT CARDS */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px}
+.stat-card{background:#fff;border-radius:14px;padding:20px;box-shadow:var(--shadow)}
+.stat-card .label{font-size:12px;color:var(--mid);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.stat-card .value{font-size:32px;font-weight:800}
+.stat-card .sub{font-size:12px;color:#888;margin-top:4px}
+.stat-card.green .value{color:var(--brand)}
+.stat-card.orange .value{color:#f39c12}
+.stat-card.red .value{color:#e74c3c}
+.stat-card.blue .value{color:#3498db}
+
+/* KANBAN */
+.kanban{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.kanban-col{background:#fff;border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+.kanban-col-header{padding:14px 16px;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:space-between}
+.kanban-col-header .count{background:rgba(255,255,255,.3);border-radius:50px;padding:2px 10px;font-size:12px}
+.col-placed .kanban-col-header{background:#3498db;color:#fff}
+.col-accepted .kanban-col-header{background:#9b59b6;color:#fff}
+.col-preparing .kanban-col-header{background:#f39c12;color:#fff}
+.col-picked .kanban-col-header{background:#1abc9c;color:#fff}
+.col-delivered .kanban-col-header{background:var(--brand);color:#fff}
+.kanban-cards{padding:10px;min-height:80px;display:flex;flex-direction:column;gap:8px;max-height:420px;overflow-y:auto}
+.order-card{background:var(--light);border-radius:10px;padding:12px;border-left:3px solid var(--border);transition:box-shadow .2s}
+.order-card:hover{box-shadow:var(--shadow)}
+.oc-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.oc-id{font-size:12px;font-weight:700;color:var(--mid)}
+.oc-time{font-size:11px;color:#aaa}
+.oc-customer{font-size:13px;font-weight:600;margin-bottom:2px}
+.oc-items{font-size:12px;color:#888;margin-bottom:8px;line-height:1.4}
+.oc-total{font-size:13px;font-weight:700;color:var(--brand)}
+.oc-payment{font-size:11px;color:var(--mid);margin-top:2px}
+.oc-actions{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.oc-btn{padding:5px 10px;border-radius:6px;font-size:11px;font-weight:700;border:none;cursor:pointer}
+.oc-btn.accept{background:#9b59b6;color:#fff}
+.oc-btn.prepare{background:#f39c12;color:#fff}
+.oc-btn.ready{background:#1abc9c;color:#fff}
+.oc-btn.assign{background:var(--brand);color:#fff}
+.oc-btn.cancel{background:#e74c3c;color:#fff}
+.oc-btn.done{background:#ccc;color:#666;cursor:not-allowed}
+.oc-driver{font-size:11px;color:#888;margin-top:4px}
+.empty-col{text-align:center;padding:24px;color:#ccc;font-size:13px}
+
+/* CHART */
+.chart-card{background:#fff;border-radius:14px;padding:20px;box-shadow:var(--shadow);margin-bottom:24px}
+.chart-card h3{font-size:15px;font-weight:700;margin-bottom:16px}
+.chart-wrap{height:200px;position:relative}
+
+/* DRIVER ASSIGN MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal-box{background:#fff;border-radius:16px;width:100%;max-width:420px;padding:24px;box-shadow:0 8px 40px rgba(0,0,0,.18)}
+.modal-box h3{font-size:17px;font-weight:700;margin-bottom:16px}
+.driver-list{display:flex;flex-direction:column;gap:8px;max-height:280px;overflow-y:auto;margin-bottom:16px}
+.driver-row{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--light);border-radius:10px;border:1.5px solid transparent;cursor:pointer;transition:all .2s}
+.driver-row:hover,.driver-row.sel{border-color:var(--brand);background:#f0faf5}
+.driver-name{font-size:14px;font-weight:600}
+.driver-meta{font-size:12px;color:#888}
+.driver-status{font-size:12px;padding:3px 10px;border-radius:20px;font-weight:600}
+.status-available{background:#d5f5e3;color:var(--brand)}
+.status-busy{background:#fdecea;color:#e74c3c}
+.status-offline{background:#eee;color:#888}
+.modal-actions{display:flex;gap:10px}
+.btn-modal{flex:1;padding:11px;border-radius:10px;font-size:14px;font-weight:700}
+.btn-assign-confirm{background:var(--brand);color:#fff}
+.btn-cancel-modal{background:var(--light);color:var(--dark)}
+
+/* SOUND ALERT */
+.alert-banner{position:fixed;top:70px;right:24px;background:var(--brand);color:#fff;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:700;z-index:300;box-shadow:var(--shadow);display:none;animation:pulse 1s ease infinite alternate}
+@keyframes pulse{from{transform:scale(1)}to{transform:scale(1.03)}}
+
+.refresh-tag{font-size:12px;color:#888;font-weight:400}
 </style>
 </head>
 <body>
-<nav>
-  <div class="logo">Swift<span>ly</span></div>
-  <div class="nav-right">
-    <div class="lang-mini">
-      <button class="lm active" onclick="setLang('en')">EN</button>
-      <button class="lm" onclick="setLang('es')">ES</button>
-      <button class="lm" onclick="setLang('fr')">FR</button>
-      <button class="lm" onclick="setLang('ar')">AR</button>
-      <button class="lm" onclick="setLang('hi')">HI</button>
-      <button class="lm" onclick="setLang('ml')">ML</button>
-    </div>
-    <span class="nav-store" id="nav-store-name"></span>
-    <a href="/manager/products" class="nav-btn" data-i18n="products">Products</a>
-    <a href="/logout" class="nav-btn" data-i18n="logout">Log out</a>
-  </div>
-</nav>
 
-<main>
-  <div class="page-head">
-    <h1 data-i18n="dashboard">Dashboard</h1>
-    <button class="btn-sm btn-accept" onclick="loadAll()" data-i18n="refresh">↻ Refresh</button>
-  </div>
+<div class="alert-banner" id="alertBanner">🔔 New order received!</div>
 
-  <!-- Store bar -->
-  <div class="store-bar" id="store-bar" style="display:none">
-    <div class="store-emoji-big" id="sb-emoji">🏪</div>
-    <div class="store-bar-info">
-      <div class="store-bar-name" id="sb-name">Your Store</div>
-      <div class="store-bar-meta" id="sb-meta"></div>
+<div class="layout">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-logo">⚡ Swiftly</div>
+    <div class="sidebar-nav">
+      <div class="nav-item active" onclick="showPage('dashboard',this)">📊 Dashboard</div>
+      <div class="nav-item" onclick="showPage('orders',this)">📋 Orders</div>
+      <div class="nav-item" onclick="window.location='/manager/products'">🍕 Menu</div>
+      <div class="nav-item" onclick="showPage('drivers',this)">🛵 Drivers</div>
     </div>
-    <div class="open-toggle">
-      <span class="toggle-label" data-i18n="store_open">Store open</span>
-      <button class="toggle" id="open-toggle" onclick="toggleOpen()"></button>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">Logged in as<span>{{ user.name }}</span></div>
+      <a href="/logout" class="btn-logout">Log out</a>
     </div>
   </div>
 
-  <!-- Stats -->
-  <div class="stats">
-    <div class="stat-card"><div class="stat-label" data-i18n="total_orders">Total Orders</div><div class="stat-val" id="s-total">–</div><div class="stat-sub" data-i18n="all_time">All time</div></div>
-    <div class="stat-card"><div class="stat-label" data-i18n="pending">Pending</div><div class="stat-val" id="s-pending">–</div><div class="stat-sub" data-i18n="needs_action">Needs action</div></div>
-    <div class="stat-card"><div class="stat-label" data-i18n="delivered">Delivered</div><div class="stat-val" id="s-delivered">–</div><div class="stat-sub" data-i18n="completed">Completed</div></div>
-    <div class="stat-card"><div class="stat-label" data-i18n="revenue">Revenue</div><div class="stat-val" id="s-revenue">–</div><div class="stat-sub" data-i18n="gross">Gross</div></div>
-  </div>
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <h1 id="pageTitle">Dashboard <span class="refresh-tag" id="refreshTag"></span></h1>
+      {% if store %}
+      <div class="store-badge">🏪 {{ store.name }}</div>
+      {% endif %}
+    </div>
 
-  <!-- Orders -->
-  <div class="order-tabs" id="order-tabs">
-    <button class="ot active" onclick="setTab('placed',this)" data-i18n="tab_new">New</button>
-    <button class="ot" onclick="setTab('accepted',this)" data-i18n="tab_accepted">Accepted</button>
-    <button class="ot" onclick="setTab('preparing',this)" data-i18n="tab_preparing">Preparing</button>
-    <button class="ot" onclick="setTab('picked_up',this)" data-i18n="tab_picked_up">Picked up</button>
-    <button class="ot" onclick="setTab('delivered',this)" data-i18n="tab_delivered">Delivered</button>
-    <button class="ot" onclick="setTab('all',this)" data-i18n="tab_all">All</button>
-  </div>
-  <div class="order-list" id="order-list"></div>
-</main>
+    <!-- DASHBOARD PAGE -->
+    <div class="page active" id="page-dashboard">
+      <div class="stats-row" id="statsRow">
+        <div class="stat-card green"><div class="label">Revenue today</div><div class="value" id="statRevenue">—</div><div class="sub">Delivered orders</div></div>
+        <div class="stat-card orange"><div class="label">Active orders</div><div class="value" id="statPending">—</div><div class="sub">In progress</div></div>
+        <div class="stat-card blue"><div class="label">Total orders</div><div class="value" id="statTotal">—</div><div class="sub">All time</div></div>
+        <div class="stat-card"><div class="label">Completed</div><div class="value" id="statDelivered">—</div><div class="sub">Delivered</div></div>
+      </div>
 
-<!-- ASSIGN DRIVER MODAL -->
-<div class="modal-bg" id="assign-modal">
-  <div class="modal">
-    <h2 data-i18n="assign_driver">Assign a driver</h2>
-    <div id="drv-list"></div>
-    <div class="modal-actions">
-      <button class="btn-sec" onclick="closeAssign()" data-i18n="cancel">Cancel</button>
-      <button class="btn-pri" onclick="confirmAssign()" data-i18n="assign">Assign</button>
+      <div class="chart-card">
+        <h3>📈 Revenue trend (recent orders)</h3>
+        <div class="chart-wrap"><canvas id="revenueChart"></canvas></div>
+      </div>
+
+      <h2 style="font-size:16px;font-weight:700;margin-bottom:14px">Live order board</h2>
+      <div class="kanban" id="kanbanBoard"></div>
+    </div>
+
+    <!-- ORDERS PAGE -->
+    <div class="page" id="page-orders">
+      <div style="margin-bottom:16px;display:flex;gap:8px;flex-wrap:wrap">
+        <button style="padding:8px 16px;border-radius:8px;background:var(--brand);color:#fff;font-weight:700;font-size:13px" onclick="loadOrders('all')">All</button>
+        <button style="padding:8px 16px;border-radius:8px;background:#3498db;color:#fff;font-weight:700;font-size:13px" onclick="loadOrders('placed')">Placed</button>
+        <button style="padding:8px 16px;border-radius:8px;background:#f39c12;color:#fff;font-weight:700;font-size:13px" onclick="loadOrders('preparing')">Preparing</button>
+        <button style="padding:8px 16px;border-radius:8px;background:#06c167;color:#fff;font-weight:700;font-size:13px" onclick="loadOrders('delivered')">Delivered</button>
+      </div>
+      <div id="ordersTable" style="background:#fff;border-radius:14px;box-shadow:var(--shadow);overflow:hidden"></div>
+    </div>
+
+    <!-- DRIVERS PAGE -->
+    <div class="page" id="page-drivers">
+      <div id="driversPanel" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px"></div>
     </div>
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<!-- ASSIGN DRIVER MODAL -->
+<div class="modal-overlay" id="assignModal">
+  <div class="modal-box">
+    <h3>Assign Driver</h3>
+    <div class="driver-list" id="driverPickList"></div>
+    <div class="modal-actions">
+      <button class="btn-modal btn-cancel-modal" onclick="closeAssign()">Cancel</button>
+      <button class="btn-modal btn-assign-confirm" onclick="confirmAssign()">Assign →</button>
+    </div>
+  </div>
+</div>
 
 <script>
-const T={
-  en:{dashboard:'Dashboard',products:'Products',logout:'Log out',refresh:'↻ Refresh',total_orders:'Total Orders',pending:'Pending',delivered:'Delivered',revenue:'Revenue',all_time:'All time',needs_action:'Needs action',completed:'Completed',gross:'Gross',tab_new:'New',tab_accepted:'Accepted',tab_preparing:'Preparing',tab_picked_up:'On the way',tab_delivered:'Delivered',tab_all:'All Orders',store_open:'Store open',assign_driver:'Assign a driver',assign:'Assign',cancel:'Cancel',no_orders:'No orders here',accept:'Accept',mark_ready:'Mark ready',assign_btn:'Assign driver',cancel_order:'Cancel'},
-  es:{dashboard:'Panel',products:'Productos',logout:'Salir',refresh:'↻ Actualizar',total_orders:'Total Pedidos',pending:'Pendiente',delivered:'Entregado',revenue:'Ingresos',all_time:'Todo el tiempo',needs_action:'Requiere acción',completed:'Completados',gross:'Bruto',tab_new:'Nuevo',tab_accepted:'Aceptado',tab_preparing:'Preparando',tab_picked_up:'En camino',tab_delivered:'Entregado',tab_all:'Todos',store_open:'Tienda abierta',assign_driver:'Asignar conductor',assign:'Asignar',cancel:'Cancelar',no_orders:'Sin pedidos',accept:'Aceptar',mark_ready:'Listo',assign_btn:'Asignar',cancel_order:'Cancelar'},
-  fr:{dashboard:'Tableau de bord',products:'Produits',logout:'Déconnexion',refresh:'↻ Rafraîchir',total_orders:'Total commandes',pending:'En attente',delivered:'Livré',revenue:'Revenus',all_time:'Tout le temps',needs_action:'Action requise',completed:'Terminées',gross:'Brut',tab_new:'Nouvelles',tab_accepted:'Acceptées',tab_preparing:'En préparation',tab_picked_up:'En route',tab_delivered:'Livrées',tab_all:'Toutes',store_open:'Boutique ouverte',assign_driver:'Assigner un livreur',assign:'Assigner',cancel:'Annuler',no_orders:'Aucune commande',accept:'Accepter',mark_ready:'Prêt',assign_btn:'Assigner',cancel_order:'Annuler'},
-  ar:{dashboard:'لوحة التحكم',products:'المنتجات',logout:'خروج',total_orders:'إجمالي الطلبات',pending:'قيد الانتظار',delivered:'تم التسليم',revenue:'الإيرادات',tab_new:'جديد',tab_accepted:'مقبول',tab_preparing:'يُحضَّر',tab_picked_up:'في الطريق',tab_delivered:'تم التسليم',tab_all:'الكل',store_open:'المتجر مفتوح',assign_driver:'تعيين سائق',assign:'تعيين',cancel:'إلغاء',accept:'قبول',mark_ready:'جاهز',cancel_order:'إلغاء'},
-  hi:{dashboard:'डैशबोर्ड',products:'उत्पाद',logout:'लॉग आउट',total_orders:'कुल ऑर्डर',pending:'लंबित',delivered:'डिलीवर',revenue:'राजस्व',tab_new:'नया',tab_accepted:'स्वीकृत',tab_preparing:'तैयार हो रहा है',tab_picked_up:'रास्ते में',tab_delivered:'डिलीवर',tab_all:'सभी',store_open:'दुकान खुली',assign_driver:'ड्राइवर असाइन करें',assign:'असाइन',cancel:'रद्द',accept:'स्वीकार',mark_ready:'तैयार',cancel_order:'रद्द करें'},
-  ml:{dashboard:'ഡാഷ്‌ബോർഡ്',products:'ഉൽ‌പ്പന്നങ്ങൾ',logout:'ലോഗ് ഔട്ട്',total_orders:'ആകെ ഓർഡറുകൾ',pending:'നിലനിൽക്കുന്നു',delivered:'ഡെലിവർ ചെയ്‌തു',revenue:'വരുമാനം',tab_new:'പുതിയത്',tab_accepted:'സ്വീകരിച്ചു',tab_preparing:'തയ്യാറാകുന്നു',tab_picked_up:'വഴിക്ക്',tab_delivered:'ഡെലിവർ',tab_all:'എല്ലാം',store_open:'സ്റ്റോർ തുറന്നു',assign_driver:'ഡ്രൈവർ നിയോഗിക്കൂ',assign:'നിയോഗിക്കൂ',cancel:'റദ്ദ്',accept:'സ്വീകരിക്കൂ',mark_ready:'തയ്യാർ',cancel_order:'റദ്ദ്'}
-};
-let lang=localStorage.getItem('sw_lang')||'en';
-function t(k){return (T[lang]||T.en)[k]||k;}
-function applyLang(){
-  const tr=T[lang]||T.en;
-  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(tr[k])el.textContent=tr[k];});
-  document.querySelectorAll('.lm').forEach(b=>b.classList.remove('active'));
-  const lb=document.querySelector(`.lm[onclick="setLang('${lang}')"]`);if(lb)lb.classList.add('active');
-  document.getElementById('html-root').dir=lang==='ar'?'rtl':'ltr';
-}
-function setLang(l){lang=l;localStorage.setItem('sw_lang',l);applyLang();}
+let allOrders=[], allDrivers=[], selectedDriverId=null, assigningOrderId=null;
+let chart=null, knownOrderIds=new Set(), prevOrderCount=0;
 
-let currentTab='placed',orders=[],drivers=[],myStore=null,assignOrderId=null,assignDrvId=null;
-let storeOpen=true;
-
-async function loadAll(){await Promise.all([loadStore(),loadStats(),loadOrders(),loadDrivers()]);}
-async function loadStore(){
-  const r=await fetch('/api/me');const me=await r.json();
-  if(me.store){
-    myStore=me.store;
-    document.getElementById('nav-store-name').textContent=me.store.name;
-    document.getElementById('sb-emoji').textContent=me.store.emoji||'🏪';
-    document.getElementById('sb-name').textContent=me.store.name;
-    document.getElementById('sb-meta').textContent=`${me.store.category} · ${me.store.address||''}`;
-    storeOpen=me.store.is_open!==false;
-    updateToggle();
-    document.getElementById('store-bar').style.display='flex';
-  }
-}
-function updateToggle(){
-  const tog=document.getElementById('open-toggle');
-  tog.classList.toggle('on',storeOpen);
-}
-async function toggleOpen(){
-  storeOpen=!storeOpen;
-  updateToggle();
-  await fetch(`/api/stores/${myStore.id}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({is_open:storeOpen})});
-  showToast(storeOpen?'Store is now open ✓':'Store is now closed');
-}
-async function loadStats(){
-  const r=await fetch('/api/stats');const d=await r.json();
-  document.getElementById('s-total').textContent=d.total||0;
-  document.getElementById('s-pending').textContent=d.pending||0;
-  document.getElementById('s-delivered').textContent=d.delivered||0;
-  document.getElementById('s-revenue').textContent=`£${(d.revenue||0).toFixed(2)}`;
-}
-async function loadOrders(){
-  const r=await fetch('/api/orders');orders=await r.json();
-  renderOrders();
-}
-async function loadDrivers(){
-  const r=await fetch('/api/drivers');drivers=await r.json();
-}
-function setTab(tab,el){
-  currentTab=tab;
-  document.querySelectorAll('.ot').forEach(b=>b.classList.remove('active'));
+// ── NAVIGATION ────────────────────────────────────────────────────────────────
+function showPage(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
   el.classList.add('active');
-  renderOrders();
+  const titles={dashboard:'Dashboard',orders:'Orders',drivers:'Drivers'};
+  document.getElementById('pageTitle').innerHTML=`${titles[id]||id} <span class="refresh-tag" id="refreshTag"></span>`;
+  if(id==='orders') loadOrders('all');
+  if(id==='drivers') loadDrivers();
 }
-function renderOrders(){
-  const filtered=currentTab==='all'?orders:orders.filter(o=>o.status===currentTab);
-  const el=document.getElementById('order-list');
-  if(!filtered.length){el.innerHTML=`<div class="empty-state"><div class="big">📋</div><p>${t('no_orders')}</p></div>`;return;}
-  el.innerHTML=filtered.map(o=>{
-    const items=JSON.parse(o.items_json||'[]');
-    const actions=getActions(o);
-    return`<div class="order-card">
-      <div class="oc-top">
-        <div><div class="oc-id">#${o.id} · ${new Date(o.created_at).toLocaleString()}</div><div class="oc-store">${o.customer_name||'Customer'}</div></div>
-        <span class="status-chip sc-${o.status}">${o.status.replace('_',' ')}</span>
-      </div>
-      <div class="oc-items">${items.map(i=>`${i.emoji||'📦'} ${i.name} ×${i.qty}`).join(' · ')}</div>
-      <div class="oc-foot">
-        <div class="oc-addr">📍 ${o.address||'–'}${o.driver_name?` &nbsp;🏍️ ${o.driver_name}`:''}</div>
-        <strong class="oc-total">£${o.total.toFixed(2)}</strong>
-        <div class="oc-actions">${actions}</div>
-      </div>
+
+// ── STATS ─────────────────────────────────────────────────────────────────────
+async function loadStats(){
+  try{
+    const r=await fetch('/api/stats');
+    const s=await r.json();
+    document.getElementById('statRevenue').textContent=`£${(s.revenue||0).toFixed(2)}`;
+    document.getElementById('statPending').textContent=s.pending||0;
+    document.getElementById('statTotal').textContent=s.total||0;
+    document.getElementById('statDelivered').textContent=s.delivered||0;
+  } catch{}
+}
+
+// ── ORDERS / KANBAN ───────────────────────────────────────────────────────────
+async function loadAll(){
+  try{
+    const [oRes,dRes]=await Promise.all([fetch('/api/orders'),fetch('/api/drivers')]);
+    allOrders=await oRes.json();
+    allDrivers=await dRes.json();
+
+    // New order alert
+    const newIds=new Set(allOrders.map(o=>o.id));
+    if(prevOrderCount>0){
+      for(const id of newIds){
+        if(!knownOrderIds.has(id)){ showAlert(); break; }
+      }
+    }
+    knownOrderIds=newIds;
+    prevOrderCount=allOrders.length;
+
+    renderKanban();
+    renderChart();
+    document.getElementById('refreshTag').textContent=`• updated ${new Date().toLocaleTimeString()}`;
+  } catch{}
+}
+
+const STATUSES=['placed','accepted','preparing','picked_up','delivered'];
+const COL_LABELS={placed:'🆕 New',accepted:'✅ Accepted',preparing:'👨‍🍳 Preparing',picked_up:'🛵 On the Way',delivered:'🏠 Delivered'};
+const COL_CLASS={placed:'col-placed',accepted:'col-accepted',preparing:'col-preparing',picked_up:'col-picked',delivered:'col-delivered'};
+
+function renderKanban(){
+  const board=document.getElementById('kanbanBoard');
+  board.innerHTML=STATUSES.map(st=>{
+    const orders=allOrders.filter(o=>o.status===st);
+    const cards=orders.length
+      ?orders.map(o=>orderCard(o)).join('')
+      :'<div class="empty-col">No orders</div>';
+    return `<div class="kanban-col ${COL_CLASS[st]}">
+      <div class="kanban-col-header"><span>${COL_LABELS[st]}</span><span class="count">${orders.length}</span></div>
+      <div class="kanban-cards">${cards}</div>
     </div>`;
   }).join('');
 }
-function getActions(o){
-  const s=o.status;
-  if(s==='placed')return`<button class="btn-sm btn-accept" onclick="updateStatus(${o.id},'accepted')">${t('accept')}</button><button class="btn-sm btn-cancel" onclick="updateStatus(${o.id},'cancelled')">${t('cancel_order')}</button>`;
-  if(s==='accepted')return`<button class="btn-sm btn-ready" onclick="updateStatus(${o.id},'preparing')">${t('mark_ready')}</button>`;
-  if(s==='preparing')return`<button class="btn-sm btn-assign" onclick="openAssign(${o.id})">${t('assign_btn')}</button>`;
-  return '';
-}
-async function updateStatus(id,status){
-  const r=await fetch(`/api/orders/${id}/status`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status})});
-  const d=await r.json();
-  if(d.ok){showToast(`Order #${id} → ${status}`);loadOrders();loadStats();}
-  else showToast(d.error||'Error');
-}
-function openAssign(oid){
-  assignOrderId=oid;assignDrvId=null;
-  document.getElementById('drv-list').innerHTML=drivers.length?drivers.map(d=>`
-    <div class="drv-option" id="drv-opt-${d.id}" onclick="selectDrv(${d.id})">
-      <div class="drv-info"><h4>🏍️ ${d.name}</h4><p>${d.vehicle||''} ${d.license_plate?'· '+d.license_plate:''}</p></div>
-      <span class="drv-status ${d.is_online?'ds-online':'ds-busy'}">${d.is_online?'Online':'Busy'}</span>
-    </div>`).join(''):'<p style="color:#aaa;text-align:center;padding:20px">No drivers available</p>';
-  document.getElementById('assign-modal').classList.add('open');
-}
-function selectDrv(id){
-  assignDrvId=id;
-  document.querySelectorAll('.drv-option').forEach(el=>el.classList.remove('selected'));
-  document.getElementById(`drv-opt-${id}`)?.classList.add('selected');
-}
-function closeAssign(){document.getElementById('assign-modal').classList.remove('open');}
-async function confirmAssign(){
-  if(!assignDrvId){showToast('Select a driver');return;}
-  const r=await fetch(`/api/orders/${assignOrderId}/status`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:'picked_up',driver_id:assignDrvId})});
-  const d=await r.json();
-  if(d.ok){closeAssign();showToast('Driver assigned!');loadOrders();}
-  else showToast(d.error||'Error');
-}
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
 
+function orderCard(o){
+  let items=[];
+  try{items=JSON.parse(o.items_json||'[]')}catch{}
+  const itemStr=items.map(i=>`${i.qty}× ${i.name}`).join(', ').substring(0,60)+(items.length>2?'…':'');
+  const elapsed=o.created_at?timeSince(o.created_at):'';
+  const payIcon={cash:'💵',card:'💳',gpay:'🟢',applepay:'🍎'}[o.payment_method]||'💵';
+  let actions='';
+  if(o.status==='placed') actions=`<button class="oc-btn accept" onclick="advance(${o.id},'accepted')">Accept</button><button class="oc-btn cancel" onclick="advance(${o.id},'cancelled')">Cancel</button>`;
+  if(o.status==='accepted') actions=`<button class="oc-btn prepare" onclick="advance(${o.id},'preparing')">Start Prep</button>`;
+  if(o.status==='preparing') actions=`<button class="oc-btn ready" onclick="openAssign(${o.id})">Assign Driver</button>`;
+  if(o.status==='picked_up') actions=`<button class="oc-btn done" disabled>En Route</button>`;
+  return `<div class="order-card">
+    <div class="oc-header"><span class="oc-id">#${o.id}</span><span class="oc-time">${elapsed}</span></div>
+    <div class="oc-customer">${o.customer_name||'Customer'}</div>
+    <div class="oc-items">${itemStr||'Items'}</div>
+    <div class="oc-total">£${(o.total||0).toFixed(2)} <span class="oc-payment">${payIcon} ${(o.payment_method||'cash').replace('applepay','Apple Pay').replace('gpay','GPay').replace('cash','Cash').replace('card','Card')}</span></div>
+    ${o.driver_name?`<div class="oc-driver">🛵 ${o.driver_name}</div>`:''}
+    <div class="oc-actions">${actions}</div>
+  </div>`;
+}
+
+async function advance(oid,status){
+  await fetch(`/api/orders/${oid}/status`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status})});
+  loadAll(); loadStats();
+}
+
+function timeSince(ts){
+  const sec=Math.floor((Date.now()-new Date(ts+'Z').getTime())/1000);
+  if(sec<60) return `${sec}s ago`;
+  if(sec<3600) return `${Math.floor(sec/60)}m ago`;
+  return `${Math.floor(sec/3600)}h ago`;
+}
+
+// ── CHART ─────────────────────────────────────────────────────────────────────
+function renderChart(){
+  const delivered=allOrders.filter(o=>o.status==='delivered').slice(-20);
+  const labels=delivered.map((_,i)=>`#${i+1}`);
+  const data=delivered.map(o=>o.total||0);
+  const ctx=document.getElementById('revenueChart').getContext('2d');
+  if(chart) chart.destroy();
+  chart=new Chart(ctx,{
+    type:'line',
+    data:{labels,datasets:[{label:'Order total (£)',data,borderColor:'#06c167',backgroundColor:'rgba(6,193,103,.08)',borderWidth:2,tension:.4,fill:true,pointRadius:4,pointBackgroundColor:'#06c167'}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>`£${v}`}},x:{grid:{display:false}}}}
+  });
+}
+
+// ── ORDERS TABLE ──────────────────────────────────────────────────────────────
+async function loadOrders(status){
+  const url=status==='all'?'/api/orders':`/api/orders?status=${status}`;
+  const res=await fetch(url);
+  const orders=await res.json();
+  const tbl=document.getElementById('ordersTable');
+  if(!orders.length){ tbl.innerHTML='<p style="padding:32px;text-align:center;color:#888">No orders</p>'; return; }
+  tbl.innerHTML=`<table style="width:100%;border-collapse:collapse">
+    <thead><tr style="background:var(--light)">
+      ${['#','Customer','Items','Total','Payment','Status','Driver','Time'].map(h=>`<th style="padding:12px 16px;text-align:left;font-size:12px;font-weight:700;color:var(--mid);text-transform:uppercase">${h}</th>`).join('')}
+    </tr></thead>
+    <tbody>
+    ${orders.map(o=>{
+      let items=[];try{items=JSON.parse(o.items_json||'[]')}catch{}
+      const statusColors={placed:'#3498db',accepted:'#9b59b6',preparing:'#f39c12',picked_up:'#1abc9c',delivered:'#06c167',cancelled:'#e74c3c'};
+      const payIcon={cash:'💵',card:'💳',gpay:'🟢',applepay:'🍎'}[o.payment_method]||'💵';
+      return `<tr style="border-top:1px solid var(--border)">
+        <td style="padding:12px 16px;font-weight:700">#${o.id}</td>
+        <td style="padding:12px 16px"><div style="font-weight:600">${o.customer_name||''}</div><div style="font-size:11px;color:#888">${o.customer_address||''}</div></td>
+        <td style="padding:12px 16px;font-size:13px">${items.map(i=>`${i.qty}× ${i.name}`).join('<br>')}</td>
+        <td style="padding:12px 16px;font-weight:700">£${(o.total||0).toFixed(2)}</td>
+        <td style="padding:12px 16px">${payIcon} ${(o.payment_method||'cash')}</td>
+        <td style="padding:12px 16px"><span style="background:${statusColors[o.status]||'#ccc'};color:#fff;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700">${o.status}</span></td>
+        <td style="padding:12px 16px;font-size:13px">${o.driver_name||'—'}</td>
+        <td style="padding:12px 16px;font-size:12px;color:#888">${o.created_at||''}</td>
+      </tr>`;
+    }).join('')}
+    </tbody></table>`;
+}
+
+// ── DRIVERS ───────────────────────────────────────────────────────────────────
+async function loadDrivers(){
+  const res=await fetch('/api/drivers');
+  allDrivers=await res.json();
+  const panel=document.getElementById('driversPanel');
+  panel.innerHTML=allDrivers.map(d=>{
+    const sc={available:'status-available',offline:'status-offline',busy:'status-busy'}[d.status]||'status-offline';
+    return `<div style="background:#fff;border-radius:14px;padding:20px;box-shadow:var(--shadow)">
+      <div style="font-size:16px;font-weight:700;margin-bottom:4px">${d.name}</div>
+      <div style="font-size:13px;color:#888;margin-bottom:10px">${d.vehicle} · ${d.license_plate||'N/A'}</div>
+      <span class="driver-status ${sc}">${d.status}</span>
+      <div style="margin-top:10px;font-size:13px">⭐ ${(d.rating||5).toFixed(1)} · 📦 ${d.total_deliveries||0} deliveries · 💰 £${(d.earnings||0).toFixed(2)}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── ASSIGN DRIVER ─────────────────────────────────────────────────────────────
+function openAssign(oid){
+  assigningOrderId=oid; selectedDriverId=null;
+  const available=allDrivers.filter(d=>d.status==='available');
+  const list=document.getElementById('driverPickList');
+  list.innerHTML=available.length?available.map(d=>`
+    <div class="driver-row" id="dr_${d.id}" onclick="selectDriver(${d.id},this)">
+      <div><div class="driver-name">${d.name}</div><div class="driver-meta">${d.vehicle}</div></div>
+      <span class="driver-status status-available">Available</span>
+    </div>`).join(''):'<p style="color:#888;font-size:14px">No available drivers right now</p>';
+  document.getElementById('assignModal').classList.add('open');
+}
+
+function selectDriver(id,el){
+  selectedDriverId=id;
+  document.querySelectorAll('.driver-row').forEach(r=>r.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+async function confirmAssign(){
+  if(!selectedDriverId||!assigningOrderId) return;
+  await fetch(`/api/orders/${assigningOrderId}/status`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:'picked_up',driver_id:selectedDriverId})});
+  closeAssign(); loadAll(); loadStats();
+}
+
+function closeAssign(){ document.getElementById('assignModal').classList.remove('open'); }
+
+// ── ALERT ─────────────────────────────────────────────────────────────────────
+let alertTimer=null;
+function showAlert(){
+  const b=document.getElementById('alertBanner');
+  b.style.display='block';
+  if(alertTimer) clearTimeout(alertTimer);
+  alertTimer=setTimeout(()=>b.style.display='none',4000);
+  try{const ctx=new AudioContext();const o=ctx.createOscillator();o.connect(ctx.destination);o.frequency.value=880;o.start();setTimeout(()=>o.stop(),120);}catch{}
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+loadStats();
 loadAll();
-applyLang();
-// Auto-refresh every 30s
-setInterval(()=>{loadOrders();loadStats();},30000);
+setInterval(()=>{ loadAll(); loadStats(); }, 15000);
 </script>
 </body>
 </html>
