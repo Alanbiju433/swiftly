@@ -239,277 +239,305 @@ button{cursor:pointer;font-family:inherit;border:none;outline:none}
 </div>
 
 <script>
-// ── TRANSLATION ───────────────────────────────────────────────────────────────
 const LANGS={
-  en:{dashboard:'Dashboard',orders:'Orders',menu:'Menu',drivers:'Drivers',reviews:'Reviews',logout:'Log out',revenue_today:'Revenue today',active_orders:'Active orders',total_orders:'Total orders',completed:'Completed',revenue_trend:'Revenue trend',live_board:'Live order board',all:'All',placed:'Placed',preparing:'Preparing',delivered:'Delivered',assign_driver:'Assign Driver',cancel:'Cancel',assign:'Assign',issue_refund:'Issue Refund',refund_desc:'This will cancel the order and notify the customer.',confirm_refund:'Confirm Refund & Cancel',no_drivers:'No available drivers',accept:'Accept',start_prep:'Start Prep',assign_drv:'Assign Driver',en_route:'En Route',mark_done:'Mark Delivered',refund:'Refund',no_reviews:'No reviews yet'},
-  es:{dashboard:'Panel',orders:'Pedidos',menu:'Menú',drivers:'Conductores',reviews:'Reseñas',logout:'Salir',revenue_today:'Ingresos hoy',active_orders:'Pedidos activos',total_orders:'Total pedidos',completed:'Completados',revenue_trend:'Tendencia ingresos',live_board:'Panel en vivo',all:'Todos',placed:'Enviados',preparing:'Preparando',delivered:'Entregados',assign_driver:'Asignar conductor',cancel:'Cancelar',assign:'Asignar',issue_refund:'Emitir reembolso',refund_desc:'Esto cancelará el pedido.',confirm_refund:'Confirmar reembolso',no_drivers:'Sin conductores',accept:'Aceptar',start_prep:'Preparar',assign_drv:'Asignar',en_route:'En camino',mark_done:'Entregado',refund:'Reembolso',no_reviews:'Sin reseñas'},
-  fr:{dashboard:'Tableau de bord',orders:'Commandes',menu:'Menu',drivers:'Livreurs',reviews:'Avis',logout:'Déconnexion',revenue_today:"Revenus aujourd'hui",active_orders:'Commandes actives',total_orders:'Total commandes',completed:'Livrées',revenue_trend:'Tendance revenus',live_board:'Tableau en direct',all:'Tout',placed:'Passées',preparing:'Préparation',delivered:'Livrées',assign_driver:'Assigner livreur',cancel:'Annuler',assign:'Assigner',issue_refund:'Rembourser',refund_desc:'Cela annulera la commande.',confirm_refund:'Confirmer le remboursement',no_drivers:'Aucun livreur',accept:'Accepter',start_prep:'Préparer',assign_drv:'Assigner',en_route:'En route',mark_done:'Livré',refund:'Remboursement',no_reviews:'Pas encore d\'avis'},
-  ar:{dashboard:'لوحة التحكم',orders:'الطلبات',menu:'القائمة',drivers:'السائقون',reviews:'التقييمات',logout:'تسجيل الخروج',revenue_today:'الإيرادات اليوم',active_orders:'الطلبات النشطة',total_orders:'إجمالي الطلبات',completed:'مكتملة',revenue_trend:'اتجاه الإيرادات',live_board:'لوحة حية',all:'الكل',placed:'مُقدَّمة',preparing:'يُحضَّر',delivered:'مُسلَّمة',assign_driver:'تعيين سائق',cancel:'إلغاء',assign:'تعيين',issue_refund:'إصدار استرداد',refund_desc:'سيؤدي هذا إلى إلغاء الطلب.',confirm_refund:'تأكيد الاسترداد',no_drivers:'لا يوجد سائقون',accept:'قبول',start_prep:'ابدأ التحضير',assign_drv:'تعيين',en_route:'في الطريق',mark_done:'تم التسليم',refund:'استرداد',no_reviews:'لا تقييمات بعد'},
-  hi:{dashboard:'डैशबोर्ड',orders:'ऑर्डर',menu:'मेनू',drivers:'ड्राइवर',reviews:'समीक्षाएं',logout:'लॉग आउट',revenue_today:'आज की आय',active_orders:'सक्रिय ऑर्डर',total_orders:'कुल ऑर्डर',completed:'पूर्ण',revenue_trend:'आय रुझान',live_board:'लाइव बोर्ड',all:'सभी',placed:'रखे गए',preparing:'तैयार हो रहे',delivered:'डिलीवर',assign_driver:'ड्राइवर असाइन करें',cancel:'रद्द करें',assign:'असाइन',issue_refund:'रिफंड',refund_desc:'इससे ऑर्डर रद्द हो जाएगा।',confirm_refund:'रिफंड की पुष्टि करें',no_drivers:'कोई ड्राइवर नहीं',accept:'स्वीकार',start_prep:'तैयारी शुरू',assign_drv:'असाइन',en_route:'रास्ते में',mark_done:'डिलीवर किया',refund:'रिफंड',no_reviews:'अभी तक कोई समीक्षा नहीं'},
-  ml:{dashboard:'ഡാഷ്‌ബോർഡ്',orders:'ഓർഡറുകൾ',menu:'മെനു',drivers:'ഡ്രൈവർമാർ',reviews:'അവലോകനങ്ങൾ',logout:'ലോഗ് ഔട്ട്',revenue_today:'ഇന്നത്തെ വരുമാനം',active_orders:'സക്രിയ ഓർഡറുകൾ',total_orders:'മൊത്തം ഓർഡറുകൾ',completed:'പൂർത്തിയായത്',revenue_trend:'വരുമാന പ്രവണത',live_board:'തത്സമയ ബോർഡ്',all:'എല്ലാം',placed:'ചെയ്തത്',preparing:'തയ്യാറാക്കുന്നു',delivered:'ഡെലിവർ ചെയ്തു',assign_driver:'ഡ്രൈവർ നിയോഗിക്കുക',cancel:'റദ്ദാക്കുക',assign:'നിയോഗിക്കുക',issue_refund:'റീഫണ്ട്',refund_desc:'ഇത് ഓർഡർ റദ്ദാക്കും.',confirm_refund:'റീഫണ്ട് സ്ഥിരീകരിക്കുക',no_drivers:'ഡ്രൈവർമാർ ഇല്ല',accept:'സ്വീകരിക്കുക',start_prep:'തുടങ്ങുക',assign_drv:'നിയോഗിക്കുക',en_route:'വഴിയിൽ',mark_done:'ഡെലിവർ ആയി',refund:'റീഫണ്ട്',no_reviews:'അവലോകനങ്ങൾ ഇല്ല'}
+  en:{dashboard:'Dashboard',orders:'Orders',menu:'Menu',drivers:'Drivers',reviews:'Reviews',logout:'Log out',revenue_today:'Revenue today',active_orders:'Active orders',total_orders:'Total orders',completed:'Completed',revenue_trend:'Revenue trend',live_board:'Live order board',all:'All',placed:'Placed',preparing:'Preparing',delivered:'Delivered',assign_driver:'Assign Driver',cancel:'Cancel',assign:'Assign',issue_refund:'Issue Refund',refund_desc:'This will cancel the order and notify the customer.',confirm_refund:'Confirm Refund & Cancel'},
+  es:{dashboard:'Panel',orders:'Pedidos',menu:'Menu',drivers:'Conductores',reviews:'Resenas',logout:'Salir',revenue_today:'Ingresos hoy',active_orders:'Pedidos activos',total_orders:'Pedidos totales',completed:'Completados',revenue_trend:'Tendencia de ingresos',live_board:'Tablero en vivo',all:'Todos',placed:'Pedido',preparing:'Preparando',delivered:'Entregado',assign_driver:'Asignar conductor',cancel:'Cancelar',assign:'Asignar',issue_refund:'Emitir reembolso',refund_desc:'Esto cancelara el pedido.',confirm_refund:'Confirmar reembolso'},
+  fr:{dashboard:'Tableau de bord',orders:'Commandes',menu:'Menu',drivers:'Chauffeurs',reviews:'Avis',logout:'Deconnexion',revenue_today:"Chiffre d'affaires",active_orders:'Commandes actives',total_orders:'Total commandes',completed:'Terminees',revenue_trend:'Tendance',live_board:'Tableau en direct',all:'Tout',placed:'Passee',preparing:'Preparation',delivered:'Livree',assign_driver:'Assigner chauffeur',cancel:'Annuler',assign:'Assigner',issue_refund:'Rembourser',refund_desc:'Cela annulera la commande.',confirm_refund:'Confirmer le remboursement'},
+  ar:{dashboard:'لوحة التحكم',orders:'الطلبات',menu:'القائمة',drivers:'السائقون',reviews:'التقييمات',logout:'تسجيل الخروج',revenue_today:'الايراد اليوم',active_orders:'الطلبات النشطة',total_orders:'اجمالي الطلبات',completed:'مكتملة',revenue_trend:'اتجاه الايرادات',live_board:'لوحة الطلبات المباشرة',all:'الكل',placed:'تم الطلب',preparing:'قيد التحضير',delivered:'تم التسليم',assign_driver:'تعيين سائق',cancel:'الغاء',assign:'تعيين',issue_refund:'اصدار استرداد',refund_desc:'سيتم الغاء الطلب.',confirm_refund:'تاكيد الاسترداد'},
+  hi:{dashboard:'Dashboard',orders:'Orders',menu:'Menu',drivers:'Drivers',reviews:'Samiksha',logout:'Log Out',revenue_today:'Aaj ki aay',active_orders:'Sakriya orders',total_orders:'Kul orders',completed:'Poore',revenue_trend:'Aay pravritti',live_board:'Live order board',all:'Sab',placed:'Rakha gaya',preparing:'Taiyari',delivered:'Deliver',assign_driver:'Driver assign karein',cancel:'Radd karein',assign:'Assign karein',issue_refund:'Refund karein',refund_desc:'Order cancel ho jayega.',confirm_refund:'Refund ki pushti karein'},
+  ml:{dashboard:'Dashboard',orders:'Orders',menu:'Menu',drivers:'Drivers',reviews:'Anubhavangal',logout:'Log Out',revenue_today:'Indathe varumanam',active_orders:'Sakriya orders',total_orders:'Mొtt orders',completed:'Purthiyayi',revenue_trend:'Varumaana pravanatha',live_board:'Live order board',all:'Ellam',placed:'Order cheytu',preparing:'Tayyaredukkunnu',delivered:'Deliver cheytu',assign_driver:'Driver niyanikkuka',cancel:'Radd cheyyuka',assign:'Niyanikkuka',issue_refund:'Refund naluka',refund_desc:'Order cancel cheyyum.',confirm_refund:'Refund ushtiram cheyyuka'},
 };
+
 let curLang=localStorage.getItem('sw_lang')||'en';
-function t(k){return (LANGS[curLang]||LANGS.en)[k]||k;}
+function t(k){return(LANGS[curLang]||LANGS.en)[k]||k;}
 function applyLang(){
-  const tr=LANGS[curLang]||LANGS.en;
-  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(tr[k])el.textContent=tr[k];});
-  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
-  const ab=document.querySelector(`.lang-btn[onclick="setLang('${curLang}')"]`);
-  if(ab) ab.classList.add('active');
-  document.documentElement.setAttribute('dir',curLang==='ar'?'rtl':'ltr');
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k=el.getAttribute('data-i18n');
+    if(el.tagName==='INPUT'||el.tagName==='TEXTAREA')el.placeholder=t(k);
+    else el.textContent=t(k);
+  });
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===curLang.toUpperCase()));
 }
 function setLang(l){curLang=l;localStorage.setItem('sw_lang',l);applyLang();}
 
-// ── STATE ─────────────────────────────────────────────────────────────────────
-let allOrders=[], allDrivers=[], selectedDriverId=null, assigningOrderId=null, refundingOrderId=null;
-let chart=null, knownOrderIds=new Set(), prevOrderCount=0;
+// STATE
+let allOrders=[],assigningOrderId=null,selectedDriverId=null,refundingOrderId=null;
+let revenueChart=null,prevOrderCount=0;
 
-// ── NAVIGATION ────────────────────────────────────────────────────────────────
-function showPage(id,el){
+// NAV
+function showPage(name,el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
+  document.getElementById('page-'+name).classList.add('active');
   el.classList.add('active');
-  const titles={dashboard:t('dashboard'),orders:t('orders'),drivers:t('drivers'),reviews:t('reviews')};
-  document.getElementById('pageTitle').innerHTML=`${titles[id]||id} <span class="refresh-tag" id="refreshTag"></span>`;
-  if(id==='orders') loadOrders('all');
-  if(id==='drivers') loadDrivers();
-  if(id==='reviews') loadReviews();
+  document.getElementById('pageTitle').textContent={
+    dashboard:t('dashboard'),orders:t('orders'),drivers:t('drivers'),reviews:t('reviews')
+  }[name]||name;
+  if(name==='dashboard'){loadAll();loadStats();}
+  if(name==='orders')loadOrders('all');
+  if(name==='drivers')loadDrivers();
+  if(name==='reviews')loadReviews();
 }
 
-// ── STATS ─────────────────────────────────────────────────────────────────────
+// STATS
 async function loadStats(){
   try{
     const r=await fetch('/api/stats');
     const s=await r.json();
-    document.getElementById('statRevenue').textContent=`£${(s.revenue||0).toFixed(2)}`;
+    document.getElementById('statRevenue').textContent='£'+Number(s.revenue||0).toFixed(2);
     document.getElementById('statPending').textContent=s.pending||0;
     document.getElementById('statTotal').textContent=s.total||0;
     document.getElementById('statDelivered').textContent=s.delivered||0;
-  } catch{}
+  }catch(e){}
 }
 
-// ── ORDERS / KANBAN ───────────────────────────────────────────────────────────
+// KANBAN (dashboard)
 async function loadAll(){
   try{
-    const [oRes,dRes]=await Promise.all([fetch('/api/orders'),fetch('/api/drivers')]);
-    allOrders=await oRes.json();
-    allDrivers=await dRes.json();
-    const newIds=new Set(allOrders.map(o=>o.id));
-    if(prevOrderCount>0){for(const id of newIds){if(!knownOrderIds.has(id)){showAlert();break;}}}
-    knownOrderIds=newIds; prevOrderCount=allOrders.length;
-    renderKanban();
-    renderChart();
-    document.getElementById('refreshTag').textContent=`• updated ${new Date().toLocaleTimeString()}`;
-  } catch{}
+    const r=await fetch('/api/orders');
+    const orders=await r.json();
+    // New order alert
+    if(prevOrderCount>0&&orders.length>prevOrderCount){
+      document.getElementById('alertBanner').style.display='block';
+      setTimeout(()=>document.getElementById('alertBanner').style.display='none',5000);
+    }
+    prevOrderCount=orders.length;
+    allOrders=orders;
+    renderKanban(orders);
+    updateRevenueChart(orders);
+  }catch(e){}
 }
 
-const STATUSES=['placed','accepted','preparing','picked_up','delivered'];
-const COL_LABELS={placed:'🆕 New',accepted:'✅ Accepted',preparing:'👨‍🍳 Preparing',picked_up:'🛵 On the Way',delivered:'🏠 Delivered'};
-const COL_CLASS={placed:'col-placed',accepted:'col-accepted',preparing:'col-preparing',picked_up:'col-picked',delivered:'col-delivered'};
-
-function renderKanban(){
-  const board=document.getElementById('kanbanBoard');
-  board.innerHTML=STATUSES.map(st=>{
-    const orders=allOrders.filter(o=>o.status===st);
-    const cards=orders.length?orders.map(o=>orderCard(o)).join(''):'<div class="empty-col">No orders</div>';
-    return `<div class="kanban-col ${COL_CLASS[st]}">
-      <div class="kanban-col-header"><span>${COL_LABELS[st]}</span><span class="count">${orders.length}</span></div>
-      <div class="kanban-cards">${cards}</div>
-    </div>`;
-  }).join('');
+function renderKanban(orders){
+  const cols={placed:[],accepted:[],preparing:[],picked_up:[],delivered:[]};
+  orders.forEach(o=>{if(cols[o.status])cols[o.status].push(o);});
+  const labels={placed:'Placed',accepted:'Accepted',preparing:'Preparing',picked_up:'Picked Up',delivered:'Delivered'};
+  const colClass={placed:'col-placed',accepted:'col-accepted',preparing:'col-preparing',picked_up:'col-picked',delivered:'col-delivered'};
+  document.getElementById('kanbanBoard').innerHTML=Object.entries(cols).map(([status,orders])=>`
+    <div class="kanban-col ${colClass[status]}">
+      <div class="kanban-col-header">${labels[status]}<span class="count">${orders.length}</span></div>
+      <div class="kanban-cards">
+        ${orders.length?orders.map(o=>renderOrderCard(o)).join(''):'<div class="empty-col">No orders</div>'}
+      </div>
+    </div>
+  `).join('');
 }
 
-function orderCard(o){
-  let items=[];try{items=JSON.parse(o.items_json||'[]')}catch{}
-  const itemStr=items.map(i=>`${i.qty}× ${i.name}`).join(', ').substring(0,55)+(items.length>2?'…':'');
-  const elapsed=o.created_at?timeSince(o.created_at):'';
-  const payIcon={cash:'💵',card:'💳',gpay:'🟢',applepay:'🍎'}[o.payment_method]||'💵';
+function renderOrderCard(o){
+  let items=[];try{items=JSON.parse(o.items_json||'[]');}catch(e){}
+  const itemStr=items.map(i=>(i.qty||1)+'x '+(i.name||'')).join(', ');
+  const date=o.created_at?new Date((o.created_at||'').replace(' ','T')).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):'';
   let actions='';
-  if(o.status==='placed')    actions=`<button class="oc-btn accept" onclick="advance(${o.id},'accepted')">${t('accept')}</button><button class="oc-btn cancel" onclick="openRefund(${o.id})">✕</button>`;
-  if(o.status==='accepted')  actions=`<button class="oc-btn prepare" onclick="advance(${o.id},'preparing')">${t('start_prep')}</button><button class="oc-btn refund" onclick="openRefund(${o.id})">${t('refund')}</button>`;
-  if(o.status==='preparing') actions=`<button class="oc-btn ready" onclick="openAssign(${o.id})">${t('assign_drv')}</button><button class="oc-btn complete" onclick="advance(${o.id},'picked_up')">→ Ready</button>`;
-  if(o.status==='picked_up') actions=`<button class="oc-btn enroute" disabled>${t('en_route')}</button><button class="oc-btn complete" onclick="advance(${o.id},'delivered')">${t('mark_done')}</button>`;
-  return `<div class="order-card">
-    <div class="oc-header"><span class="oc-id">#${o.id}</span><span class="oc-time">${elapsed}</span></div>
-    <div class="oc-customer">${o.customer_name||'Customer'}</div>
-    <div class="oc-items">${itemStr||'Items'}</div>
-    <div class="oc-total">£${(o.total||0).toFixed(2)} <span class="oc-payment">${payIcon} ${(o.payment_method||'cash').replace('applepay','Apple Pay').replace('gpay','GPay').replace('cash','Cash').replace('card','Card')}</span></div>
-    ${o.driver_name?`<div class="oc-driver">🛵 ${o.driver_name}</div>`:''}
-    <div class="oc-actions">${actions}</div>
-  </div>`;
+  if(o.status==='placed')
+    actions=`<button class="oc-btn accept" onclick="advance(${o.id},'accepted')">Accept</button>
+             <button class="oc-btn refund" onclick="openRefund(${o.id})">Refund</button>`;
+  else if(o.status==='accepted')
+    actions=`<button class="oc-btn prepare" onclick="advance(${o.id},'preparing')">Mark Preparing</button>
+             <button class="oc-btn refund" onclick="openRefund(${o.id})">Refund</button>`;
+  else if(o.status==='preparing')
+    actions=`<button class="oc-btn assign" onclick="openAssign(${o.id})">Assign Driver</button>
+             <button class="oc-btn refund" onclick="openRefund(${o.id})">Refund</button>`;
+  else if(o.status==='picked_up')
+    actions=`<button class="oc-btn enroute" disabled>En Route</button>
+             <button class="oc-btn complete" onclick="advance(${o.id},'delivered')">Mark Delivered</button>`;
+  else if(o.status==='delivered')
+    actions=`<span style="color:var(--brand);font-size:11px;font-weight:700">✓ Delivered</span>`;
+  return `
+    <div class="order-card">
+      <div class="oc-header"><span class="oc-id">#${o.id}</span><span class="oc-time">${date}</span></div>
+      <div class="oc-customer">${o.customer_name||'Customer'}</div>
+      <div class="oc-items">${itemStr}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span class="oc-total">£${Number(o.total||0).toFixed(2)}</span>
+        <span class="oc-payment">${o.payment_method||'cash'}</span>
+      </div>
+      ${o.driver_name?`<div class="oc-driver">🛵 ${o.driver_name}</div>`:''}
+      <div class="oc-actions">${actions}</div>
+    </div>`;
 }
 
 async function advance(oid,status){
-  await fetch(`/api/orders/${oid}/status`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status})});
-  loadAll(); loadStats();
+  try{
+    await fetch('/api/orders/'+oid+'/status',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status})});
+    loadAll();loadStats();
+  }catch(e){}
 }
 
-function timeSince(ts){
-  if(!ts) return '';
-  const sec=Math.floor((Date.now()-new Date(ts.includes('Z')?ts:ts+'Z').getTime())/1000);
-  if(isNaN(sec)||sec<0) return '';
-  if(sec<60) return `${sec}s ago`;
-  if(sec<3600) return `${Math.floor(sec/60)}m ago`;
-  return `${Math.floor(sec/3600)}h ago`;
+// ORDERS PAGE (table view)
+async function loadOrders(statusFilter){
+  const url=statusFilter&&statusFilter!=='all'?'/api/orders?status='+statusFilter:'/api/orders';
+  try{
+    const r=await fetch(url);
+    const orders=await r.json();
+    const wrap=document.getElementById('ordersTable');
+    if(!orders.length){wrap.innerHTML='<div style="padding:24px;text-align:center;color:#888">No orders found.</div>';return;}
+    wrap.innerHTML=`<table style="width:100%;border-collapse:collapse;font-size:13px">
+      <thead style="background:var(--light)"><tr>
+        <th style="padding:10px 12px;text-align:left;font-weight:700">#</th>
+        <th style="padding:10px 12px;text-align:left;font-weight:700">Customer</th>
+        <th style="padding:10px 12px;text-align:left;font-weight:700">Items</th>
+        <th style="padding:10px 12px;text-align:left;font-weight:700">Total</th>
+        <th style="padding:10px 12px;text-align:left;font-weight:700">Status</th>
+        <th style="padding:10px 12px;text-align:left;font-weight:700">Driver</th>
+        <th style="padding:10px 12px;text-align:left;font-weight:700">Actions</th>
+      </tr></thead>
+      <tbody>${orders.map(o=>{
+        let items=[];try{items=JSON.parse(o.items_json||'[]');}catch(e){}
+        const itemStr=items.map(i=>(i.qty||1)+'x '+i.name).slice(0,2).join(', ')+(items.length>2?'...':'');
+        let actions='';
+        if(o.status==='placed') actions=`<button class="oc-btn accept" onclick="advance(${o.id},'accepted');loadOrders('${statusFilter||'all'}')">Accept</button>`;
+        else if(o.status==='accepted') actions=`<button class="oc-btn prepare" onclick="advance(${o.id},'preparing');loadOrders('${statusFilter||'all'}')">Preparing</button>`;
+        else if(o.status==='preparing') actions=`<button class="oc-btn assign" onclick="openAssign(${o.id})">Assign Driver</button>`;
+        else if(o.status==='picked_up') actions=`<button class="oc-btn complete" onclick="advance(${o.id},'delivered');loadOrders('${statusFilter||'all'}')">Delivered</button>`;
+        if(!['delivered','cancelled'].includes(o.status)) actions+=` <button class="oc-btn refund" onclick="openRefund(${o.id})">Refund</button>`;
+        return `<tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:10px 12px;font-weight:700">#${o.id}</td>
+          <td style="padding:10px 12px">${o.customer_name||'—'}</td>
+          <td style="padding:10px 12px;color:#888">${itemStr}</td>
+          <td style="padding:10px 12px;font-weight:700;color:var(--brand)">£${Number(o.total||0).toFixed(2)}</td>
+          <td style="padding:10px 12px"><span style="padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--light)">${(o.status||'').replace('_',' ')}</span></td>
+          <td style="padding:10px 12px">${o.driver_name||'—'}</td>
+          <td style="padding:10px 12px;white-space:nowrap">${actions}</td>
+        </tr>`;
+      }).join('')}</tbody>
+    </table>`;
+  }catch(e){}
 }
 
-// ── CHART ─────────────────────────────────────────────────────────────────────
-function renderChart(){
-  const delivered=allOrders.filter(o=>o.status==='delivered').slice(-20);
-  const labels=delivered.map((_,i)=>`#${i+1}`);
-  const data=delivered.map(o=>o.total||0);
-  const ctx=document.getElementById('revenueChart').getContext('2d');
-  if(chart) chart.destroy();
-  chart=new Chart(ctx,{type:'line',data:{labels,datasets:[{label:'Order total (£)',data,borderColor:'#06c167',backgroundColor:'rgba(6,193,103,.08)',borderWidth:2,tension:.4,fill:true,pointRadius:4,pointBackgroundColor:'#06c167'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>`£${v}`}},x:{grid:{display:false}}}}});
-}
-
-// ── ORDERS TABLE ──────────────────────────────────────────────────────────────
-async function loadOrders(status){
-  const url=status==='all'?'/api/orders':`/api/orders?status=${status}`;
-  const res=await fetch(url);
-  const orders=await res.json();
-  const tbl=document.getElementById('ordersTable');
-  if(!orders.length){tbl.innerHTML='<p style="padding:28px;text-align:center;color:#888">No orders</p>';return;}
-  tbl.innerHTML=`<table style="width:100%;border-collapse:collapse">
-    <thead><tr style="background:var(--light)">${['#','Customer','Items','Total','Pay','Status','Driver','Time','Actions'].map(h=>`<th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase">${h}</th>`).join('')}</tr></thead>
-    <tbody>
-    ${orders.map(o=>{
-      let items=[];try{items=JSON.parse(o.items_json||'[]')}catch{}
-      const sc={placed:'#3498db',accepted:'#9b59b6',preparing:'#f39c12',picked_up:'#1abc9c',delivered:'#06c167',cancelled:'#e74c3c'}[o.status]||'#ccc';
-      const payIcon={cash:'💵',card:'💳',gpay:'🟢',applepay:'🍎'}[o.payment_method]||'💵';
-      return `<tr style="border-top:1px solid var(--border)">
-        <td style="padding:10px 14px;font-weight:700">#${o.id}</td>
-        <td style="padding:10px 14px"><div style="font-weight:600;font-size:13px">${o.customer_name||''}</div><div style="font-size:11px;color:#888">${(o.customer_address||'').substring(0,30)}</div></td>
-        <td style="padding:10px 14px;font-size:12px">${items.map(i=>`${i.qty}× ${i.name}`).join('<br>')}</td>
-        <td style="padding:10px 14px;font-weight:700">£${(o.total||0).toFixed(2)}</td>
-        <td style="padding:10px 14px">${payIcon}</td>
-        <td style="padding:10px 14px"><span style="background:${sc};color:#fff;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700">${o.status}</span></td>
-        <td style="padding:10px 14px;font-size:12px">${o.driver_name||'—'}</td>
-        <td style="padding:10px 14px;font-size:11px;color:#888">${timeSince(o.created_at)}</td>
-        <td style="padding:10px 14px">${['placed','accepted','preparing','picked_up'].includes(o.status)?`<button onclick="openRefund(${o.id})" style="padding:4px 10px;background:#fef3c7;color:#b45309;border-radius:6px;font-size:11px;font-weight:700;border:none;cursor:pointer">Refund</button>`:''}</td>
-      </tr>`;
-    }).join('')}
-    </tbody></table>`;
-}
-
-// ── DRIVERS ───────────────────────────────────────────────────────────────────
-async function loadDrivers(){
-  const res=await fetch('/api/drivers');
-  allDrivers=await res.json();
-  const panel=document.getElementById('driversPanel');
-  panel.innerHTML=allDrivers.length?allDrivers.map(d=>{
-    const sc={available:'status-available',offline:'status-offline',busy:'status-busy'}[d.status]||'status-offline';
-    return `<div style="background:#fff;border-radius:14px;padding:18px;box-shadow:var(--shadow)">
-      <div style="font-size:15px;font-weight:700;margin-bottom:3px">${d.name}</div>
-      <div style="font-size:12px;color:#888;margin-bottom:8px">${d.vehicle} · ${d.license_plate||'N/A'}</div>
-      <span class="driver-status ${sc}">${d.status}</span>
-      <div style="margin-top:8px;font-size:12px">⭐ ${(d.rating||5).toFixed(1)} · 📦 ${d.total_deliveries||0} deliveries · 💰 £${(d.earnings||0).toFixed(2)}</div>
-    </div>`;
-  }).join(''):'<p style="color:#888;padding:20px">No drivers registered</p>';
-}
-
-// ── ASSIGN DRIVER ─────────────────────────────────────────────────────────────
-function openAssign(oid){
-  assigningOrderId=oid; selectedDriverId=null;
-  const available=allDrivers.filter(d=>d.status==='available');
-  const list=document.getElementById('driverPickList');
-  list.innerHTML=available.length?available.map(d=>`
-    <div class="driver-row" id="dr_${d.id}" onclick="selectDriver(${d.id},this)">
-      <div><div class="driver-name">${d.name}</div><div class="driver-meta">${d.vehicle} · ⭐ ${(d.rating||5).toFixed(1)}</div></div>
-      <span class="driver-status status-available">Available</span>
-    </div>`).join(''):`<p style="color:#888;font-size:13px;padding:8px">${t('no_drivers')}</p>`;
+// ASSIGN DRIVER MODAL
+async function openAssign(oid){
+  assigningOrderId=oid;selectedDriverId=null;
   document.getElementById('assignModal').classList.add('open');
+  document.getElementById('driverPickList').innerHTML='<div style="text-align:center;padding:16px;color:#888">Loading drivers...</div>';
+  try{
+    const r=await fetch('/api/drivers?status=available');
+    const drivers=await r.json();
+    if(!drivers.length){document.getElementById('driverPickList').innerHTML='<div style="text-align:center;padding:16px;color:#888">No available drivers right now.</div>';return;}
+    document.getElementById('driverPickList').innerHTML=drivers.map(d=>`
+      <div class="driver-row" id="dr-${d.id}" onclick="selectDriver(${d.id},this)">
+        <div><div class="driver-name">${d.name}</div><div class="driver-meta">${d.vehicle||'Bike'} · ${d.license_plate||'—'}</div></div>
+        <span class="driver-status status-available">Available</span>
+      </div>`).join('');
+  }catch(e){document.getElementById('driverPickList').innerHTML='<div style="padding:16px;color:#e74c3c">Failed to load drivers.</div>';}
 }
-
 function selectDriver(id,el){
   selectedDriverId=id;
   document.querySelectorAll('.driver-row').forEach(r=>r.classList.remove('sel'));
   el.classList.add('sel');
 }
-
+function closeAssign(){document.getElementById('assignModal').classList.remove('open');assigningOrderId=null;selectedDriverId=null;}
 async function confirmAssign(){
-  if(!selectedDriverId||!assigningOrderId) return;
-  await fetch(`/api/orders/${assigningOrderId}/status`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:'picked_up',driver_id:selectedDriverId})});
-  closeAssign(); loadAll(); loadStats();
+  if(!selectedDriverId){alert('Please select a driver.');return;}
+  try{
+    await fetch('/api/orders/'+assigningOrderId+'/status',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:'picked_up',driver_id:selectedDriverId})});
+    closeAssign();loadAll();loadStats();
+  }catch(e){alert('Failed to assign driver.');}
 }
-function closeAssign(){document.getElementById('assignModal').classList.remove('open');}
 
-// ── REFUND / CANCEL ───────────────────────────────────────────────────────────
-function openRefund(oid){
-  refundingOrderId=oid;
-  document.getElementById('refundReason').value='';
-  document.getElementById('refundModal').classList.add('open');
-}
+// REFUND MODAL
+function openRefund(oid){refundingOrderId=oid;document.getElementById('refundModal').classList.add('open');}
+function closeRefund(){document.getElementById('refundModal').classList.remove('open');refundingOrderId=null;}
 async function confirmRefund(){
-  if(!refundingOrderId) return;
-  await fetch(`/api/orders/${refundingOrderId}/status`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:'cancelled'})});
-  closeRefund(); loadAll(); loadStats();
+  try{
+    await fetch('/api/orders/'+refundingOrderId+'/status',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:'cancelled'})});
+    closeRefund();loadAll();loadStats();
+  }catch(e){alert('Failed to process refund.');}
 }
-function closeRefund(){document.getElementById('refundModal').classList.remove('open');}
 
-// ── REVIEWS ───────────────────────────────────────────────────────────────────
+// DRIVERS PAGE
+async function loadDrivers(){
+  try{
+    const r=await fetch('/api/drivers');
+    const drivers=await r.json();
+    const panel=document.getElementById('driversPanel');
+    if(!drivers.length){panel.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:#888">No drivers registered.</div>';return;}
+    panel.innerHTML=drivers.map(d=>`
+      <div style="background:#fff;border-radius:14px;padding:18px;box-shadow:var(--shadow)">
+        <div style="font-size:28px;margin-bottom:8px">🛵</div>
+        <div style="font-size:15px;font-weight:700;margin-bottom:4px">${d.name||'Driver'}</div>
+        <div style="font-size:12px;color:#888;margin-bottom:8px">${d.vehicle||'Bike'} · ${d.license_plate||'—'}</div>
+        <div style="font-size:12px;margin-bottom:4px">📱 ${d.phone||'—'}</div>
+        <div style="font-size:12px;margin-bottom:8px">⭐ ${Number(d.rating||5).toFixed(1)} · ${d.total_deliveries||0} deliveries</div>
+        <span class="driver-status ${d.status==='available'?'status-available':d.status==='busy'?'status-busy':'status-offline'}">${d.status||'offline'}</span>
+        <div style="font-size:12px;color:var(--brand);margin-top:8px;font-weight:700">£${Number(d.earnings||0).toFixed(2)} earned</div>
+      </div>`).join('');
+  }catch(e){}
+}
+
+// REVIEWS PAGE
 async function loadReviews(){
   try{
-    const res=await fetch('/api/reviews');
-    const reviews=await res.json();
+    const r=await fetch('/api/reviews');
+    const reviews=await r.json();
     renderReviews(reviews);
-  } catch{document.getElementById('reviewsList').innerHTML='<p style="color:#888;padding:20px">Failed to load reviews</p>';}
+  }catch(e){document.getElementById('reviewsList').innerHTML='<div style="padding:24px;color:#e74c3c">Failed to load reviews.</div>';}
 }
 
 function renderReviews(reviews){
-  const summEl=document.getElementById('ratingSummary');
-  const listEl=document.getElementById('reviewsList');
+  const summary=document.getElementById('ratingSummary');
+  const list=document.getElementById('reviewsList');
   if(!reviews.length){
-    summEl.innerHTML='';
-    listEl.innerHTML=`<div style="text-align:center;padding:48px;color:#aaa"><div style="font-size:48px">⭐</div><p style="margin-top:12px;font-size:14px">${t('no_reviews')}</p></div>`;
+    summary.innerHTML='';
+    list.innerHTML='<div style="padding:40px;text-align:center;color:#888">No reviews yet.</div>';
     return;
   }
-  // Summary
-  const avgStore=(reviews.reduce((s,r)=>s+(r.store_rating||5),0)/reviews.length);
-  const stars5=reviews.filter(r=>r.store_rating>=5).length;
-  const stars4=reviews.filter(r=>r.store_rating>=4&&r.store_rating<5).length;
-  const stars3=reviews.filter(r=>r.store_rating>=3&&r.store_rating<4).length;
-  const stars2=reviews.filter(r=>r.store_rating>=2&&r.store_rating<3).length;
-  const stars1=reviews.filter(r=>r.store_rating<2).length;
-  const n=reviews.length;
-  summEl.innerHTML=`<div class="rating-summary">
-    <div class="rating-big"><div class="num">${avgStore.toFixed(1)}</div><div style="font-size:20px">⭐</div><div class="lbl">${n} review${n>1?'s':''}</div></div>
-    <div class="rating-bars">
-      ${[[5,stars5],[4,stars4],[3,stars3],[2,stars2],[1,stars1]].map(([star,cnt])=>`
-      <div class="rbar"><span>${star}⭐</span><div class="rbar-bg"><div class="rbar-fill" style="width:${n?Math.round(cnt/n*100):0}%"></div></div><span style="color:#888;min-width:24px">${cnt}</span></div>`).join('')}
-    </div>
-  </div>`;
-  listEl.innerHTML=reviews.map(r=>{
-    const storeStars='⭐'.repeat(r.store_rating||5)+'☆'.repeat(5-(r.store_rating||5));
-    const driverStars='⭐'.repeat(r.driver_rating||5)+'☆'.repeat(5-(r.driver_rating||5));
-    return `<div class="review-card">
-      <div class="review-top">
-        <div class="review-customer">👤 ${r.customer_name||'Customer'}</div>
-        <div class="review-date">${r.created_at?r.created_at.substring(0,10):''}</div>
+  const avg=reviews.reduce((s,r)=>s+Number(r.store_rating||5),0)/reviews.length;
+  const counts=[5,4,3,2,1].map(n=>reviews.filter(r=>Number(r.store_rating)===n).length);
+  summary.innerHTML=`
+    <div class="rating-summary">
+      <div class="rating-big">
+        <div class="num">${avg.toFixed(1)}</div>
+        <div>${'⭐'.repeat(Math.round(avg))}</div>
+        <div class="lbl">${reviews.length} review${reviews.length!==1?'s':''}</div>
       </div>
-      <div class="review-stars">Restaurant: ${storeStars} &nbsp;|&nbsp; Driver: ${driverStars}</div>
-      ${r.comment?`<div class="review-comment">"${r.comment}"</div>`:''}
-      <div class="review-order">Order #${r.order_id} · £${(r.total||0).toFixed(2)}</div>
+      <div class="rating-bars">
+        ${[5,4,3,2,1].map((n,i)=>`
+          <div class="rbar">
+            <span>${n}★</span>
+            <div class="rbar-bg"><div class="rbar-fill" style="width:${reviews.length?counts[i]/reviews.length*100:0}%"></div></div>
+            <span style="min-width:20px">${counts[i]}</span>
+          </div>`).join('')}
+      </div>
     </div>`;
-  }).join('');
+  list.innerHTML=reviews.map(r=>`
+    <div class="review-card">
+      <div class="review-top">
+        <span class="review-customer">${r.customer_name||'Customer'}</span>
+        <span class="review-date">${r.created_at?new Date((r.created_at||'').replace(' ','T')).toLocaleDateString():''}</span>
+      </div>
+      <div class="review-stars">
+        Store: ${'⭐'.repeat(Number(r.store_rating)||5)}
+        ${r.driver_rating?` · Driver: ${'⭐'.repeat(Number(r.driver_rating))}`: ''}
+      </div>
+      ${r.comment?`<div class="review-comment">"${r.comment}"</div>`:''}
+      <div class="review-order">Order #${r.order_id} · £${Number(r.total||0).toFixed(2)}</div>
+    </div>`).join('');
 }
 
-// ── ALERT ─────────────────────────────────────────────────────────────────────
-let alertTimer=null;
-function showAlert(){
-  const b=document.getElementById('alertBanner');
-  b.style.display='block';
-  if(alertTimer) clearTimeout(alertTimer);
-  alertTimer=setTimeout(()=>b.style.display='none',4000);
-  try{const ctx=new AudioContext();const o=ctx.createOscillator();o.connect(ctx.destination);o.frequency.value=880;o.start();setTimeout(()=>o.stop(),120);}catch{}
+// REVENUE CHART
+function updateRevenueChart(orders){
+  const ctx=document.getElementById('revenueChart');
+  if(!ctx)return;
+  const delivered=orders.filter(o=>o.status==='delivered').slice(-10);
+  const labels=delivered.map(o=>'#'+o.id);
+  const data=delivered.map(o=>Number(o.total||0));
+  if(revenueChart)revenueChart.destroy();
+  revenueChart=new Chart(ctx,{
+    type:'bar',
+    data:{labels,datasets:[{label:'Revenue (£)',data,backgroundColor:'#06c167',borderRadius:6}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'£'+v}}}}
+  });
 }
 
-// ── INIT ──────────────────────────────────────────────────────────────────────
+// AUTO REFRESH
+setInterval(()=>{
+  const activePage=document.querySelector('.page.active');
+  if(activePage&&activePage.id==='page-dashboard'){loadAll();loadStats();}
+},30000);
+
+applyLang();
 loadStats();
 loadAll();
-setInterval(()=>{loadAll();loadStats();},15000);
-applyLang();
 </script>
 </body>
 </html>
