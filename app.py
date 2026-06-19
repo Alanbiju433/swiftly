@@ -674,7 +674,7 @@ def api_driver_orders():
     for r in results:
         r['address'] = r.get('customer_address', '')
         r['customer_phone'] = r.get('customer_phone', '')
-        return jsonify(results)
+    return jsonify(results)
 
 # ── API: DRIVER PENDING ORDERS ────────────────────────────────────────────────
 
