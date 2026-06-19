@@ -1,5 +1,5 @@
 import os, json, secrets
-from datetime import datetime
+from datetime import datetime, timedelta
 from functools import wraps
 from flask import Flask, render_template, request, jsonify, session, redirect, flash
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -7,6 +7,7 @@ import sqlite3
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', secrets.token_hex(32))
+app.permanent_session_lifetime = timedelta(days=30)
 DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'swiftly.db')
 
 # ── DB ────────────────────────────────────────────────────────────────────────
@@ -31,6 +32,16 @@ def _check_schema():
         if 'user_id' not in cols or 'customer_address' not in cols2:
             print("Detected old database schema — deleting swiftly.db to recreate fresh...")
             os.remove(DB_PATH)
+            return
+        # Migrate: add payment_method if missing
+        if 'payment_method' not in cols2:
+            try:
+                conn2 = sqlite3.connect(DB_PATH)
+                conn2.execute("ALTER TABLE orders ADD COLUMN payment_method TEXT DEFAULT 'cash'")
+                conn2.commit()
+                conn2.close()
+            except Exception:
+                pass
     except Exception:
         pass  # If anything goes wrong, let init_db handle it
 
@@ -102,6 +113,7 @@ def init_db():
         status TEXT DEFAULT 'placed',
         driver_id INTEGER,
         notes TEXT,
+        payment_method TEXT DEFAULT 'cash',
         created_at TEXT DEFAULT CURRENT_TIMESTAMP,
         updated_at TEXT DEFAULT CURRENT_TIMESTAMP
     );
@@ -239,6 +251,7 @@ def login():
         if not user or not check_password_hash(user['password_hash'], password):
             flash('Wrong email or password.', 'error')
             return redirect('/login')
+        session.permanent = True
         session['uid']  = user['id']
         session['role'] = user['role']
         session['name'] = user['name']
@@ -294,6 +307,7 @@ def signup():
 
             conn.commit()
             conn.close()
+            session.permanent = True
             session['uid']  = uid
             session['role'] = role
             session['name'] = name
@@ -522,12 +536,13 @@ def api_create_order():
     user  = conn.execute("SELECT * FROM users WHERE id=?", (session['uid'],)).fetchone()
     sub   = round(sum(i['price'] * i['qty'] for i in items), 2)
     total = round(sub + dfee, 2)
-    addr  = data.get('address') or user['address'] or ''
+    addr    = data.get('address') or user['address'] or ''
+    pay_mtd = data.get('payment_method', 'cash')
     cur   = conn.execute(
         "INSERT INTO orders (customer_id,customer_name,customer_phone,customer_address,"
-        "store_id,store_name,items_json,subtotal,delivery_fee,total,notes) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+        "store_id,store_name,items_json,subtotal,delivery_fee,total,notes,payment_method) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
         (session['uid'], user['name'], user['phone'], addr,
-         sid, sname, json.dumps(items), sub, dfee, total, data.get('notes','')))
+         sid, sname, json.dumps(items), sub, dfee, total, data.get('notes',''), pay_mtd))
     oid = cur.lastrowid
     conn.commit()
     conn.close()
@@ -641,6 +656,58 @@ def api_driver_orders():
         r['address'] = r.get('customer_address', '')
         r['customer_phone'] = r.get('customer_phone', '')
     return jsonify(results)
+
+# ── API: DRIVER PENDING ORDERS ────────────────────────────────────────────────
+
+@app.route('/api/drivers/pending-orders')
+@login_required(roles=['driver'])
+def api_driver_pending_orders():
+    """Returns orders in accepted/preparing state with no driver assigned yet."""
+    conn = get_db()
+    rows = conn.execute(
+        "SELECT o.*, s.name as store_name FROM orders o "
+        "LEFT JOIN stores s ON o.store_id=s.id "
+        "WHERE o.status IN ('accepted','preparing') AND o.driver_id IS NULL "
+        "ORDER BY o.created_at ASC"
+    ).fetchall()
+    conn.close()
+    results = []
+    for r in rows:
+        d = dict(r)
+        d['address'] = d.get('customer_address', '')
+        results.append(d)
+    return jsonify(results)
+
+@app.route('/api/orders/<int:oid>/accept', methods=['POST'])
+@login_required(roles=['driver'])
+def api_driver_accept_order(oid):
+    """Driver claims an unassigned order."""
+    conn = get_db()
+    drv = conn.execute("SELECT id FROM drivers WHERE user_id=?", (session['uid'],)).fetchone()
+    if not drv:
+        conn.close()
+        return jsonify({'error': 'No driver profile'}), 404
+    order = conn.execute("SELECT id,status,driver_id FROM orders WHERE id=?", (oid,)).fetchone()
+    if not order:
+        conn.close()
+        return jsonify({'error': 'Order not found'}), 404
+    if order['driver_id']:
+        conn.close()
+        return jsonify({'error': 'Already claimed by another driver'}), 409
+    now = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+    conn.execute("UPDATE orders SET driver_id=?,status='picked_up',updated_at=? WHERE id=?",
+                 (drv['id'], now, oid))
+    conn.execute("UPDATE drivers SET status='busy',current_order_id=? WHERE id=?",
+                 (oid, drv['id']))
+    conn.commit()
+    conn.close()
+    return jsonify({'ok': True, 'order_id': oid})
+
+@app.route('/api/orders/<int:oid>/decline', methods=['POST'])
+@login_required(roles=['driver'])
+def api_driver_decline_order(oid):
+    """Driver explicitly declines — just a no-op acknowledgement (order stays unassigned)."""
+    return jsonify({'ok': True, 'order_id': oid})
 
 # ── API: STATS ────────────────────────────────────────────────────────────────
 
