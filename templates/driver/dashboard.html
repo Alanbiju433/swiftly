@@ -1,242 +1,384 @@
 <!DOCTYPE html>
-<html lang="en" id="html-root">
+<html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Driver – Swiftly</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Swiftly Driver</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f6f6f6;color:#111;min-height:100vh}
-nav{background:#000;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.logo{font-size:1.4rem;font-weight:800;color:#fff;letter-spacing:-.5px}.logo span{color:#FF6B35}
-.nav-right{display:flex;align-items:center;gap:12px}
-.nav-btn{background:none;border:1px solid #333;color:#fff;border-radius:20px;padding:7px 16px;font-size:.82rem;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center}
-.nav-btn:hover{background:#fff;color:#000;border-color:#fff}
-.lang-mini{display:flex;gap:2px}
-.lm{background:none;border:none;color:#666;font-size:.72rem;cursor:pointer;padding:3px 5px;border-radius:4px}
-.lm:hover,.lm.active{background:#222;color:#fff}
-main{max-width:780px;margin:0 auto;padding:28px 24px 80px}
-/* STATUS CARD */
-.status-card{background:#000;border-radius:20px;padding:28px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:20px}
-.sc-left h2{font-size:1.3rem;font-weight:800;color:#fff;margin-bottom:4px}
-.sc-left p{color:#888;font-size:.85rem}
-.online-pill{background:#22C55E;color:#fff;font-size:.78rem;font-weight:700;padding:4px 12px;border-radius:20px;display:inline-flex;align-items:center;gap:5px;margin-top:8px}
-.offline-pill{background:#555;color:#ccc;font-size:.78rem;font-weight:700;padding:4px 12px;border-radius:20px;display:inline-flex;align-items:center;gap:5px;margin-top:8px}
-.pulse{width:8px;height:8px;border-radius:50%;background:#fff;animation:pulse 1.4s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.toggle-big{background:#FF6B35;color:#fff;border:none;border-radius:14px;padding:15px 28px;font-size:1rem;font-weight:700;cursor:pointer;transition:background .2s}
-.toggle-big:hover{background:#e55a28}
-.toggle-big.offline{background:#333}
-.toggle-big.offline:hover{background:#444}
-/* STATS */
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
-.stat-card{background:#fff;border-radius:16px;padding:18px;border:1px solid #f0f0f0;text-align:center}
-.stat-val{font-size:1.7rem;font-weight:800}
-.stat-label{font-size:.73rem;color:#888;font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-top:3px}
-/* DELIVERIES */
-.section-title{font-size:1.1rem;font-weight:800;margin-bottom:14px}
-.delivery-list{display:flex;flex-direction:column;gap:14px}
-.delivery-card{background:#fff;border-radius:16px;padding:20px;border:1px solid #f0f0f0;transition:box-shadow .2s}
-.delivery-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.07)}
-.dc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
-.dc-id{font-size:.72rem;color:#aaa;margin-bottom:2px}
-.dc-store{font-weight:800;font-size:1rem}
-.dc-total{font-weight:800;font-size:1rem;color:#FF6B35}
-.dc-items{font-size:.8rem;color:#777;margin-bottom:14px;line-height:1.5}
-.dc-addr{display:flex;align-items:flex-start;gap:8px;background:#f9f9f9;border-radius:10px;padding:12px;margin-bottom:14px}
-.dc-addr-icon{font-size:1.1rem;flex-shrink:0;margin-top:1px}
-.dc-addr-text{font-size:.82rem;color:#555;line-height:1.5;flex:1}
-.dc-actions{display:flex;gap:10px}
-.btn-nav{flex:1;background:#000;color:#fff;border:none;border-radius:10px;padding:12px;font-weight:700;font-size:.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;text-decoration:none}
-.btn-nav:hover{background:#222}
-.btn-done{flex:1;background:#FF6B35;color:#fff;border:none;border-radius:10px;padding:12px;font-weight:700;font-size:.85rem;cursor:pointer;transition:background .2s}
-.btn-done:hover{background:#e55a28}
-.empty-state{text-align:center;padding:60px;color:#ccc}
-.empty-state .big{font-size:3.5rem;margin-bottom:12px}
-.empty-state p{font-size:.9rem}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--brand:#06c167;--dark:#1a1a1a;--mid:#545454;--light:#f6f6f6;--border:#e8e8e8;--shadow:0 2px 12px rgba(0,0,0,.08)}
+body{font-family:'Inter',sans-serif;background:#f4f5f7;color:var(--dark)}
+button{cursor:pointer;font-family:inherit;border:none;outline:none}
+
+/* HEADER */
+.header{background:#1a1a1a;color:#fff;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.logo{font-size:18px;font-weight:800;color:var(--brand)}
+.header-right{display:flex;align-items:center;gap:12px}
+.driver-name{font-size:13px;color:#ccc}
+.toggle-wrap{display:flex;align-items:center;gap:8px}
+.toggle-label{font-size:13px;font-weight:600}
+.toggle{width:48px;height:26px;background:#555;border-radius:50px;position:relative;cursor:pointer;transition:background .3s}
+.toggle.on{background:var(--brand)}
+.toggle::after{content:'';position:absolute;width:20px;height:20px;border-radius:50%;background:#fff;top:3px;left:3px;transition:transform .3s}
+.toggle.on::after{transform:translateX(22px)}
+.btn-logout{padding:7px 14px;border-radius:8px;background:#333;color:#fff;font-size:12px;font-weight:600;text-decoration:none}
+
+/* TABS */
+.tabs{display:flex;background:#fff;border-bottom:2px solid var(--border)}
+.tab{flex:1;padding:14px;text-align:center;font-size:14px;font-weight:600;color:var(--mid);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s}
+.tab.active{color:var(--brand);border-bottom-color:var(--brand)}
+
+/* MAIN */
+.main{max-width:600px;margin:0 auto;padding:20px 16px}
+
+/* STATUS CARDS */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.scard{background:#fff;border-radius:12px;padding:16px;text-align:center;box-shadow:var(--shadow)}
+.scard .val{font-size:24px;font-weight:800;color:var(--brand)}
+.scard .lbl{font-size:11px;color:var(--mid);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
+
+/* STATUS BANNER */
+.status-banner{border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px;font-size:15px;font-weight:600}
+.banner-offline{background:#fff3f3;color:#e74c3c;border:1.5px solid #f5c6c6}
+.banner-available{background:#f0faf5;color:var(--brand);border:1.5px solid #a8e6c7}
+.banner-busy{background:#fff9f0;color:#f39c12;border:1.5px solid #f9e0a0}
+
+/* ORDER CARDS */
+.section-title{font-size:15px;font-weight:700;margin-bottom:12px}
+.order-list{display:flex;flex-direction:column;gap:12px}
+.order-card{background:#fff;border-radius:14px;padding:18px;box-shadow:var(--shadow);border-left:4px solid var(--border)}
+.order-card.active{border-left-color:var(--brand)}
+.order-card.pending{border-left-color:#3498db}
+.oc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.oc-id{font-size:13px;font-weight:700;color:var(--mid)}
+.oc-status{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:700}
+.s-accepting{background:#dbeafe;color:#1d4ed8}
+.s-active{background:#d5f5e3;color:var(--brand)}
+.s-delivered{background:#eee;color:#888}
+.s-cancelled{background:#fde8e8;color:#e74c3c}
+.oc-store{font-size:14px;font-weight:600;margin-bottom:4px}
+.oc-addr{font-size:13px;color:var(--mid);display:flex;align-items:center;gap:4px;margin-bottom:8px}
+.oc-items{font-size:12px;color:#888;margin-bottom:10px;line-height:1.5}
+.oc-total{font-size:14px;font-weight:700;margin-bottom:12px}
+.oc-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn-act{padding:9px 16px;border-radius:8px;font-size:13px;font-weight:700;flex:1;min-width:100px;text-align:center}
+.btn-accept{background:var(--brand);color:#fff}
+.btn-decline{background:var(--light);color:var(--mid)}
+.btn-maps{background:#1a1a1a;color:#fff;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:4px}
+.btn-deliver{background:var(--brand);color:#fff}
+.btn-deliver:disabled{background:#ccc;cursor:not-allowed}
+
+/* GPS NOTICE */
+.gps-notice{font-size:12px;color:#888;margin-top:6px;text-align:center;min-height:16px}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:48px 20px;color:#aaa}
+.empty-state .icon{font-size:52px;margin-bottom:12px}
+
 /* HISTORY */
-.hist-tabs{display:flex;background:#fff;border-radius:10px;padding:4px;gap:4px;margin-bottom:16px;border:1px solid #f0f0f0}
-.ht{flex:1;padding:9px;border:none;background:none;border-radius:8px;font-size:.82rem;font-weight:600;color:#888;cursor:pointer}
-.ht.active{background:#000;color:#fff}
-.hist-card{background:#fff;border-radius:12px;padding:14px 16px;border:1px solid #f0f0f0;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
-.hc-left h4{font-size:.88rem;font-weight:700}
-.hc-left p{font-size:.75rem;color:#aaa;margin-top:2px}
-.hc-right{text-align:right}
-.hc-earnings{font-weight:800;color:#22C55E}
-.hc-date{font-size:.72rem;color:#aaa;margin-top:2px}
-.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(120px);background:#111;color:#fff;padding:13px 24px;border-radius:12px;font-weight:600;z-index:999;transition:transform .4s;font-size:.88rem}
+.history-item{background:#fff;border-radius:12px;padding:14px;box-shadow:var(--shadow);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.history-left .hi-id{font-size:13px;font-weight:700;color:var(--mid)}
+.history-left .hi-addr{font-size:13px;color:var(--dark)}
+.history-left .hi-time{font-size:11px;color:#aaa;margin-top:2px}
+.history-right{text-align:right}
+.history-right .hi-earn{font-size:16px;font-weight:700;color:var(--brand)}
+.status-tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:700}
+.tag-delivered{background:#d5f5e3;color:var(--brand)}
+.tag-cancelled{background:#fde8e8;color:#e74c3c}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:#1a1a1a;color:#fff;padding:12px 24px;border-radius:50px;font-size:14px;font-weight:600;z-index:600;transition:transform .3s ease;pointer-events:none}
 .toast.show{transform:translateX(-50%) translateY(0)}
-@media(max-width:600px){.stats{grid-template-columns:1fr 1fr}.status-card{flex-direction:column;text-align:center}}
 </style>
 </head>
 <body>
-<nav>
-  <div class="logo">Swift<span>ly</span></div>
-  <div class="nav-right">
-    <div class="lang-mini">
-      <button class="lm active" onclick="setLang('en')">EN</button>
-      <button class="lm" onclick="setLang('es')">ES</button>
-      <button class="lm" onclick="setLang('fr')">FR</button>
-      <button class="lm" onclick="setLang('ar')">AR</button>
-      <button class="lm" onclick="setLang('hi')">HI</button>
-      <button class="lm" onclick="setLang('ml')">ML</button>
+
+<div class="header">
+  <div class="logo">⚡ Swiftly Driver</div>
+  <div class="header-right">
+    <span class="driver-name">{{ user.name }}</span>
+    <div class="toggle-wrap">
+      <div class="toggle" id="onlineToggle" onclick="toggleOnline()"></div>
+      <span class="toggle-label" id="onlineLabel">Offline</span>
     </div>
-    <a href="/logout" class="nav-btn" data-i18n="logout">Log out</a>
+    <a href="/logout" class="btn-logout">Logout</a>
   </div>
-</nav>
+</div>
 
-<main>
-  <!-- Status card -->
-  <div class="status-card">
-    <div class="sc-left">
-      <h2 id="drv-name-h" data-i18n="hello">Hello, Driver!</h2>
-      <p id="drv-vehicle-p"></p>
-      <div id="status-pill" class="offline-pill">⚫ <span data-i18n="offline">Offline</span></div>
+<div class="tabs">
+  <div class="tab active" onclick="showTab('active',this)">Active Delivery</div>
+  <div class="tab" onclick="showTab('pending',this)">Available Orders</div>
+  <div class="tab" onclick="showTab('history',this)">History</div>
+</div>
+
+<div class="main">
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="scard"><div class="val" id="statEarnings">£0</div><div class="lbl">Earned</div></div>
+    <div class="scard"><div class="val" id="statDeliveries">0</div><div class="lbl">Deliveries</div></div>
+    <div class="scard"><div class="val" id="statRating">5.0</div><div class="lbl">Rating ⭐</div></div>
+  </div>
+
+  <!-- STATUS BANNER -->
+  <div class="status-banner banner-offline" id="statusBanner">
+    <span>🔴</span> You are offline. Toggle above to go online.
+  </div>
+
+  <!-- ACTIVE TAB -->
+  <div id="tab-active">
+    <div class="section-title">Your active delivery</div>
+    <div class="order-list" id="activeList">
+      <div class="empty-state"><div class="icon">🛵</div><p>No active delivery</p></div>
     </div>
-    <button class="toggle-big offline" id="online-toggle-btn" onclick="toggleOnline()" data-i18n="go_online">Go Online</button>
   </div>
 
-  <!-- Stats -->
-  <div class="stats">
-    <div class="stat-card"><div class="stat-val" id="st-today">0</div><div class="stat-label" data-i18n="today">Today</div></div>
-    <div class="stat-card"><div class="stat-val" id="st-total">0</div><div class="stat-label" data-i18n="total_del">Total Delivered</div></div>
-    <div class="stat-card"><div class="stat-val" id="st-earn">£0</div><div class="stat-label" data-i18n="earnings">Earnings</div></div>
+  <!-- PENDING TAB -->
+  <div id="tab-pending" style="display:none">
+    <div class="section-title">Available orders to pick up</div>
+    <div class="order-list" id="pendingList">
+      <div class="empty-state"><div class="icon">📋</div><p>No orders available</p></div>
+    </div>
   </div>
 
-  <!-- Tabs -->
-  <div class="hist-tabs">
-    <button class="ht active" onclick="showTab('active',this)" data-i18n="active_tab">Active</button>
-    <button class="ht" onclick="showTab('history',this)" data-i18n="history_tab">History</button>
+  <!-- HISTORY TAB -->
+  <div id="tab-history" style="display:none">
+    <div class="section-title">Delivery history</div>
+    <div id="historyList">
+      <div class="empty-state"><div class="icon">📦</div><p>No deliveries yet</p></div>
+    </div>
   </div>
-
-  <!-- Active deliveries -->
-  <div id="active-panel">
-    <div class="delivery-list" id="delivery-list"></div>
-  </div>
-
-  <!-- History -->
-  <div id="history-panel" style="display:none">
-    <div id="history-list"></div>
-  </div>
-</main>
+</div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-const T={
-  en:{hello:'Hello!',logout:'Log out',offline:'Offline',online:'Online',go_online:'Go Online',go_offline:'Go Offline',active_tab:'Active Deliveries',history_tab:'History',today:'Today',total_del:'Total Delivered',earnings:'Est. Earnings',navigate:'Navigate',delivered_btn:'Mark Delivered',no_active:'No active deliveries.\nGo online to start receiving orders!',items:'Items',delivery_to:'Deliver to',from:'From',order_id:'Order'},
-  es:{hello:'¡Hola!',logout:'Salir',offline:'Desconectado',online:'En línea',go_online:'Conectarse',go_offline:'Desconectarse',active_tab:'Entregas activas',history_tab:'Historial',today:'Hoy',total_del:'Total entregado',earnings:'Ganancias',navigate:'Navegar',delivered_btn:'Marcar entregado',no_active:'Sin entregas activas.'},
-  fr:{hello:'Bonjour !',logout:'Déconnexion',offline:'Hors ligne',online:'En ligne',go_online:'Passer en ligne',go_offline:'Passer hors ligne',active_tab:'Livraisons actives',history_tab:'Historique',today:"Aujourd'hui",total_del:'Total livré',earnings:'Gains',navigate:'Naviguer',delivered_btn:'Marquer livré',no_active:'Aucune livraison active.'},
-  ar:{hello:'مرحباً!',logout:'خروج',offline:'غير متصل',online:'متصل',go_online:'الاتصال',go_offline:'قطع الاتصال',active_tab:'التوصيلات النشطة',history_tab:'السجل',today:'اليوم',total_del:'إجمالي التسليم',earnings:'الأرباح',navigate:'التنقل',delivered_btn:'تم التسليم',no_active:'لا توصيلات نشطة.'},
-  hi:{hello:'नमस्ते!',logout:'लॉग आउट',offline:'ऑफलाइन',online:'ऑनलाइन',go_online:'ऑनलाइन जाएं',go_offline:'ऑफलाइन जाएं',active_tab:'सक्रिय डिलीवरी',history_tab:'इतिहास',today:'आज',total_del:'कुल डिलीवरी',earnings:'कमाई',navigate:'नेविगेट',delivered_btn:'डिलीवर',no_active:'कोई सक्रिय डिलीवरी नहीं।'},
-  ml:{hello:'ഹലോ!',logout:'ലോഗ് ഔട്ട്',offline:'ഓഫ്‌ലൈൻ',online:'ഓൺലൈൻ',go_online:'ഓൺലൈൻ ആകൂ',go_offline:'ഓഫ്‌ലൈൻ ആകൂ',active_tab:'സജീവ ഡെലിവറികൾ',history_tab:'ചരിത്രം',today:'ഇന്ന്',total_del:'ആകെ ഡെലിവറി',earnings:'വരുമാനം',navigate:'നേവിഗേറ്റ്',delivered_btn:'ഡെലിവർ ചെയ്‌തു',no_active:'സജീവ ഡെലിവറികളൊന്നും ഇല്ല.'}
-};
-let lang=localStorage.getItem('sw_lang')||'en';
-function t(k){return (T[lang]||T.en)[k]||k;}
-function applyLang(){
-  const tr=T[lang]||T.en;
-  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(tr[k])el.textContent=tr[k];});
-  document.querySelectorAll('.lm').forEach(b=>b.classList.remove('active'));
-  const lb=document.querySelector(`.lm[onclick="setLang('${lang}')"]`);if(lb)lb.classList.add('active');
-  document.getElementById('html-root').dir=lang==='ar'?'rtl':'ltr';
-}
-function setLang(l){lang=l;localStorage.setItem('sw_lang',l);applyLang();}
+let isOnline=false, myOrders=[], pendingOrders=[], gpsPosition=null, pollInterval=null;
 
-let isOnline=false,myOrders=[];
-
+// ── INIT ──────────────────────────────────────────────────────────────────────
 async function init(){
-  const r=await fetch('/api/drivers/me');
-  if(!r.ok){window.location='/login';return;}
-  const me=await r.json();
-  document.getElementById('drv-name-h').textContent=`${t('hello').replace('!','')} ${me.name}!`;
-  document.getElementById('drv-vehicle-p').textContent=`${me.vehicle||''} ${me.license_plate?'· '+me.license_plate:''}`;
-  isOnline=me.is_online||false;
-  updateOnlineUI();
-  loadMyOrders();
-  applyLang();
+  await loadDriverStatus();
+  startPolling();
+  watchGPS();
 }
-function updateOnlineUI(){
-  const pill=document.getElementById('status-pill');
-  const btn=document.getElementById('online-toggle-btn');
-  if(isOnline){
-    pill.className='online-pill';
-    pill.innerHTML=`<span class="pulse"></span> ${t('online')}`;
-    btn.className='toggle-big';
-    btn.textContent=t('go_offline');
-  }else{
-    pill.className='offline-pill';
-    pill.innerHTML=`⚫ ${t('offline')}`;
-    btn.className='toggle-big offline';
-    btn.textContent=t('go_online');
-  }
+
+async function loadDriverStatus(){
+  try{
+    const r=await fetch('/api/drivers/me');
+    const d=await r.json();
+    isOnline=d.status!=='offline';
+    setOnlineUI(isOnline);
+    document.getElementById('statEarnings').textContent=`£${(d.earnings||0).toFixed(2)}`;
+    document.getElementById('statDeliveries').textContent=d.total_deliveries||0;
+    document.getElementById('statRating').textContent=(d.rating||5).toFixed(1);
+  } catch{}
 }
+
+// ── ONLINE TOGGLE ─────────────────────────────────────────────────────────────
 async function toggleOnline(){
   isOnline=!isOnline;
+  setOnlineUI(isOnline);
   await fetch('/api/drivers/me',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({is_online:isOnline})});
-  updateOnlineUI();
-  showToast(isOnline?'You are now online 🟢':'You are now offline ⚫');
+  if(isOnline) showToast('✅ You are now online');
+  else showToast('🔴 You are now offline');
+}
+
+function setOnlineUI(on){
+  const toggle=document.getElementById('onlineToggle');
+  const label=document.getElementById('onlineLabel');
+  const banner=document.getElementById('statusBanner');
+  toggle.className='toggle'+(on?' on':'');
+  label.textContent=on?'Online':'Offline';
+  if(on){
+    banner.className='status-banner banner-available';
+    banner.innerHTML='<span>🟢</span> You are online — ready for deliveries';
+  } else {
+    banner.className='status-banner banner-offline';
+    banner.innerHTML='<span>🔴</span> You are offline. Toggle above to go online.';
+  }
+}
+
+// ── POLLING ───────────────────────────────────────────────────────────────────
+function startPolling(){
+  loadMyOrders();
+  loadPendingOrders();
+  pollInterval=setInterval(()=>{loadMyOrders();loadPendingOrders();},8000);
 }
 
 async function loadMyOrders(){
-  const r=await fetch('/api/drivers/me/orders');
-  const all=await r.json();
-  myOrders=all;
-  const active=all.filter(o=>o.status==='picked_up');
-  const delivered=all.filter(o=>o.status==='delivered');
-  document.getElementById('st-today').textContent=delivered.filter(o=>isToday(o.created_at)).length;
-  document.getElementById('st-total').textContent=delivered.length;
-  document.getElementById('st-earn').textContent=`£${(delivered.length*2.5).toFixed(2)}`;
-  renderActive(active);
-  renderHistory(delivered);
+  try{
+    const r=await fetch('/api/drivers/me/orders');
+    myOrders=await r.json();
+    renderActive();
+    renderHistory();
+  } catch{}
 }
-function isToday(dt){const d=new Date(dt);const n=new Date();return d.getDate()===n.getDate()&&d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear();}
-function renderActive(orders){
-  const el=document.getElementById('delivery-list');
-  if(!orders.length){el.innerHTML=`<div class="empty-state"><div class="big">🏍️</div><p>${t('no_active')}</p></div>`;return;}
-  el.innerHTML=orders.map(o=>{
-    const items=JSON.parse(o.items_json||'[]');
-    const mapsUrl=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(o.address||'')}`;
-    return`<div class="delivery-card">
-      <div class="dc-top">
-        <div><div class="dc-id">#${o.id}</div><div class="dc-store">${o.store_name}</div></div>
-        <span class="dc-total">£${o.total.toFixed(2)}</span>
+
+async function loadPendingOrders(){
+  if(!isOnline) return;
+  try{
+    const r=await fetch('/api/drivers/pending-orders');
+    pendingOrders=await r.json();
+    renderPending();
+  } catch{}
+}
+
+// ── RENDER ACTIVE ─────────────────────────────────────────────────────────────
+function renderActive(){
+  const active=myOrders.filter(o=>!['delivered','cancelled'].includes(o.status));
+  const el=document.getElementById('activeList');
+  if(!active.length){
+    el.innerHTML='<div class="empty-state"><div class="icon">🛵</div><p>No active delivery right now</p></div>';
+    // Update banner if we have no active but we're online
+    if(isOnline){
+      document.getElementById('statusBanner').className='status-banner banner-available';
+      document.getElementById('statusBanner').innerHTML='<span>🟢</span> You are online — waiting for an order';
+    }
+    return;
+  }
+  const o=active[0]; // One active at a time
+  const items=tryParseItems(o.items_json);
+  const mapsUrl=`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(o.customer_address||o.address||'')}`;
+
+  // GPS delivery button logic
+  const dist=gpsPosition?haversine(gpsPosition.lat,gpsPosition.lng,o.customerLat,o.customerLng):null;
+  const canDeliver=dist===null?false:dist<=0.5; // within 500m
+  const gpsNote=gpsPosition
+    ?(dist!==null?`📍 ${dist<0.1?'You are at the location':dist.toFixed(2)+' km away'} (need ≤ 0.5 km to mark delivered)`)
+    :'📍 Acquiring GPS...'
+  : '📍 GPS not available';
+
+  // Update busy banner
+  document.getElementById('statusBanner').className='status-banner banner-busy';
+  document.getElementById('statusBanner').innerHTML=`<span>🟡</span> On delivery — Order #${o.id}`;
+
+  el.innerHTML=`<div class="order-card active">
+    <div class="oc-top">
+      <span class="oc-id">Order #${o.id}</span>
+      <span class="oc-status s-active">${o.status.replace('_',' ')}</span>
+    </div>
+    <div class="oc-store">🏪 ${o.store_name||'Store'}</div>
+    <div class="oc-addr">📍 ${o.customer_address||o.address||'No address'}</div>
+    <div class="oc-items">${items.map(i=>`${i.qty}× ${i.name}`).join(' · ')||'—'}</div>
+    <div class="oc-total">£${(o.total||0).toFixed(2)} · ${o.customer_phone?`📞 ${o.customer_phone}`:''}</div>
+    <div class="oc-actions">
+      <a class="btn-act btn-maps" href="${mapsUrl}" target="_blank">🗺️ Navigate</a>
+      <button class="btn-act btn-deliver" id="deliverBtn" onclick="markDelivered(${o.id})" ${canDeliver?'':' disabled'}>Mark Delivered</button>
+    </div>
+    <div class="gps-notice" id="gpsNote">${gpsNote}</div>
+  </div>`;
+}
+
+// ── RENDER PENDING ────────────────────────────────────────────────────────────
+function renderPending(){
+  const el=document.getElementById('pendingList');
+  if(!isOnline){
+    el.innerHTML='<div class="empty-state"><div class="icon">🔴</div><p>Go online to see available orders</p></div>';
+    return;
+  }
+  if(!pendingOrders.length){
+    el.innerHTML='<div class="empty-state"><div class="icon">⏳</div><p>No orders available right now</p></div>';
+    return;
+  }
+  el.innerHTML=pendingOrders.map(o=>{
+    const items=tryParseItems(o.items_json);
+    return `<div class="order-card pending">
+      <div class="oc-top">
+        <span class="oc-id">Order #${o.id}</span>
+        <span class="oc-status s-accepting">Available</span>
       </div>
-      <div class="dc-items">📦 ${items.map(i=>`${i.emoji||''}${i.name} ×${i.qty}`).join(', ')}</div>
-      <div class="dc-addr">
-        <div class="dc-addr-icon">📍</div>
-        <div class="dc-addr-text"><strong>${t('delivery_to')}</strong><br>${o.address||'–'}${o.customer_phone?`<br>📞 ${o.customer_phone}`:''}</div>
-      </div>
-      <div class="dc-actions">
-        <a class="btn-nav" href="${mapsUrl}" target="_blank">🗺️ ${t('navigate')}</a>
-        <button class="btn-done" onclick="markDelivered(${o.id})">${t('delivered_btn')}</button>
+      <div class="oc-store">🏪 ${o.store_name||'Store'}</div>
+      <div class="oc-addr">📍 ${o.customer_address||o.address||'No address'}</div>
+      <div class="oc-items">${items.map(i=>`${i.qty}× ${i.name}`).join(' · ')||'—'}</div>
+      <div class="oc-total">£${(o.total||0).toFixed(2)}</div>
+      <div class="oc-actions">
+        <button class="btn-act btn-decline" onclick="declineOrder(${o.id})">Decline</button>
+        <button class="btn-act btn-accept" onclick="acceptOrder(${o.id})">Accept →</button>
       </div>
     </div>`;
   }).join('');
 }
-function renderHistory(orders){
-  const el=document.getElementById('history-list');
-  if(!orders.length){el.innerHTML='<p style="color:#aaa;text-align:center;padding:40px">No deliveries yet</p>';return;}
-  el.innerHTML=orders.map(o=>`<div class="hist-card">
-    <div class="hc-left"><h4>${o.store_name} → ${o.address?.split(',')[0]||'–'}</h4><p>#${o.id} · ${items_summary(o)}</p></div>
-    <div class="hc-right"><div class="hc-earnings">+£2.50</div><div class="hc-date">${new Date(o.created_at).toLocaleDateString()}</div></div>
-  </div>`).join('');
+
+// ── RENDER HISTORY ────────────────────────────────────────────────────────────
+function renderHistory(){
+  const done=myOrders.filter(o=>['delivered','cancelled'].includes(o.status));
+  const el=document.getElementById('historyList');
+  if(!done.length){
+    el.innerHTML='<div class="empty-state"><div class="icon">📦</div><p>No deliveries yet</p></div>';
+    return;
+  }
+  el.innerHTML=done.map(o=>`
+    <div class="history-item">
+      <div class="history-left">
+        <div class="hi-id">Order #${o.id}</div>
+        <div class="hi-addr">${o.store_name||''} → ${(o.customer_address||o.address||'').substring(0,35)}</div>
+        <div class="hi-time">${o.created_at||''}</div>
+      </div>
+      <div class="history-right">
+        <div class="hi-earn">${o.status==='delivered'?'+£3.00':'—'}</div>
+        <span class="status-tag ${o.status==='delivered'?'tag-delivered':'tag-cancelled'}">${o.status}</span>
+      </div>
+    </div>`).join('');
 }
-function items_summary(o){try{return JSON.parse(o.items_json||'[]').map(i=>i.name).join(', ');}catch{return '';}}
-async function markDelivered(id){
-  const r=await fetch(`/api/orders/${id}/status`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:'delivered'})});
-  const d=await r.json();
-  if(d.ok){showToast('Delivery complete! 🎉 +£2.50');loadMyOrders();}
-  else showToast(d.error||'Error');
+
+// ── ACCEPT / DECLINE / DELIVER ────────────────────────────────────────────────
+async function acceptOrder(oid){
+  try{
+    const r=await fetch(`/api/orders/${oid}/accept`,{method:'POST'});
+    const d=await r.json();
+    if(d.ok){ showToast('✅ Order accepted!'); await loadMyOrders(); await loadPendingOrders(); showTab('active',document.querySelector('.tab')); }
+    else showToast(d.error||'Could not accept order');
+  } catch{ showToast('Error accepting order'); }
 }
-function showTab(tab,el){
-  document.querySelectorAll('.ht').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('active-panel').style.display=tab==='active'?'block':'none';
-  document.getElementById('history-panel').style.display=tab==='history'?'block':'none';
+
+async function declineOrder(oid){
+  await fetch(`/api/orders/${oid}/decline`,{method:'POST'});
+  showToast('Order declined');
+  pendingOrders=pendingOrders.filter(o=>o.id!==oid);
+  renderPending();
 }
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
+
+async function markDelivered(oid){
+  if(!gpsPosition){ showToast('GPS not available — cannot confirm delivery location'); return; }
+  const btn=document.getElementById('deliverBtn');
+  if(btn) btn.disabled=true;
+  try{
+    await fetch(`/api/orders/${oid}/status`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:'delivered'})});
+    showToast('🎉 Delivery confirmed!');
+    await loadDriverStatus();
+    await loadMyOrders();
+  } catch{ showToast('Error marking delivered'); if(btn) btn.disabled=false; }
+}
+
+// ── GPS ───────────────────────────────────────────────────────────────────────
+function watchGPS(){
+  if(!navigator.geolocation) return;
+  navigator.geolocation.watchPosition(pos=>{
+    gpsPosition={lat:pos.coords.latitude,lng:pos.coords.longitude};
+    renderActive(); // refresh distance display
+  },{enableHighAccuracy:true,timeout:10000},()=>{gpsPosition=null;});
+}
+
+// Haversine distance in km
+function haversine(lat1,lon1,lat2,lon2){
+  if(!lat2||!lon2) return null;
+  const R=6371,dLat=(lat2-lat1)*Math.PI/180,dLon=(lon2-lon1)*Math.PI/180;
+  const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+// ── TABS ──────────────────────────────────────────────────────────────────────
+function showTab(id,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  if(el) el.classList.add('active');
+  ['active','pending','history'].forEach(t=>document.getElementById('tab-'+t).style.display=t===id?'block':'none');
+}
+
+// ── UTILS ─────────────────────────────────────────────────────────────────────
+function tryParseItems(json){try{return JSON.parse(json||'[]')}catch{return []}}
+function showToast(msg,dur=3000){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),dur); }
 
 init();
-setInterval(loadMyOrders,20000);
 </script>
 </body>
 </html>
