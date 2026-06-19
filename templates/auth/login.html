@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" id="html-root">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Swiftly – Sign In</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;height:100vh;display:flex;background:#000}
+a{color:inherit;text-decoration:none}
+.left{background:#000;width:42%;display:flex;flex-direction:column;justify-content:center;padding:60px 56px;position:relative;overflow:hidden}
+.left-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 60%,rgba(255,107,53,.18) 0%,transparent 70%);pointer-events:none}
+.logo{font-size:2.2rem;font-weight:800;color:#fff;letter-spacing:-1px;margin-bottom:16px}
+.logo span{color:#FF6B35}
+.tagline{font-size:1.1rem;color:#aaa;line-height:1.6;margin-bottom:48px}
+.feature{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.feat-icon{width:40px;height:40px;border-radius:50%;background:rgba(255,107,53,.15);border:1px solid rgba(255,107,53,.3);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.feat-text{color:#888;font-size:.9rem;line-height:1.4}
+.feat-text strong{color:#ccc;display:block;font-size:.95rem}
+.right{background:#fff;flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:48px 56px;overflow-y:auto}
+.form-box{width:100%;max-width:400px}
+.lang-bar{display:flex;gap:6px;justify-content:flex-end;margin-bottom:32px}
+.lang-btn{border:none;background:none;cursor:pointer;font-size:.78rem;color:#888;padding:4px 8px;border-radius:6px}
+.lang-btn.active,.lang-btn:hover{background:#f0f0f0;color:#000}
+.form-title{font-size:1.8rem;font-weight:800;color:#000;margin-bottom:6px}
+.form-sub{font-size:.9rem;color:#888;margin-bottom:28px}
+.role-tabs{display:flex;background:#f6f6f6;border-radius:12px;padding:4px;gap:2px;margin-bottom:24px}
+.role-tab{flex:1;padding:10px;border:none;background:none;border-radius:10px;font-size:.85rem;font-weight:600;color:#888;cursor:pointer;transition:all .2s}
+.role-tab.active{background:#fff;color:#000;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:.8rem;font-weight:600;color:#444;margin-bottom:6px}
+.field input{width:100%;border:1.5px solid #e0e0e0;border-radius:10px;padding:13px 16px;font-size:.95rem;outline:none;transition:border-color .2s;background:#fff}
+.field input:focus{border-color:#FF6B35}
+.submit-btn{width:100%;background:#000;color:#fff;border:none;border-radius:12px;padding:15px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:8px;transition:background .2s}
+.submit-btn:hover{background:#222}
+.alt-link{text-align:center;margin-top:20px;font-size:.88rem;color:#888}
+.alt-link a{color:#FF6B35;font-weight:600}
+.error-box{background:#fff0f0;border:1px solid #fcc;color:#c00;padding:12px 16px;border-radius:10px;font-size:.85rem;margin-bottom:16px}
+.demo-box{background:#f9f9f9;border:1px solid #eee;border-radius:12px;padding:16px;margin-top:20px}
+.demo-title{font-size:.78rem;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.demo-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f0f0f0;font-size:.8rem}
+.demo-row:last-child{border:none}
+.demo-role{font-weight:700;color:#444;min-width:80px}
+.demo-creds{color:#888}
+.demo-fill{background:none;border:1px solid #ddd;border-radius:6px;padding:3px 8px;font-size:.75rem;cursor:pointer;color:#FF6B35;font-weight:600}
+.demo-fill:hover{background:#FF6B35;color:#fff;border-color:#FF6B35}
+@media(max-width:768px){.left{display:none}.right{padding:32px 24px}}
+</style>
+</head>
+<body>
+
+<div class="left">
+  <div class="left-bg"></div>
+  <div class="logo">Swift<span>ly</span></div>
+  <div class="tagline" data-i18n="tagline">Food, medicine, groceries —<br>delivered fast.</div>
+  <div class="feature"><div class="feat-icon">🚀</div><div class="feat-text"><strong data-i18n="feat1_title">Ultra-fast delivery</strong><span data-i18n="feat1_sub">Average 25 minutes to your door</span></div></div>
+  <div class="feature"><div class="feat-icon">🛒</div><div class="feat-text"><strong data-i18n="feat2_title">Everything in one app</strong><span data-i18n="feat2_sub">Food, medicine, groceries & more</span></div></div>
+  <div class="feature"><div class="feat-icon">🔒</div><div class="feat-text"><strong data-i18n="feat3_title">Safe & secure</strong><span data-i18n="feat3_sub">Encrypted payments & live tracking</span></div></div>
+</div>
+
+<div class="right">
+  <div class="form-box">
+    <div class="lang-bar">
+      <button class="lang-btn active" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('es')">ES</button>
+      <button class="lang-btn" onclick="setLang('fr')">FR</button>
+      <button class="lang-btn" onclick="setLang('ar')">AR</button>
+      <button class="lang-btn" onclick="setLang('hi')">HI</button>
+      <button class="lang-btn" onclick="setLang('ml')">ML</button>
+    </div>
+
+    <h1 class="form-title" data-i18n="sign_in">Sign in</h1>
+    <p class="form-sub" data-i18n="sign_in_sub">Welcome back to Swiftly</p>
+
+    {% for cat, msg in messages %}
+      {% if cat == 'error' %}<div class="error-box">{{ msg }}</div>{% endif %}
+    {% endfor %}
+
+    <div class="role-tabs">
+      <button class="role-tab active" onclick="setRole('customer',this)" data-i18n="customer">Customer</button>
+      <button class="role-tab" onclick="setRole('manager',this)" data-i18n="manager">Manager</button>
+      <button class="role-tab" onclick="setRole('driver',this)" data-i18n="driver">Driver</button>
+    </div>
+
+    <form method="POST" action="/login">
+      <div class="field">
+        <label data-i18n="email">Email address</label>
+        <input type="email" name="email" id="email-input" data-i18n-ph="email_ph" placeholder="you@example.com" required>
+      </div>
+      <div class="field">
+        <label data-i18n="password">Password</label>
+        <input type="password" name="password" data-i18n-ph="password_ph" placeholder="Enter your password" required>
+      </div>
+      <button class="submit-btn" type="submit" data-i18n="sign_in_btn">Sign in</button>
+    </form>
+
+    <div class="alt-link"><span data-i18n="no_account">Don't have an account?</span> <a href="/signup" data-i18n="sign_up_link">Sign up</a></div>
+
+    <div class="demo-box">
+      <div class="demo-title" data-i18n="demo_title">Demo accounts (password: demo123)</div>
+      <div class="demo-row">
+        <span class="demo-role" data-i18n="customer">Customer</span>
+        <span class="demo-creds">customer@demo.com</span>
+        <button class="demo-fill" onclick="fill('customer@demo.com')">Use</button>
+      </div>
+      <div class="demo-row">
+        <span class="demo-role" data-i18n="manager">Manager</span>
+        <span class="demo-creds">pizza@demo.com</span>
+        <button class="demo-fill" onclick="fill('pizza@demo.com')">Use</button>
+      </div>
+      <div class="demo-row">
+        <span class="demo-role" data-i18n="driver">Driver</span>
+        <span class="demo-creds">driver@demo.com</span>
+        <button class="demo-fill" onclick="fill('driver@demo.com')">Use</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const T={
+  en:{tagline:'Food, medicine, groceries —\ndelivered fast.',feat1_title:'Ultra-fast delivery',feat1_sub:'Average 25 minutes to your door',feat2_title:'Everything in one app',feat2_sub:'Food, medicine, groceries & more',feat3_title:'Safe & secure',feat3_sub:'Encrypted payments & live tracking',sign_in:'Sign in',sign_in_sub:'Welcome back to Swiftly',customer:'Customer',manager:'Manager',driver:'Driver',email:'Email address',email_ph:'you@example.com',password:'Password',password_ph:'Enter your password',sign_in_btn:'Sign in',no_account:"Don't have an account?",sign_up_link:'Sign up',demo_title:'Demo accounts (password: demo123)'},
+  es:{sign_in:'Iniciar sesión',sign_in_sub:'Bienvenido a Swiftly',customer:'Cliente',manager:'Gerente',driver:'Conductor',email:'Correo electrónico',email_ph:'tu@ejemplo.com',password:'Contraseña',password_ph:'Ingresa tu contraseña',sign_in_btn:'Iniciar sesión',no_account:'¿No tienes cuenta?',sign_up_link:'Registrarse',demo_title:'Cuentas de prueba (clave: demo123)'},
+  fr:{sign_in:'Se connecter',sign_in_sub:'Bienvenue sur Swiftly',customer:'Client',manager:'Gérant',driver:'Livreur',email:'Adresse e-mail',email_ph:'vous@exemple.com',password:'Mot de passe',password_ph:'Entrez votre mot de passe',sign_in_btn:'Se connecter',no_account:'Pas de compte ?',sign_up_link:'Créer un compte',demo_title:'Comptes démo (mdp : demo123)'},
+  ar:{sign_in:'تسجيل الدخول',sign_in_sub:'مرحبا بك في Swiftly',customer:'عميل',manager:'مدير',driver:'سائق',email:'البريد الإلكتروني',email_ph:'أنت@مثال.com',password:'كلمة المرور',password_ph:'أدخل كلمة المرور',sign_in_btn:'دخول',no_account:'ليس لديك حساب؟',sign_up_link:'إنشاء حساب',demo_title:'حسابات تجريبية (كلمة المرور: demo123)'},
+  hi:{sign_in:'साइन इन करें',sign_in_sub:'Swiftly में आपका स्वागत है',customer:'ग्राहक',manager:'प्रबंधक',driver:'चालक',email:'ईमेल पता',email_ph:'aap@example.com',password:'पासवर्ड',password_ph:'अपना पासवर्ड दर्ज करें',sign_in_btn:'साइन इन करें',no_account:'खाता नहीं है?',sign_up_link:'साइन अप करें',demo_title:'डेमो अकाउंट (पासवर्ड: demo123)'},
+  ml:{sign_in:'സൈൻ ഇൻ',sign_in_sub:'Swiftly-ലേക്ക് സ്വാഗതം',customer:'ഉപഭോക്താവ്',manager:'മാനേജർ',driver:'ഡ്രൈവർ',email:'ഇമെയിൽ',email_ph:'നിങ്ങൾ@example.com',password:'പാസ്‌വേഡ്',password_ph:'പാസ്‌വേഡ് നൽകുക',sign_in_btn:'സൈൻ ഇൻ',no_account:'അക്കൗണ്ട് ഇല്ലേ?',sign_up_link:'സൈൻ അപ്',demo_title:'ഡെമോ അക്കൗണ്ടുകൾ (പാസ്‌വേഡ്: demo123)'}
+};
+let lang = localStorage.getItem('sw_lang') || 'en';
+function applyLang(){
+  const t=T[lang]||T.en;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(t[k])el.textContent=t[k];});
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{const k=el.getAttribute('data-i18n-ph');if(t[k])el.placeholder=t[k];});
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+  const btn=document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`);
+  if(btn)btn.classList.add('active');
+  document.getElementById('html-root').dir=lang==='ar'?'rtl':'ltr';
+}
+function setLang(l){lang=l;localStorage.setItem('sw_lang',l);applyLang();}
+function setRole(r,el){document.querySelectorAll('.role-tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');}
+function fill(email){document.getElementById('email-input').value=email;}
+applyLang();
+</script>
+</body>
+</html>

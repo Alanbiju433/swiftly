@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" id="html-root">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Swiftly – Create Account</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;background:#f6f6f6;display:flex;align-items:center;justify-content:center;padding:24px}
+.card{background:#fff;border-radius:20px;width:100%;max-width:560px;padding:40px 48px;box-shadow:0 4px 40px rgba(0,0,0,.08)}
+.top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px}
+.logo{font-size:1.5rem;font-weight:800;color:#000;letter-spacing:-.5px}
+.logo span{color:#FF6B35}
+.lang-bar{display:flex;gap:4px}
+.lang-btn{border:none;background:none;cursor:pointer;font-size:.75rem;color:#888;padding:3px 7px;border-radius:5px}
+.lang-btn.active,.lang-btn:hover{background:#f0f0f0;color:#000}
+h1{font-size:1.6rem;font-weight:800;margin-bottom:6px}
+.sub{font-size:.88rem;color:#888;margin-bottom:24px}
+.role-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:28px}
+.role-card{border:2px solid #e8e8e8;border-radius:14px;padding:16px 12px;text-align:center;cursor:pointer;transition:all .2s}
+.role-card:hover{border-color:#ccc}
+.role-card.selected{border-color:#FF6B35;background:#fff8f5}
+.role-icon{font-size:1.8rem;margin-bottom:6px}
+.role-name{font-size:.82rem;font-weight:700;color:#333}
+.role-desc{font-size:.72rem;color:#aaa;margin-top:2px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field-full{grid-column:1/-1}
+.field label{display:block;font-size:.78rem;font-weight:600;color:#444;margin-bottom:5px}
+.field input,.field select{width:100%;border:1.5px solid #e0e0e0;border-radius:10px;padding:11px 14px;font-size:.9rem;outline:none;transition:border-color .2s;background:#fff;appearance:none}
+.field input:focus,.field select:focus{border-color:#FF6B35}
+.section-label{grid-column:1/-1;font-size:.78rem;font-weight:700;color:#FF6B35;text-transform:uppercase;letter-spacing:.5px;padding-top:4px;border-top:1px solid #f0f0f0;margin-top:4px;padding-top:12px}
+.submit-btn{width:100%;background:#000;color:#fff;border:none;border-radius:12px;padding:14px;font-size:.95rem;font-weight:700;cursor:pointer;margin-top:20px;transition:background .2s}
+.submit-btn:hover{background:#222}
+.alt-link{text-align:center;margin-top:16px;font-size:.85rem;color:#888}
+.alt-link a{color:#FF6B35;font-weight:600}
+.error-box{background:#fff0f0;border:1px solid #fcc;color:#c00;padding:11px 14px;border-radius:10px;font-size:.83rem;margin-bottom:14px;grid-column:1/-1}
+@media(max-width:520px){.card{padding:28px 20px}.fields{grid-template-columns:1fr}.field-full{grid-column:1}.section-label{grid-column:1}}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="top-bar">
+    <div class="logo">Swift<span>ly</span></div>
+    <div class="lang-bar">
+      <button class="lang-btn active" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('es')">ES</button>
+      <button class="lang-btn" onclick="setLang('fr')">FR</button>
+      <button class="lang-btn" onclick="setLang('ar')">AR</button>
+      <button class="lang-btn" onclick="setLang('hi')">HI</button>
+      <button class="lang-btn" onclick="setLang('ml')">ML</button>
+    </div>
+  </div>
+
+  <h1 data-i18n="create_account">Create your account</h1>
+  <p class="sub" data-i18n="create_sub">Join thousands of happy customers</p>
+
+  <div class="role-grid">
+    <div class="role-card selected" onclick="selectRole('customer',this)">
+      <div class="role-icon">🛍️</div>
+      <div class="role-name" data-i18n="customer">Customer</div>
+      <div class="role-desc" data-i18n="cust_desc">Order anything</div>
+    </div>
+    <div class="role-card" onclick="selectRole('manager',this)">
+      <div class="role-icon">🏪</div>
+      <div class="role-name" data-i18n="manager">Manager</div>
+      <div class="role-desc" data-i18n="mgr_desc">Run your store</div>
+    </div>
+    <div class="role-card" onclick="selectRole('driver',this)">
+      <div class="role-icon">🏍️</div>
+      <div class="role-name" data-i18n="driver">Driver</div>
+      <div class="role-desc" data-i18n="drv_desc">Start delivering</div>
+    </div>
+  </div>
+
+  {% for cat, msg in messages %}
+    {% if cat == 'error' %}<div class="error-box">{{ msg }}</div>{% endif %}
+  {% endfor %}
+
+  <form method="POST" action="/signup" id="signup-form">
+    <input type="hidden" name="role" id="role-input" value="customer">
+    <div class="fields">
+
+      <!-- Common fields -->
+      <div class="field field-full">
+        <label data-i18n="full_name">Full name</label>
+        <input type="text" name="name" data-i18n-ph="name_ph" placeholder="Your full name" required>
+      </div>
+      <div class="field">
+        <label data-i18n="email">Email</label>
+        <input type="email" name="email" placeholder="you@example.com" required>
+      </div>
+      <div class="field">
+        <label data-i18n="phone">Phone</label>
+        <input type="tel" name="phone" data-i18n-ph="phone_ph" placeholder="07700 000000">
+      </div>
+      <div class="field">
+        <label data-i18n="password">Password</label>
+        <input type="password" name="password" data-i18n-ph="pass_ph" placeholder="Min. 6 characters" required>
+      </div>
+      <div class="field">
+        <label data-i18n="confirm_password">Confirm password</label>
+        <input type="password" name="confirm_password" data-i18n-ph="confirm_ph" placeholder="Repeat password" required>
+      </div>
+
+      <!-- Customer fields -->
+      <div class="field field-full" id="f-address">
+        <label data-i18n="address">Delivery address</label>
+        <input type="text" name="address" data-i18n-ph="address_ph" placeholder="Your home address">
+      </div>
+
+      <!-- Manager fields -->
+      <div class="section-label" id="f-store-label" style="display:none" data-i18n="store_info">Store information</div>
+      <div class="field field-full" id="f-store-name" style="display:none">
+        <label data-i18n="store_name">Store name</label>
+        <input type="text" name="store_name" data-i18n-ph="store_name_ph" placeholder="e.g. Pizza Palace">
+      </div>
+      <div class="field" id="f-store-cat" style="display:none">
+        <label data-i18n="store_category">Category</label>
+        <select name="store_category">
+          <option value="food" data-i18n="food">Food</option>
+          <option value="medicine" data-i18n="medicine">Medicine</option>
+          <option value="grocery" data-i18n="grocery">Grocery</option>
+          <option value="general" data-i18n="general">General</option>
+        </select>
+      </div>
+      <div class="field" id="f-store-addr" style="display:none">
+        <label data-i18n="store_address">Store address</label>
+        <input type="text" name="store_address" data-i18n-ph="store_addr_ph" placeholder="Store location">
+      </div>
+
+      <!-- Driver fields -->
+      <div class="section-label" id="f-drv-label" style="display:none" data-i18n="vehicle_info">Vehicle information</div>
+      <div class="field" id="f-vehicle" style="display:none">
+        <label data-i18n="vehicle_type">Vehicle type</label>
+        <select name="vehicle">
+          <option value="Bicycle" data-i18n="bicycle">Bicycle</option>
+          <option value="Motorbike" data-i18n="motorbike">Motorbike</option>
+          <option value="Car" data-i18n="car">Car</option>
+          <option value="Scooter" data-i18n="scooter">Scooter</option>
+        </select>
+      </div>
+      <div class="field" id="f-plate" style="display:none">
+        <label data-i18n="license_plate">License plate</label>
+        <input type="text" name="license_plate" data-i18n-ph="plate_ph" placeholder="e.g. LN71 XYZ">
+      </div>
+
+    </div>
+    <button class="submit-btn" type="submit" data-i18n="create_btn">Create account</button>
+  </form>
+  <div class="alt-link"><span data-i18n="have_account">Already have an account?</span> <a href="/login" data-i18n="sign_in_link">Sign in</a></div>
+</div>
+
+<script>
+const T={
+  en:{create_account:'Create your account',create_sub:'Join thousands of happy customers',customer:'Customer',cust_desc:'Order anything',manager:'Manager',mgr_desc:'Run your store',driver:'Driver',drv_desc:'Start delivering',full_name:'Full name',name_ph:'Your full name',email:'Email',phone:'Phone',phone_ph:'07700 000000',password:'Password',pass_ph:'Min. 6 characters',confirm_password:'Confirm password',confirm_ph:'Repeat password',address:'Delivery address',address_ph:'Your home address',store_info:'Store information',store_name:'Store name',store_name_ph:'e.g. Pizza Palace',store_category:'Category',store_address:'Store address',store_addr_ph:'Store location',food:'Food',medicine:'Medicine',grocery:'Grocery',general:'General',vehicle_info:'Vehicle information',vehicle_type:'Vehicle type',bicycle:'Bicycle',motorbike:'Motorbike',car:'Car',scooter:'Scooter',license_plate:'License plate',plate_ph:'e.g. LN71 XYZ',create_btn:'Create account',have_account:'Already have an account?',sign_in_link:'Sign in'},
+  es:{create_account:'Crear cuenta',create_sub:'Únete a miles de clientes felices',customer:'Cliente',cust_desc:'Pide cualquier cosa',manager:'Gerente',mgr_desc:'Administra tu tienda',driver:'Conductor',drv_desc:'Empieza a entregar',full_name:'Nombre completo',password:'Contraseña',confirm_password:'Confirmar contraseña',address:'Dirección de entrega',store_info:'Información de la tienda',store_name:'Nombre de la tienda',vehicle_info:'Información del vehículo',vehicle_type:'Tipo de vehículo',create_btn:'Crear cuenta',have_account:'¿Ya tienes cuenta?',sign_in_link:'Iniciar sesión'},
+  fr:{create_account:'Créer un compte',create_sub:'Rejoignez des milliers de clients',customer:'Client',cust_desc:'Commander quoi que ce soit',manager:'Gérant',mgr_desc:'Gérez votre boutique',driver:'Livreur',drv_desc:'Commencez à livrer',full_name:'Nom complet',password:'Mot de passe',confirm_password:'Confirmer le mot de passe',address:'Adresse de livraison',store_info:'Informations sur la boutique',store_name:'Nom de la boutique',vehicle_info:'Informations sur le véhicule',vehicle_type:'Type de véhicule',create_btn:'Créer un compte',have_account:'Déjà un compte?',sign_in_link:'Se connecter'},
+  ar:{create_account:'إنشاء حساب',create_sub:'انضم إلى آلاف العملاء',customer:'عميل',manager:'مدير',driver:'سائق',full_name:'الاسم الكامل',password:'كلمة المرور',confirm_password:'تأكيد كلمة المرور',address:'عنوان التوصيل',store_name:'اسم المتجر',vehicle_type:'نوع السيارة',create_btn:'إنشاء حساب',have_account:'لديك حساب بالفعل؟',sign_in_link:'تسجيل الدخول'},
+  hi:{create_account:'खाता बनाएं',create_sub:'हजारों खुश ग्राहकों से जुड़ें',customer:'ग्राहक',cust_desc:'कुछ भी ऑर्डर करें',manager:'प्रबंधक',mgr_desc:'अपनी दुकान चलाएं',driver:'चालक',drv_desc:'डिलीवरी शुरू करें',full_name:'पूरा नाम',password:'पासवर्ड',confirm_password:'पासवर्ड की पुष्टि',address:'डिलीवरी पता',store_name:'दुकान का नाम',vehicle_type:'वाहन का प्रकार',create_btn:'खाता बनाएं',have_account:'पहले से खाता है?',sign_in_link:'साइन इन करें'},
+  ml:{create_account:'അക്കൗണ്ട് ഉണ്ടാക്കുക',create_sub:'ആയിരക്കണക്കിന് ഉപഭോക്താക്കളോടൊപ്പം ചേരുക',customer:'ഉപഭോക്താവ്',cust_desc:'എന്തും ഓർഡർ ചെയ്യൂ',manager:'മാനേജർ',mgr_desc:'നിങ്ങളുടെ സ്റ്റോർ നടത്തുക',driver:'ഡ്രൈവർ',drv_desc:'ഡെലിവറി ആരംഭിക്കൂ',full_name:'പൂർണ്ണ നാമം',password:'പാസ്‌വേഡ്',confirm_password:'പാസ്‌വേഡ് സ്ഥിരീകരിക്കുക',address:'ഡെലിവറി വിലാസം',store_name:'സ്റ്റോർ പേര്',vehicle_type:'വാഹന തരം',create_btn:'അക്കൗണ്ട് ഉണ്ടാക്കുക',have_account:'ഇതിനകം അക്കൗണ്ട് ഉണ്ടോ?',sign_in_link:'സൈൻ ഇൻ'}
+};
+let lang=localStorage.getItem('sw_lang')||'en';
+let role='customer';
+function applyLang(){
+  const t=T[lang]||T.en;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(t[k])el.textContent=t[k];});
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{const k=el.getAttribute('data-i18n-ph');if(t[k])el.placeholder=t[k];});
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+  const btn=document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`);
+  if(btn)btn.classList.add('active');
+  document.getElementById('html-root').dir=lang==='ar'?'rtl':'ltr';
+}
+function setLang(l){lang=l;localStorage.setItem('sw_lang',l);applyLang();}
+function selectRole(r,el){
+  role=r;
+  document.getElementById('role-input').value=r;
+  document.querySelectorAll('.role-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  // Show/hide fields
+  const cust=['f-address'];
+  const mgr=['f-store-label','f-store-name','f-store-cat','f-store-addr'];
+  const drv=['f-drv-label','f-vehicle','f-plate'];
+  [...cust,...mgr,...drv].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+  const show=r==='customer'?cust:r==='manager'?mgr:drv;
+  show.forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='';});
+}
+applyLang();
+selectRole('customer',document.querySelector('.role-card'));
+</script>
+</body>
+</html>
