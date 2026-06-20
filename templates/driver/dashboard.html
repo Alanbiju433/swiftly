@@ -4,436 +4,534 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Swiftly Driver</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--brand:#06c167;--dark:#1a1a1a;--mid:#545454;--light:#f6f6f6;--border:#e8e8e8;--shadow:0 2px 12px rgba(0,0,0,.08)}
-body{font-family:'Inter',sans-serif;background:#f4f5f7;color:var(--dark)}
-button{cursor:pointer;font-family:inherit;border:none;outline:none}
-
-/* HEADER */
-.header{background:#1a1a1a;color:#fff;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;gap:10px}
-.logo{font-size:17px;font-weight:800;color:var(--brand);white-space:nowrap}
-.header-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.driver-name{font-size:12px;color:#ccc}
-.toggle-wrap{display:flex;align-items:center;gap:8px;cursor:pointer}
-.toggle-label{font-size:12px;font-weight:600;color:#ccc;min-width:44px}
-.toggle{width:46px;height:25px;background:#555;border-radius:50px;position:relative;transition:background .3s;flex-shrink:0}
-.toggle.on{background:var(--brand)}
-.toggle::after{content:'';position:absolute;width:19px;height:19px;border-radius:50%;background:#fff;top:3px;left:3px;transition:transform .3s}
-.toggle.on::after{transform:translateX(21px)}
-.lang-bar{display:flex;gap:3px}
-.lang-btn{background:none;border:none;cursor:pointer;font-size:10px;color:#888;padding:3px 5px;border-radius:4px;font-weight:600}
-.lang-btn.active,.lang-btn:hover{background:#333;color:#fff}
-.btn-logout{padding:6px 12px;border-radius:7px;background:#333;color:#fff;font-size:11px;font-weight:600;text-decoration:none;white-space:nowrap}
-
-/* TABS */
-.tabs{display:flex;background:#fff;border-bottom:2px solid var(--border)}
-.tab{flex:1;padding:13px 8px;text-align:center;font-size:13px;font-weight:600;color:var(--mid);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s}
-.tab.active{color:var(--brand);border-bottom-color:var(--brand)}
-
-/* MAIN */
-.main{max-width:600px;margin:0 auto;padding:18px 14px}
-
-/* STATS */
-.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
-.scard{background:#fff;border-radius:12px;padding:14px;text-align:center;box-shadow:var(--shadow)}
-.scard .val{font-size:22px;font-weight:800;color:var(--brand)}
-.scard .lbl{font-size:10px;color:var(--mid);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:3px}
-
-/* STATUS BANNER */
-.status-banner{border-radius:12px;padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600}
-.banner-offline{background:#fff3f3;color:#e74c3c;border:1.5px solid #f5c6c6}
-.banner-available{background:#f0faf5;color:var(--brand);border:1.5px solid #a8e6c7}
-.banner-busy{background:#fff9f0;color:#f39c12;border:1.5px solid #f9e0a0}
-
-/* ORDER CARDS */
-.section-title{font-size:14px;font-weight:700;margin-bottom:10px}
-.order-list{display:flex;flex-direction:column;gap:10px}
-.order-card{background:#fff;border-radius:14px;padding:16px;box-shadow:var(--shadow);border-left:4px solid var(--border)}
-.order-card.active{border-left-color:var(--brand)}
-.order-card.pending{border-left-color:#3498db}
-.oc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
-.oc-id{font-size:12px;font-weight:700;color:var(--mid)}
-.oc-status{font-size:10px;padding:3px 9px;border-radius:20px;font-weight:700}
-.s-accepting{background:#dbeafe;color:#1d4ed8}
-.s-active{background:#d5f5e3;color:var(--brand)}
-.s-delivered{background:#eee;color:#888}
-.s-cancelled{background:#fde8e8;color:#e74c3c}
-.oc-store{font-size:13px;font-weight:700;margin-bottom:3px}
-.oc-addr{font-size:12px;color:var(--mid);margin-bottom:7px;display:flex;align-items:flex-start;gap:4px}
-.oc-items{font-size:11px;color:#888;margin-bottom:8px;line-height:1.5}
-.oc-total{font-size:13px;font-weight:700;margin-bottom:10px}
-.oc-actions{display:flex;gap:7px;flex-wrap:wrap}
-.btn-act{padding:9px 14px;border-radius:8px;font-size:12px;font-weight:700;flex:1;min-width:90px;text-align:center}
-.btn-accept{background:var(--brand);color:#fff}
-.btn-decline{background:var(--light);color:var(--mid)}
-.btn-maps{background:#1a1a1a;color:#fff;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:4px}
-.btn-deliver{background:var(--brand);color:#fff}
-.btn-deliver:disabled{background:#ccc;cursor:not-allowed}
-.gps-notice{font-size:11px;color:#888;margin-top:5px;text-align:center;min-height:14px}
-
-/* EMPTY STATE */
-.empty-state{text-align:center;padding:44px 20px;color:#aaa}
-.empty-state .icon{font-size:48px;margin-bottom:10px}
-.empty-state p{font-size:13px}
-
-/* HISTORY */
-.history-item{background:#fff;border-radius:12px;padding:13px;box-shadow:var(--shadow);margin-bottom:9px;display:flex;justify-content:space-between;align-items:center}
-.history-left .hi-id{font-size:12px;font-weight:700;color:var(--mid)}
-.history-left .hi-addr{font-size:12px;color:var(--dark)}
-.history-left .hi-time{font-size:10px;color:#aaa;margin-top:2px}
-.history-right{text-align:right}
-.history-right .hi-earn{font-size:15px;font-weight:700;color:var(--brand)}
-.status-tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:20px;font-weight:700}
-.tag-delivered{background:#d5f5e3;color:var(--brand)}
-.tag-cancelled{background:#fde8e8;color:#e74c3c}
-
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f7f7f7;color:#1a1a1a}
+body.dark{background:#111;color:#f0f0f0}
+.topbar{background:#fff;border-bottom:1px solid #eee;padding:12px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
+body.dark .topbar{background:#1a1a1a;border-color:#333}
+.topbar-logo{font-size:20px;font-weight:800;color:#06c167}
+.nav-tabs{display:flex;gap:0;border-bottom:1px solid #eee;background:#fff;overflow-x:auto;scrollbar-width:none}
+body.dark .nav-tabs{background:#1a1a1a;border-color:#333}
+.nav-tabs::-webkit-scrollbar{display:none}
+.nav-tab{padding:12px 16px;border:none;background:none;font-size:14px;font-weight:500;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;color:#666}
+body.dark .nav-tab{color:#aaa}
+.nav-tab.active{color:#06c167;border-bottom-color:#06c167}
+.page{display:none;padding:16px;padding-bottom:30px}
+.page.active{display:block}
+/* ONLINE CARD */
+.online-card{background:linear-gradient(135deg,#06c167,#04a052);border-radius:20px;padding:20px;color:#fff;text-align:center;margin-bottom:16px}
+.online-card h2{font-size:22px;font-weight:800;margin-bottom:4px}
+.online-card p{font-size:14px;opacity:0.9;margin-bottom:16px}
+.toggle-big{width:80px;height:44px;border-radius:22px;background:rgba(255,255,255,0.3);border:none;cursor:pointer;position:relative;margin:0 auto;display:block;transition:background .3s}
+.toggle-big.on{background:rgba(255,255,255,0.5)}
+.toggle-big::after{content:'';position:absolute;width:36px;height:36px;background:#fff;border-radius:50%;top:4px;left:4px;transition:.3s;box-shadow:0 2px 6px rgba(0,0,0,0.2)}
+.toggle-big.on::after{left:40px}
+/* STATS ROW */
+.stats-row{display:flex;gap:12px;margin-bottom:16px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
+.stats-row::-webkit-scrollbar{display:none}
+.stat-mini{background:#fff;border-radius:14px;padding:14px;text-align:center;flex:1;min-width:90px;box-shadow:0 2px 8px rgba(0,0,0,0.07);flex-shrink:0}
+body.dark .stat-mini{background:#1e1e1e}
+.stat-mini-val{font-size:22px;font-weight:800;color:#06c167}
+.stat-mini-label{font-size:12px;color:#888;margin-top:2px}
+/* AVAILABLE ORDERS */
+.avail-card{background:#fff;border-radius:16px;padding:16px;box-shadow:0 2px 12px rgba(6,193,103,0.15);border:1.5px solid #06c167;margin-bottom:12px;animation:pulse .8s ease-in-out infinite alternate}
+body.dark .avail-card{background:#1e1e1e}
+@keyframes pulse{from{box-shadow:0 2px 12px rgba(6,193,103,0.15)}to{box-shadow:0 4px 20px rgba(6,193,103,0.35)}}
+.avail-card-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.avail-card-store{font-size:16px;font-weight:700}
+.avail-card-earn{font-size:18px;font-weight:800;color:#06c167}
+.avail-card-details{font-size:14px;color:#666;margin-bottom:10px;line-height:1.5}
+body.dark .avail-card-details{color:#aaa}
+.avail-card-btns{display:flex;gap:8px}
+.btn-accept{flex:1;padding:12px;background:#06c167;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer}
+.btn-decline{padding:12px 16px;border:1.5px solid #e0e0e0;background:#fff;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;color:#666}
+body.dark .btn-decline{background:#2a2a2a;border-color:#444;color:#aaa}
+/* ACTIVE ORDER */
+.active-order-card{background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;border-radius:20px;padding:20px;margin-bottom:16px}
+.active-order-status{font-size:12px;background:rgba(6,193,103,0.3);color:#06c167;padding:4px 10px;border-radius:8px;font-weight:700;display:inline-block;margin-bottom:10px}
+.active-order-name{font-size:22px;font-weight:800;margin-bottom:4px}
+.active-order-addr{font-size:14px;opacity:0.8;margin-bottom:16px}
+.btn-full-green{width:100%;padding:14px;background:#06c167;color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer}
+.btn-full-outline{width:100%;padding:12px;border:1.5px solid rgba(255,255,255,0.4);background:transparent;color:#fff;border-radius:14px;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px}
+/* MAP */
+.map-container{height:240px;border-radius:16px;overflow:hidden;margin-bottom:16px;background:#e0e0e0}
+/* ORDER HISTORY */
+.order-hist-card{background:#fff;border-radius:12px;padding:12px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:8px}
+body.dark .order-hist-card{background:#1e1e1e}
+/* EARNINGS CHART */
+.earn-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.earn-bar-label{font-size:12px;color:#888;width:45px;flex-shrink:0}
+.earn-bar{height:24px;background:#06c167;border-radius:4px;min-width:4px;transition:width .5s}
+.earn-bar-val{font-size:12px;font-weight:600;white-space:nowrap}
 /* REVIEWS */
-.review-card{background:#fff;border-radius:12px;padding:14px;box-shadow:var(--shadow);margin-bottom:9px}
-.review-stars{font-size:16px;margin-bottom:4px}
-.review-comment{font-size:12px;color:var(--mid);font-style:italic;line-height:1.5}
-.review-meta{font-size:10px;color:#aaa;margin-top:5px}
-.rating-avg{background:#fff;border-radius:12px;padding:16px;box-shadow:var(--shadow);margin-bottom:14px;text-align:center}
-.rating-avg .big{font-size:40px;font-weight:800;color:var(--brand)}
-.rating-avg .stars{font-size:22px;margin-bottom:4px}
-.rating-avg .cnt{font-size:12px;color:#888}
-
+.review-card{background:#fff;border-radius:12px;padding:14px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:10px}
+body.dark .review-card{background:#1e1e1e}
+/* CHAT */
+.chat-box{height:260px;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:6px;background:#f9f9f9;border-radius:12px;margin-bottom:10px}
+body.dark .chat-box{background:#111}
+.chat-msg{max-width:75%;padding:8px 12px;border-radius:12px;font-size:14px}
+.chat-msg.mine{background:#06c167;color:#fff;margin-left:auto;border-bottom-right-radius:4px}
+.chat-msg.theirs{background:#fff;margin-right:auto;border-bottom-left-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
+body.dark .chat-msg.theirs{background:#2a2a2a}
+.input-field{width:100%;padding:10px 14px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:14px;outline:none;font-family:inherit;background:#fff}
+body.dark .input-field{background:#2a2a2a;border-color:#444;color:#f0f0f0}
+.input-field:focus{border-color:#06c167}
 /* TOAST */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:#1a1a1a;color:#fff;padding:11px 22px;border-radius:50px;font-size:13px;font-weight:600;z-index:600;transition:transform .3s ease;pointer-events:none}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);background:#1a1a1a;color:#fff;padding:10px 18px;border-radius:10px;font-size:14px;z-index:9999;transition:transform .3s;white-space:nowrap}
+body.dark .toast{background:#333}
 .toast.show{transform:translateX(-50%) translateY(0)}
-
-/* ERROR BANNER */
-.err-banner{background:#fdecea;border:1px solid #f5c6c6;border-radius:10px;padding:10px 14px;font-size:12px;color:#c0392b;margin-bottom:14px;display:none}
+.section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.section-hdr h2{font-size:16px;font-weight:700}
 </style>
 </head>
 <body>
+<nav class="topbar">
+  <span class="topbar-logo">⚡Swiftly</span>
+  <span style="flex:1;font-size:14px;color:#666">Driver Dashboard</span>
+  <button style="padding:7px 12px;border-radius:8px;border:none;background:#f0f0f0;font-size:13px;cursor:pointer" onclick="toggleDark()">🌙</button>
+  <button style="padding:7px 12px;border-radius:8px;border:none;background:#f0f0f0;font-size:13px;cursor:pointer;margin-left:6px" onclick="if(confirm('Logout?'))location='/logout'">Logout</button>
+</nav>
 
-<div class="header">
-  <div class="logo">⚡ Swiftly Driver</div>
-  <div class="header-right">
-    <div class="lang-bar">
-      <button class="lang-btn active" onclick="setLang('en')">EN</button>
-      <button class="lang-btn" onclick="setLang('es')">ES</button>
-      <button class="lang-btn" onclick="setLang('fr')">FR</button>
-      <button class="lang-btn" onclick="setLang('ar')">AR</button>
-      <button class="lang-btn" onclick="setLang('hi')">HI</button>
-      <button class="lang-btn" onclick="setLang('ml')">ML</button>
-    </div>
-    <span class="driver-name">{{ user.name }}</span>
-    <div class="toggle-wrap" onclick="toggleOnline()">
-      <div class="toggle" id="onlineToggle"></div>
-      <span class="toggle-label" id="onlineLabel" data-i18n="offline">Offline</span>
-    </div>
-    <a href="/logout" class="btn-logout" data-i18n="logout">Logout</a>
+<div class="nav-tabs">
+  <button class="nav-tab active" onclick="showPage('home',this)">🏠 Home</button>
+  <button class="nav-tab" onclick="showPage('active',this)">📦 Active</button>
+  <button class="nav-tab" onclick="showPage('history',this)">📋 History</button>
+  <button class="nav-tab" onclick="showPage('earnings',this)">💰 Earnings</button>
+  <button class="nav-tab" onclick="showPage('reviews',this)">⭐ Reviews</button>
+</div>
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+  <div class="online-card">
+    <h2 id="statusTitle">You're Offline</h2>
+    <p id="statusSubtitle">Go online to start receiving delivery requests</p>
+    <button class="toggle-big" id="toggleBtn" onclick="toggleOnline()"></button>
   </div>
-</div>
-
-<div class="tabs">
-  <div class="tab active" onclick="showTab('active',this)" data-i18n="active_tab">Active Delivery</div>
-  <div class="tab" onclick="showTab('pending',this)" data-i18n="available_tab">Available Orders</div>
-  <div class="tab" onclick="showTab('history',this)" data-i18n="history_tab">History</div>
-  <div class="tab" onclick="showTab('reviews',this)" data-i18n="reviews_tab">Reviews</div>
-</div>
-
-<div class="main">
   <div class="stats-row">
-    <div class="scard"><div class="val" id="statEarnings">£0</div><div class="lbl" data-i18n="earned">Earned</div></div>
-    <div class="scard"><div class="val" id="statDeliveries">0</div><div class="lbl" data-i18n="deliveries">Deliveries</div></div>
-    <div class="scard"><div class="val" id="statRating">5.0</div><div class="lbl" data-i18n="rating">Rating ⭐</div></div>
+    <div class="stat-mini"><div class="stat-mini-val" id="stat-earn">£0</div><div class="stat-mini-label">Total Earned</div></div>
+    <div class="stat-mini"><div class="stat-mini-val" id="stat-del">0</div><div class="stat-mini-label">Deliveries</div></div>
+    <div class="stat-mini"><div class="stat-mini-val" id="stat-rating">5.0</div><div class="stat-mini-label">Rating</div></div>
+    <div class="stat-mini"><div class="stat-mini-val" id="stat-today">£0</div><div class="stat-mini-label">Today</div></div>
   </div>
+  <div class="section-hdr"><h2>📦 Available Orders</h2><span id="availRefreshHint" style="font-size:12px;color:#aaa">Auto-refreshes</span></div>
+  <div id="availableOrders"></div>
+</div>
 
-  <div class="err-banner" id="errBanner"></div>
-
-  <div class="status-banner banner-offline" id="statusBanner">
-    <span>🔴</span> <span data-i18n="go_online_msg">You are offline. Tap the toggle above to go online.</span>
-  </div>
-
-  <!-- ACTIVE TAB -->
-  <div id="tab-active">
-    <div class="section-title" data-i18n="your_delivery">Your active delivery</div>
-    <div class="order-list" id="activeList">
-      <div class="empty-state"><div class="icon">🛵</div><p data-i18n="no_active">No active delivery</p></div>
+<!-- ACTIVE ORDER -->
+<div id="page-active" class="page">
+  <div id="activeOrderContent">
+    <div style="text-align:center;padding:40px;color:#aaa">
+      <div style="font-size:48px;margin-bottom:12px">📦</div>
+      <p>No active order</p>
     </div>
   </div>
+</div>
 
-  <!-- PENDING TAB -->
-  <div id="tab-pending" style="display:none">
-    <div class="section-title" data-i18n="available_orders">Available orders to pick up</div>
-    <div class="order-list" id="pendingList">
-      <div class="empty-state"><div class="icon">📋</div><p data-i18n="no_available">No orders available</p></div>
-    </div>
+<!-- HISTORY -->
+<div id="page-history" class="page">
+  <div class="section-hdr"><h2>Delivery History</h2></div>
+  <div id="historyList"></div>
+</div>
+
+<!-- EARNINGS -->
+<div id="page-earnings" class="page">
+  <div class="section-hdr"><h2>Earnings Breakdown</h2></div>
+  <div style="background:#fff;border-radius:16px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.07);margin-bottom:16px">
+    <div style="font-size:13px;color:#888;margin-bottom:4px">Total Lifetime Earnings</div>
+    <div style="font-size:36px;font-weight:800;color:#06c167" id="totalEarnings">£0.00</div>
+    <div style="font-size:13px;color:#888;margin-top:4px" id="totalDeliveries">0 deliveries</div>
   </div>
+  <div id="earningsChart"></div>
+</div>
 
-  <!-- HISTORY TAB -->
-  <div id="tab-history" style="display:none">
-    <div class="section-title" data-i18n="delivery_history">Delivery history</div>
-    <div id="historyList">
-      <div class="empty-state"><div class="icon">📦</div><p data-i18n="no_history">No deliveries yet</p></div>
-    </div>
-  </div>
+<!-- REVIEWS -->
+<div id="page-reviews" class="page">
+  <div class="section-hdr"><h2>Customer Reviews</h2></div>
+  <div id="reviewsList"></div>
+</div>
 
-  <!-- REVIEWS TAB -->
-  <div id="tab-reviews" style="display:none">
-    <div class="section-title" data-i18n="my_reviews">My Reviews</div>
-    <div id="reviewsSummary"></div>
-    <div id="reviewsList"></div>
+<!-- CHAT (embedded) -->
+<div id="chatSection" style="display:none;margin-top:16px">
+  <div class="section-hdr"><h2>💬 Chat with Customer</h2><button onclick="document.getElementById('chatSection').style.display='none'" style="background:none;border:none;font-size:18px;cursor:pointer;color:#aaa">✕</button></div>
+  <div class="chat-box" id="chatBox"></div>
+  <div style="display:flex;gap:8px">
+    <input class="input-field" id="chatMsg" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendChat()">
+    <button onclick="sendChat()" style="padding:10px 16px;background:#06c167;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer">Send</button>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-const LANGS={
-  en:{offline:'Offline',online:'Online',logout:'Logout',active_tab:'Active Delivery',available_tab:'Available Orders',history_tab:'History',reviews_tab:'Reviews',earned:'Earned',deliveries:'Deliveries',rating:'Rating',go_online_msg:'You are offline. Tap toggle to go online.',your_delivery:'Your active delivery',no_active:'No active delivery',available_orders:'Available orders',no_available:'No orders available',delivery_history:'Delivery history',no_history:'No deliveries yet',my_reviews:'My Reviews',no_reviews:'No reviews yet',navigate:'Navigate',mark_delivered:'Mark Delivered',accept:'Accept',decline:'Decline',online_msg:'You are now online',offline_msg:'You are now offline',waiting:'Online - waiting for an order',busy:'On delivery - Order',no_profile:'No driver profile found.',gps_acquiring:'Acquiring GPS...',gps_close:'You are at the location',gps_far:'km away (need 0.5 km)'},
-  es:{offline:'Desconectado',online:'En linea',logout:'Salir',active_tab:'Entrega Activa',available_tab:'Disponibles',history_tab:'Historial',reviews_tab:'Resenas',earned:'Ganado',deliveries:'Entregas',rating:'Calif',go_online_msg:'Desconectado. Toca para conectarte.',your_delivery:'Tu entrega activa',no_active:'Sin entrega activa',available_orders:'Pedidos disponibles',no_available:'Sin pedidos',delivery_history:'Historial',no_history:'Sin entregas',my_reviews:'Mis Resenas',no_reviews:'Sin resenas',navigate:'Navegar',mark_delivered:'Entregado',accept:'Aceptar',decline:'Rechazar',online_msg:'Estas en linea',offline_msg:'Estas desconectado',waiting:'En linea - esperando',busy:'En entrega',no_profile:'Sin perfil conductor.',gps_acquiring:'Obteniendo GPS...',gps_close:'Estas en el lugar',gps_far:'km (necesitas 0.5)'},
-  fr:{offline:'Hors ligne',online:'En ligne',logout:'Deconnexion',active_tab:'Livraison active',available_tab:'Disponibles',history_tab:'Historique',reviews_tab:'Avis',earned:'Gagne',deliveries:'Livraisons',rating:'Note',go_online_msg:'Hors ligne. Appuyez pour se connecter.',your_delivery:'Livraison active',no_active:'Aucune livraison',available_orders:'Commandes disponibles',no_available:'Aucune commande',delivery_history:'Historique',no_history:'Aucune livraison',my_reviews:'Mes Avis',no_reviews:'Aucun avis',navigate:'Naviguer',mark_delivered:'Livre',accept:'Accepter',decline:'Refuser',online_msg:'Vous etes en ligne',offline_msg:'Vous etes hors ligne',waiting:'En ligne - en attente',busy:'En livraison',no_profile:'Aucun profil conducteur.',gps_acquiring:'Acquisition GPS...',gps_close:'Vous etes sur place',gps_far:'km (besoin 0.5)'},
-  ar:{offline:'Offline',online:'Online',logout:'Logout',active_tab:'Active',available_tab:'Available',history_tab:'History',reviews_tab:'Reviews',earned:'Earned',deliveries:'Deliveries',rating:'Rating',go_online_msg:'You are offline.',your_delivery:'Active delivery',no_active:'No active delivery',available_orders:'Available orders',no_available:'No orders',delivery_history:'History',no_history:'No deliveries',my_reviews:'My Reviews',no_reviews:'No reviews',navigate:'Navigate',mark_delivered:'Delivered',accept:'Accept',decline:'Decline',online_msg:'You are online',offline_msg:'You are offline',waiting:'Online - waiting',busy:'On delivery',no_profile:'No driver profile.',gps_acquiring:'Getting GPS...',gps_close:'At location',gps_far:'km away'},
-  hi:{offline:'Offline',online:'Online',logout:'Logout',active_tab:'Active',available_tab:'Available',history_tab:'History',reviews_tab:'Reviews',earned:'Earned',deliveries:'Deliveries',rating:'Rating',go_online_msg:'Offline. Toggle to go online.',your_delivery:'Active delivery',no_active:'No active delivery',available_orders:'Available orders',no_available:'No orders',delivery_history:'History',no_history:'No deliveries',my_reviews:'My Reviews',no_reviews:'No reviews',navigate:'Navigate',mark_delivered:'Delivered',accept:'Accept',decline:'Decline',online_msg:'You are online',offline_msg:'You are offline',waiting:'Online - waiting',busy:'On delivery',no_profile:'No driver profile.',gps_acquiring:'Getting GPS...',gps_close:'At location',gps_far:'km away'},
-  ml:{offline:'Offline',online:'Online',logout:'Logout',active_tab:'Active',available_tab:'Available',history_tab:'History',reviews_tab:'Reviews',earned:'Earned',deliveries:'Deliveries',rating:'Rating',go_online_msg:'Offline. Toggle to go online.',your_delivery:'Active delivery',no_active:'No active delivery',available_orders:'Available orders',no_available:'No orders',delivery_history:'History',no_history:'No deliveries',my_reviews:'My Reviews',no_reviews:'No reviews',navigate:'Navigate',mark_delivered:'Delivered',accept:'Accept',decline:'Decline',online_msg:'You are online',offline_msg:'You are offline',waiting:'Online - waiting',busy:'On delivery',no_profile:'No driver profile.',gps_acquiring:'Getting GPS...',gps_close:'At location',gps_far:'km away'}
-};
-let curLang=localStorage.getItem('sw_lang')||'en';
-function tr(k){return (LANGS[curLang]||LANGS.en)[k]||k;}
-function applyLang(){
-  const t=LANGS[curLang]||LANGS.en;
-  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(t[k])el.textContent=t[k];});
-  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
-  const ab=document.querySelector('.lang-btn[onclick="setLang(\''+curLang+'\')"]');
-  if(ab) ab.classList.add('active');
-}
-function setLang(l){curLang=l;localStorage.setItem('sw_lang',l);applyLang();}
+let isOnline = false, driverData = {}, activeOrder = null;
+let chatOrderId = null, chatPollInterval = null;
+let availPollInterval = null;
+let locationInterval = null;
+let darkMode = localStorage.getItem('sw_dark') === '1';
+if (darkMode) document.body.classList.add('dark');
 
-let isOnline=false, myOrders=[], pendingOrders=[], gpsPosition=null, pollInterval=null;
-let toggleLocked=false;
-
-async function init(){
-  applyLang();
-  await loadDriverStatus();
-  startPolling();
-  watchGPS();
+function toggleDark() {
+  darkMode = !darkMode;
+  document.body.classList.toggle('dark', darkMode);
+  localStorage.setItem('sw_dark', darkMode ? '1' : '0');
 }
 
-function showErr(msg){
-  const el=document.getElementById('errBanner');
-  if(!el) return;
-  el.textContent=msg; el.style.display='block';
-  setTimeout(()=>el.style.display='none',6000);
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
 }
 
-async function loadDriverStatus(){
-  try{
-    const r=await fetch('/api/drivers/me');
-    if(!r.ok){
-      if(r.status===401) showErr('Session expired - please refresh.');
-      else if(r.status===404) showErr(tr('no_profile'));
-      return;
-    }
-    const d=await r.json();
-    if(d.error){showErr(d.error);return;}
-    isOnline=d.status==='available'||d.status==='busy';
-    setOnlineUI(isOnline);
-    document.getElementById('statEarnings').textContent='\u00a3'+(d.earnings||0).toFixed(2);
-    document.getElementById('statDeliveries').textContent=d.total_deliveries||0;
-    document.getElementById('statRating').textContent=(d.rating||5).toFixed(1);
-  } catch(e){showErr('Could not connect to server.');}
+function showPage(p, btn) {
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + p).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (p === 'history') loadHistory();
+  if (p === 'earnings') loadEarnings();
+  if (p === 'reviews') loadReviews();
+  if (p === 'active') loadActiveOrder();
 }
 
-async function toggleOnline(){
-  if(toggleLocked) return;
-  toggleLocked=true;
-  const newState=!isOnline;
-  isOnline=newState;
-  setOnlineUI(newState);
-  try{
-    const r=await fetch('/api/drivers/me',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({is_online:newState})});
-    if(!r.ok){
-      const err=await r.json().catch(()=>({}));
-      isOnline=!newState; setOnlineUI(isOnline);
-      if(r.status===401) showErr('Session expired. Please refresh.');
-      else if(r.status===404) showErr(tr('no_profile'));
-      else showErr(err.error||'Could not update status');
-      toggleLocked=false; return;
-    }
-    const d=await r.json();
-    if(d.status){isOnline=d.status==='available'||d.status==='busy';setOnlineUI(isOnline);}
-    showToast(isOnline?('OK '+tr('online_msg')):('🔴 '+tr('offline_msg')));
-    if(isOnline) loadPendingOrders();
-  } catch{isOnline=!newState;setOnlineUI(isOnline);showErr('Network error.');}
-  toggleLocked=false;
+// ── INIT ──
+loadDriverData();
+loadAvailableOrders();
+
+setInterval(() => {
+  loadDriverData();
+  if (isOnline) loadAvailableOrders();
+}, 15000);
+
+// Track location when online
+function startLocationTracking() {
+  if (!navigator.geolocation) return;
+  locationInterval = setInterval(() => {
+    navigator.geolocation.getCurrentPosition(pos => {
+      fetch('/api/drivers/me/location', {
+        method: 'PATCH',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ lat: pos.coords.latitude, lng: pos.coords.longitude })
+      }).catch(()=>{});
+    }, ()=>{});
+  }, 30000);
 }
 
-function setOnlineUI(on){
-  const toggle=document.getElementById('onlineToggle');
-  const label=document.getElementById('onlineLabel');
-  if(toggle) toggle.className='toggle'+(on?' on':'');
-  if(label) label.textContent=on?tr('online'):tr('offline');
-  const banner=document.getElementById('statusBanner');
-  if(banner&&!on){banner.className='status-banner banner-offline';banner.innerHTML='<span>🔴</span> <span>'+tr('go_online_msg')+'</span>';}
+function stopLocationTracking() {
+  if (locationInterval) { clearInterval(locationInterval); locationInterval = null; }
 }
 
-function startPolling(){
-  loadMyOrders();
-  if(isOnline) loadPendingOrders();
-  pollInterval=setInterval(()=>{loadMyOrders();if(isOnline)loadPendingOrders();},8000);
+async function loadDriverData() {
+  const r = await fetch('/api/drivers/me');
+  if (!r.ok) return;
+  driverData = await r.json();
+  isOnline = driverData.is_online || driverData.status === 'available' || driverData.status === 'busy';
+  updateOnlineUI();
+  document.getElementById('stat-earn').textContent = '£' + Number(driverData.earnings||0).toFixed(2);
+  document.getElementById('stat-del').textContent = driverData.total_deliveries || 0;
+  document.getElementById('stat-rating').textContent = Number(driverData.rating||5).toFixed(1);
 }
 
-async function loadMyOrders(){
-  try{
-    const r=await fetch('/api/drivers/me/orders');
-    if(!r.ok) return;
-    myOrders=await r.json();
-    renderActive(); renderHistory();
-  } catch{}
-}
-
-async function loadPendingOrders(){
-  if(!isOnline) return;
-  try{
-    const r=await fetch('/api/drivers/pending-orders');
-    if(!r.ok) return;
-    pendingOrders=await r.json();
-    renderPending();
-  } catch{}
-}
-
-function renderActive(){
-  const active=myOrders.filter(o=>!['delivered','cancelled'].includes(o.status));
-  const el=document.getElementById('activeList');
-  const banner=document.getElementById('statusBanner');
-  if(!active.length){
-    el.innerHTML='<div class="empty-state"><div class="icon">🛵</div><p>'+tr('no_active')+'</p></div>';
-    if(isOnline&&banner){banner.className='status-banner banner-available';banner.innerHTML='<span>🟢</span> <span>'+tr('waiting')+'</span>';}
-    return;
+function updateOnlineUI() {
+  const btn = document.getElementById('toggleBtn');
+  const title = document.getElementById('statusTitle');
+  const sub = document.getElementById('statusSubtitle');
+  if (isOnline) {
+    btn.classList.add('on');
+    title.textContent = "You're Online 🟢";
+    sub.textContent = 'Waiting for delivery requests...';
+  } else {
+    btn.classList.remove('on');
+    title.textContent = "You're Offline";
+    sub.textContent = 'Go online to start receiving delivery requests';
   }
-  const o=active[0];
-  const items=tryParseItems(o.items_json);
-  const mapsUrl='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(o.customer_address||o.address||'');
-  const dist=gpsPosition&&o.customerLat?haversine(gpsPosition.lat,gpsPosition.lng,o.customerLat,o.customerLng):null;
-  const canDeliver=dist===null?true:dist<=0.5;
-  if(banner){banner.className='status-banner banner-busy';banner.innerHTML='<span>🟡</span> <span>'+tr('busy')+' #'+o.id+'</span>';}
-  el.innerHTML='<div class="order-card active">'
-    +'<div class="oc-top"><span class="oc-id">Order #'+o.id+'</span><span class="oc-status s-active">'+o.status.replace('_',' ')+'</span></div>'
-    +'<div class="oc-store">🏪 '+(o.store_name||'Store')+'</div>'
-    +'<div class="oc-addr">📍 '+(o.customer_address||o.address||'No address')+'</div>'
-    +'<div class="oc-items">'+(items.map(i=>i.qty+'x '+i.name).join(', ')||'—')+'</div>'
-    +'<div class="oc-total">\u00a3'+(o.total||0).toFixed(2)+(o.customer_phone?' 📞 '+o.customer_phone:'')+'</div>'
-    +'<div class="oc-actions">'
-    +'<a class="btn-act btn-maps" href="'+mapsUrl+'" target="_blank">🗺️ '+tr('navigate')+'</a>'
-    +'<button class="btn-act btn-deliver" id="deliverBtn" onclick="markDelivered('+o.id+')"'+(canDeliver?'':' disabled')+'>'+tr('mark_delivered')+'</button>'
-    +'</div></div>';
 }
 
-function renderPending(){
-  const el=document.getElementById('pendingList');
-  if(!isOnline){el.innerHTML='<div class="empty-state"><div class="icon">🔴</div><p>'+tr('go_online_msg')+'</p></div>';return;}
-  if(!pendingOrders.length){el.innerHTML='<div class="empty-state"><div class="icon">⏳</div><p>'+tr('no_available')+'</p></div>';return;}
-  el.innerHTML=pendingOrders.map(o=>{
-    const items=tryParseItems(o.items_json);
-    return '<div class="order-card pending">'
-      +'<div class="oc-top"><span class="oc-id">Order #'+o.id+'</span><span class="oc-status s-accepting">Available</span></div>'
-      +'<div class="oc-store">🏪 '+(o.store_name||'Store')+'</div>'
-      +'<div class="oc-addr">📍 '+(o.customer_address||o.address||'No address')+'</div>'
-      +'<div class="oc-items">'+(items.map(i=>i.qty+'x '+i.name).join(', ')||'—')+'</div>'
-      +'<div class="oc-total">\u00a3'+(o.total||0).toFixed(2)+'</div>'
-      +'<div class="oc-actions">'
-      +'<button class="btn-act btn-decline" onclick="declineOrder('+o.id+')">'+tr('decline')+'</button>'
-      +'<button class="btn-act btn-accept" onclick="acceptOrder('+o.id+')">'+tr('accept')+'</button>'
-      +'</div></div>';
+async function toggleOnline() {
+  const newStatus = !isOnline;
+  try {
+    const r = await fetch('/api/drivers/me', {
+      method: 'PATCH',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ is_online: newStatus })
+    });
+    if (!r.ok) throw new Error();
+    isOnline = newStatus;
+    updateOnlineUI();
+    toast(isOnline ? '🟢 You are now online!' : '⭕ You went offline');
+    if (isOnline) { loadAvailableOrders(); startLocationTracking(); }
+    else { stopLocationTracking(); document.getElementById('availableOrders').innerHTML = '<p style="text-align:center;color:#aaa;padding:20px">Go online to see orders</p>'; }
+  } catch(e) {
+    toast('❌ Failed to update status');
+  }
+}
+
+// ── AVAILABLE ORDERS ──
+async function loadAvailableOrders() {
+  if (!isOnline) return;
+  const r = await fetch('/api/drivers/pending-orders');
+  const orders = await r.json();
+  const el = document.getElementById('availableOrders');
+  if (!orders.length) { el.innerHTML = '<div style="text-align:center;padding:30px;color:#aaa"><div style="font-size:40px;margin-bottom:8px">🔍</div><p>No orders available right now</p></div>'; return; }
+  el.innerHTML = orders.map(o => {
+    const items = (() => { try { const a=typeof o.items_json==='string'?JSON.parse(o.items_json):o.items_json; return a.map(i=>`${i.qty}× ${i.name}`).join(', '); } catch(e){return '';} })();
+    const earn = '£3.00'; // base delivery pay
+    return `<div class="avail-card">
+      <div class="avail-card-hdr">
+        <span class="avail-card-store">${o.store_name||'Store'}</span>
+        <span class="avail-card-earn">${earn}</span>
+      </div>
+      <div class="avail-card-details">
+        📍 <b>Pickup:</b> ${o.store_name||''}<br>
+        🏠 <b>Drop-off:</b> ${o.customer_address||''}<br>
+        📦 ${items}<br>
+        💰 Order: £${Number(o.total||0).toFixed(2)} ${o.tip>0?'+ £'+Number(o.tip).toFixed(2)+' tip':''}
+      </div>
+      <div class="avail-card-btns">
+        <button class="btn-accept" onclick="acceptOrder(${o.id})">✅ Accept</button>
+        <button class="btn-decline" onclick="declineOrder(${o.id})">Skip</button>
+      </div>
+    </div>`;
   }).join('');
 }
 
-function renderHistory(){
-  const done=myOrders.filter(o=>['delivered','cancelled'].includes(o.status));
-  const el=document.getElementById('historyList');
-  if(!done.length){el.innerHTML='<div class="empty-state"><div class="icon">📦</div><p>'+tr('no_history')+'</p></div>';return;}
-  el.innerHTML=done.map(o=>'<div class="history-item">'
-    +'<div class="history-left"><div class="hi-id">Order #'+o.id+'</div>'
-    +'<div class="hi-addr">'+(o.store_name||'')+' to '+(o.customer_address||o.address||'').substring(0,35)+'</div>'
-    +'<div class="hi-time">'+(o.created_at||'')+'</div></div>'
-    +'<div class="history-right"><div class="hi-earn">'+(o.status==='delivered'?'+\u00a33.00':'—')+'</div>'
-    +'<span class="status-tag '+(o.status==='delivered'?'tag-delivered':'tag-cancelled')+'">'+o.status+'</span>'
-    +'</div></div>').join('');
+async function acceptOrder(oid) {
+  const r = await fetch(`/api/orders/${oid}/accept`, { method:'POST' });
+  const d = await r.json();
+  if (!r.ok) { toast('❌ ' + (d.error||'Failed to accept')); loadAvailableOrders(); return; }
+  toast('✅ Order accepted!');
+  activeOrder = oid;
+  document.getElementById('availableOrders').innerHTML = '<p style="text-align:center;color:#aaa;padding:20px">Order accepted! Check Active tab.</p>';
+  loadActiveOrder();
+  showPage('active', document.querySelectorAll('.nav-tab')[1]);
+  requestNotifications();
 }
 
-async function loadReviews(){
-  try{
-    const r=await fetch('/api/driver/reviews');
-    if(!r.ok) return;
-    const reviews=await r.json();
-    renderReviews(reviews);
-  } catch{}
+async function declineOrder(oid) {
+  await fetch(`/api/orders/${oid}/decline`, { method:'POST' });
+  loadAvailableOrders();
 }
 
-function renderReviews(reviews){
-  const summEl=document.getElementById('reviewsSummary');
-  const listEl=document.getElementById('reviewsList');
-  if(!reviews.length){
-    if(summEl) summEl.innerHTML='';
-    if(listEl) listEl.innerHTML='<div class="empty-state"><div class="icon">⭐</div><p>'+tr('no_reviews')+'</p></div>';
+// ── ACTIVE ORDER ──
+async function loadActiveOrder() {
+  const r = await fetch('/api/orders?all=1');
+  const orders = await r.json();
+  const active = orders.find(o => ['picked_up'].includes(o.status));
+  const el = document.getElementById('activeOrderContent');
+
+  if (!active) {
+    // Check for preparing orders assigned to this driver
+    const r2 = await fetch('/api/drivers/me/orders');
+    const myOrders = await r2.json();
+    const inProgress = myOrders.find(o => ['picked_up','preparing'].includes(o.status));
+    if (!inProgress) {
+      el.innerHTML = `<div style="text-align:center;padding:40px;color:#aaa"><div style="font-size:48px;margin-bottom:12px">📦</div><p>No active delivery</p></div>`;
+      return;
+    }
+    renderActiveOrder(inProgress, el);
     return;
   }
-  const avg=reviews.reduce((s,r)=>s+(r.driver_rating||5),0)/reviews.length;
-  if(summEl) summEl.innerHTML='<div class="rating-avg"><div class="big">'+avg.toFixed(1)+'</div>'
-    +'<div class="stars">Stars: '+Math.round(avg)+'/5</div>'
-    +'<div class="cnt">'+reviews.length+' review'+(reviews.length>1?'s':'')+'</div></div>';
-  if(listEl) listEl.innerHTML=reviews.map(r=>'<div class="review-card">'
-    +'<div class="review-stars">Rating: '+(r.driver_rating||5)+'/5</div>'
-    +(r.comment?'<div class="review-comment">"'+r.comment+'"</div>':'')
-    +'<div class="review-meta">Order #'+r.order_id+' - '+(r.store_name||'')+'</div>'
-    +'</div>').join('');
+  renderActiveOrder(active, el);
 }
 
-async function acceptOrder(oid){
-  try{
-    const r=await fetch('/api/orders/'+oid+'/accept',{method:'POST'});
-    const d=await r.json();
-    if(d.ok){showToast('Order accepted!');pendingOrders=pendingOrders.filter(o=>o.id!==oid);await loadMyOrders();await loadPendingOrders();showTab('active',document.querySelector('.tab'));}
-    else showToast(d.error||'Could not accept');
-  } catch{showToast('Error accepting');}
+function renderActiveOrder(o, el) {
+  const items = (() => { try { const a=typeof o.items_json==='string'?JSON.parse(o.items_json):o.items_json; return a.map(i=>`${i.emoji||'📦'} ${i.name} ×${i.qty}`).join('<br>'); } catch(e){return '';} })();
+  activeOrder = o.id;
+  chatOrderId = o.id;
+
+  el.innerHTML = `
+    <div class="active-order-card">
+      <div class="active-order-status">🟢 ACTIVE DELIVERY</div>
+      <div class="active-order-name">${o.customer_name}</div>
+      <div class="active-order-addr">📍 ${o.customer_address||''}</div>
+      <div style="font-size:14px;opacity:0.8;margin-bottom:16px">${items}</div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:16px">
+        <div><div style="font-size:12px;opacity:0.7">Total</div><div style="font-size:20px;font-weight:800">£${Number(o.total).toFixed(2)}</div></div>
+        ${o.tip>0?`<div><div style="font-size:12px;opacity:0.7">Tip</div><div style="font-size:20px;font-weight:800;color:#06c167">+£${Number(o.tip).toFixed(2)}</div></div>`:''}
+        <div><div style="font-size:12px;opacity:0.7">Payment</div><div style="font-size:14px;font-weight:600">${o.payment_method||'cash'}</div></div>
+      </div>
+      ${o.customer_phone?`<a href="tel:${o.customer_phone}" style="display:block;background:rgba(255,255,255,0.2);color:#fff;text-align:center;padding:12px;border-radius:12px;text-decoration:none;font-weight:600;margin-bottom:10px">📞 Call Customer</a>`:''}
+      <button class="btn-full-green" onclick="markDelivered(${o.id})">✅ Mark as Delivered</button>
+      <button class="btn-full-outline" onclick="openChat(${o.id})">💬 Chat with Customer</button>
+    </div>
+    <div id="activeMap" class="map-container"></div>`;
+
+  // Load map
+  setTimeout(() => initActiveMap(o), 200);
+
+  // Show chat if open
+  document.getElementById('chatSection').style.display = 'none';
 }
 
-async function declineOrder(oid){
-  await fetch('/api/orders/'+oid+'/decline',{method:'POST'});
-  pendingOrders=pendingOrders.filter(o=>o.id!==oid);
-  renderPending();
+function initActiveMap(o) {
+  const el = document.getElementById('activeMap');
+  if (!el) return;
+  if (window.L) { _buildActiveMap(el); return; }
+  const s = document.createElement('script');
+  s.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+  s.onload = () => _buildActiveMap(el, o);
+  document.head.appendChild(s);
+  const css = document.createElement('link');
+  css.rel = 'stylesheet';
+  css.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+  document.head.appendChild(css);
 }
 
-async function markDelivered(oid){
-  const btn=document.getElementById('deliverBtn');
-  if(btn) btn.disabled=true;
-  try{
-    const r=await fetch('/api/orders/'+oid+'/status',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:'delivered'})});
-    if(r.ok){showToast('Delivery confirmed!');await loadDriverStatus();await loadMyOrders();}
-    else{showToast('Error');if(btn) btn.disabled=false;}
-  } catch{showToast('Network error');if(btn) btn.disabled=false;}
+function _buildActiveMap(el, o) {
+  const lat = 51.5074, lng = -0.1278; // Default London
+  const map = L.map(el).setView([lat, lng], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(pos => {
+      const { latitude, longitude } = pos.coords;
+      map.setView([latitude, longitude], 15);
+      L.marker([latitude, longitude]).addTo(map).bindPopup('📍 You').openPopup();
+    });
+  }
 }
 
-function watchGPS(){
-  if(!navigator.geolocation) return;
-  navigator.geolocation.watchPosition(pos=>{
-    gpsPosition={lat:pos.coords.latitude,lng:pos.coords.longitude};
-    renderActive();
-  },{enableHighAccuracy:true,timeout:15000,maximumAge:5000},()=>{gpsPosition=null;});
+async function markDelivered(oid) {
+  if (!confirm('Mark order as delivered?')) return;
+  await fetch(`/api/orders/${oid}/status`, {
+    method: 'PATCH',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ status:'delivered' })
+  });
+  toast('🎉 Delivery complete! +£3.00 earned');
+  activeOrder = null;
+  loadDriverData();
+  showPage('home', document.querySelectorAll('.nav-tab')[0]);
+  loadAvailableOrders();
+  showNotification('💰 Delivery Complete!', 'You earned £3.00 for this delivery');
 }
 
-function haversine(lat1,lon1,lat2,lon2){
-  if(lat2==null||lon2==null) return null;
-  const R=6371,dLat=(lat2-lat1)*Math.PI/180,dLon=(lon2-lon1)*Math.PI/180;
-  const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
-  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+// ── HISTORY ──
+async function loadHistory() {
+  const r = await fetch('/api/drivers/me/orders');
+  const orders = await r.json();
+  const el = document.getElementById('historyList');
+  if (!orders.length) { el.innerHTML = '<div style="text-align:center;padding:40px;color:#aaa"><div style="font-size:40px;margin-bottom:8px">📋</div><p>No delivery history yet</p></div>'; return; }
+  el.innerHTML = orders.map(o => {
+    const items = (() => { try { const a=typeof o.items_json==='string'?JSON.parse(o.items_json):o.items_json; return a.map(i=>`${i.qty}×${i.name}`).join(', '); } catch(e){return '';} })();
+    return `<div class="order-hist-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <span style="font-weight:700">#${o.id} — ${o.customer_name||''}</span>
+        <span style="font-size:12px;padding:3px 8px;border-radius:8px;font-weight:600;${o.status==='delivered'?'background:#d1fae5;color:#065f46':'background:#fee2e2;color:#991b1b'}">${o.status}</span>
+      </div>
+      <div style="font-size:13px;color:#888">${items}</div>
+      <div style="font-size:13px;color:#888;margin-top:4px">📍 ${o.customer_address||''}</div>
+      <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:13px">
+        <span style="color:#06c167;font-weight:600">+£3.00${o.tip>0?' + £'+Number(o.tip).toFixed(2)+' tip':''}</span>
+        <span style="color:#aaa">${timeAgo(o.created_at)}</span>
+      </div>
+    </div>`;
+  }).join('');
 }
 
-function showTab(id,el){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  if(el) el.classList.add('active');
-  ['active','pending','history','reviews'].forEach(t=>document.getElementById('tab-'+t).style.display=t===id?'block':'none');
-  if(id==='reviews') loadReviews();
+// ── EARNINGS ──
+async function loadEarnings() {
+  const r = await fetch('/api/driver/reviews');
+  const r2 = await fetch('/api/drivers/me');
+  const d = await r2.json();
+  document.getElementById('totalEarnings').textContent = '£' + Number(d.earnings||0).toFixed(2);
+  document.getElementById('totalDeliveries').textContent = (d.total_deliveries||0) + ' deliveries';
+
+  const er = await fetch('/api/drivers/me/earnings');
+  const earnings = await er.json();
+
+  if (!earnings.length) {
+    document.getElementById('earningsChart').innerHTML = '<p style="text-align:center;color:#aaa;padding:20px">No earnings data yet</p>';
+    return;
+  }
+
+  const maxEarn = Math.max(...earnings.map(e => e.earnings||0));
+  const html = `
+    <div style="background:#fff;border-radius:14px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.07)">
+      <div style="font-size:14px;font-weight:700;margin-bottom:12px">Last 30 days</div>
+      ${earnings.map(e => `
+        <div class="earn-bar-row">
+          <div class="earn-bar-label">${e.date.slice(5)}</div>
+          <div class="earn-bar" style="width:${Math.max(4, (e.earnings/maxEarn)*220)}px"></div>
+          <div class="earn-bar-val">£${Number(e.earnings||0).toFixed(2)} (${e.deliveries})</div>
+        </div>`).join('')}
+    </div>`;
+  document.getElementById('earningsChart').innerHTML = html;
 }
 
-function tryParseItems(json){try{return JSON.parse(json||'[]')}catch{return [];}}
-function showToast(msg,dur=3000){const t=document.getElementById('toast');if(!t)return;t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur);}
+// ── REVIEWS ──
+async function loadReviews() {
+  const r = await fetch('/api/driver/reviews');
+  const reviews = await r.json();
+  const el = document.getElementById('reviewsList');
+  if (!reviews.length) { el.innerHTML = '<div style="text-align:center;padding:40px;color:#aaa"><div style="font-size:40px;margin-bottom:8px">⭐</div><p>No reviews yet</p></div>'; return; }
+  el.innerHTML = reviews.map(rv => `
+    <div class="review-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="color:#f59e0b;font-size:18px">${'⭐'.repeat(rv.driver_rating||5)}</span>
+        <span style="font-size:12px;color:#aaa">${timeAgo(rv.created_at)}</span>
+      </div>
+      ${rv.comment ? `<div style="font-size:14px;color:#555">"${rv.comment}"</div>` : '<div style="font-size:13px;color:#aaa">No comment</div>'}
+      <div style="font-size:12px;color:#aaa;margin-top:6px">Order #${rv.order_id} · ${rv.store_name||''}</div>
+    </div>`).join('');
+}
 
-init();
+// ── CHAT ──
+function openChat(oid) {
+  chatOrderId = oid;
+  const el = document.getElementById('chatSection');
+  el.style.display = 'block';
+  el.scrollIntoView({ behavior:'smooth' });
+  loadChat();
+  if (chatPollInterval) clearInterval(chatPollInterval);
+  chatPollInterval = setInterval(loadChat, 5000);
+}
+
+async function loadChat() {
+  if (!chatOrderId) return;
+  const r = await fetch(`/api/chat/${chatOrderId}`);
+  const msgs = await r.json();
+  const box = document.getElementById('chatBox');
+  if (!box) return;
+  box.innerHTML = msgs.map(m => `
+    <div>
+      <div class="chat-msg ${m.sender_role==='driver'?'mine':'theirs'}">${m.message}</div>
+      <div style="font-size:11px;color:#aaa;text-align:${m.sender_role==='driver'?'right':'left'};margin-bottom:4px">${m.sender_name} · ${timeAgo(m.created_at)}</div>
+    </div>`).join('');
+  box.scrollTop = box.scrollHeight;
+}
+
+async function sendChat() {
+  const inp = document.getElementById('chatMsg');
+  const msg = inp.value.trim();
+  if (!msg || !chatOrderId) return;
+  inp.value = '';
+  await fetch(`/api/chat/${chatOrderId}`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ message: msg }) });
+  loadChat();
+}
+
+// ── NOTIFICATIONS ──
+function requestNotifications() {
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+}
+
+function showNotification(title, body) {
+  if (Notification.permission === 'granted') {
+    new Notification(title, { body });
+  }
+}
+
+// ── UTILS ──
+function timeAgo(ts) {
+  if (!ts) return '';
+  const d = new Date(ts.replace ? ts.replace(' ','T')+'Z' : ts);
+  const s = Math.floor((Date.now() - d) / 1000);
+  if (s < 60) return 'just now';
+  if (s < 3600) return Math.floor(s/60) + 'm ago';
+  if (s < 86400) return Math.floor(s/3600) + 'h ago';
+  return Math.floor(s/86400) + 'd ago';
+}
 </script>
 </body>
 </html>
