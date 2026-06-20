@@ -195,12 +195,14 @@ function showPage(p, btn) {
 }
 
 // ── INIT ──
-loadDriverData();
-loadAvailableOrders();
+(async () => {
+  await loadDriverData();
+  loadAvailableOrders();
+})();
 
-setInterval(() => {
-  loadDriverData();
-  if (isOnline) loadAvailableOrders();
+setInterval(async () => {
+  await loadDriverData();
+  loadAvailableOrders();
 }, 15000);
 
 // Track location when online
@@ -225,11 +227,17 @@ async function loadDriverData() {
   const r = await fetch('/api/drivers/me');
   if (!r.ok) return;
   driverData = await r.json();
-  isOnline = driverData.is_online || driverData.status === 'available' || driverData.status === 'busy';
+  const wasOnline = isOnline;
+  isOnline = driverData.is_online || ['available','busy'].includes(driverData.status);
   updateOnlineUI();
   document.getElementById('stat-earn').textContent = '£' + Number(driverData.earnings||0).toFixed(2);
   document.getElementById('stat-del').textContent = driverData.total_deliveries || 0;
   document.getElementById('stat-rating').textContent = Number(driverData.rating||5).toFixed(1);
+  // Load today's earnings
+  const today = new Date().toISOString().slice(0,10);
+  const er = await fetch('/api/drivers/me/earnings').then(r=>r.json()).catch(()=>[]);
+  const todayEarn = er.find(e=>e.date===today);
+  document.getElementById('stat-today').textContent = '£' + Number(todayEarn?.earnings||0).toFixed(2);
 }
 
 function updateOnlineUI() {
@@ -268,7 +276,7 @@ async function toggleOnline() {
 
 // ── AVAILABLE ORDERS ──
 async function loadAvailableOrders() {
-  if (!isOnline) return;
+  if (!isOnline) { document.getElementById('availableOrders').innerHTML = '<div style="text-align:center;padding:30px;color:#aaa"><div style="font-size:40px;margin-bottom:8px">💤</div><p>Go online to see orders</p></div>'; return; }
   const r = await fetch('/api/drivers/pending-orders');
   const orders = await r.json();
   const el = document.getElementById('availableOrders');
@@ -314,24 +322,18 @@ async function declineOrder(oid) {
 
 // ── ACTIVE ORDER ──
 async function loadActiveOrder() {
-  const r = await fetch('/api/orders?all=1');
-  const orders = await r.json();
-  const active = orders.find(o => ['picked_up'].includes(o.status));
   const el = document.getElementById('activeOrderContent');
-
-  if (!active) {
-    // Check for preparing orders assigned to this driver
-    const r2 = await fetch('/api/drivers/me/orders');
-    const myOrders = await r2.json();
-    const inProgress = myOrders.find(o => ['picked_up','preparing'].includes(o.status));
+  try {
+    const myOrders = await fetch('/api/drivers/me/orders').then(r=>r.json());
+    const inProgress = myOrders.find(o => ['picked_up','accepted','preparing'].includes(o.status));
     if (!inProgress) {
-      el.innerHTML = `<div style="text-align:center;padding:40px;color:#aaa"><div style="font-size:48px;margin-bottom:12px">📦</div><p>No active delivery</p></div>`;
+      el.innerHTML = `<div style="text-align:center;padding:40px;color:#aaa"><div style="font-size:48px;margin-bottom:12px">📦</div><p>No active delivery.<br><small>Accept an order from the Home tab.</small></p></div>`;
       return;
     }
     renderActiveOrder(inProgress, el);
-    return;
+  } catch(e) {
+    el.innerHTML = `<div style="text-align:center;padding:40px;color:#aaa">Unable to load</div>`;
   }
-  renderActiveOrder(active, el);
 }
 
 function renderActiveOrder(o, el) {
