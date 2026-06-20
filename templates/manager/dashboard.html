@@ -4,540 +4,814 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Swiftly Manager</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--brand:#06c167;--dark:#1a1a1a;--mid:#545454;--light:#f6f6f6;--border:#e8e8e8;--shadow:0 2px 12px rgba(0,0,0,.08)}
-body{font-family:'Inter',sans-serif;background:#f4f5f7;color:var(--dark)}
-button{cursor:pointer;font-family:inherit;border:none;outline:none}
-
-/* SIDEBAR */
-.layout{display:flex;min-height:100vh}
-.sidebar{width:220px;background:#1a1a1a;color:#fff;flex-shrink:0;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
-.sidebar-logo{padding:22px 20px;font-size:20px;font-weight:800;color:var(--brand);letter-spacing:-1px;border-bottom:1px solid #333}
-.sidebar-nav{flex:1;padding:14px 0}
-.nav-item{display:flex;align-items:center;gap:10px;padding:12px 20px;font-size:14px;font-weight:500;color:#aaa;cursor:pointer;transition:all .2s;border-left:3px solid transparent}
-.nav-item:hover,.nav-item.active{color:#fff;background:rgba(255,255,255,.06);border-left-color:var(--brand)}
-.sidebar-footer{padding:14px 20px;border-top:1px solid #333}
-.sidebar-user{font-size:12px;color:#aaa;margin-bottom:8px}
-.sidebar-user span{color:#fff;display:block;font-weight:600}
-.btn-logout{display:block;padding:8px 12px;background:#333;color:#fff;border-radius:8px;font-size:12px;font-weight:600;text-align:center;text-decoration:none}
-.lang-bar{display:flex;gap:3px;flex-wrap:wrap;margin-top:8px}
-.lang-btn{background:none;border:none;cursor:pointer;font-size:10px;color:#888;padding:3px 6px;border-radius:4px;font-weight:600}
-.lang-btn.active,.lang-btn:hover{background:#333;color:#fff}
-
-/* MAIN */
-.main{flex:1;overflow-x:hidden;min-width:0}
-.topbar{background:#fff;border-bottom:1px solid var(--border);padding:0 24px;height:58px;display:flex;align-items:center;justify-content:space-between}
-.topbar h1{font-size:17px;font-weight:700}
-.store-badge{background:#f0faf5;color:var(--brand);padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600}
-.page{padding:20px 24px;display:none}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f7f7f7;color:#1a1a1a}
+body.dark{background:#111;color:#f0f0f0}
+.topbar{background:#fff;border-bottom:1px solid #eee;padding:12px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
+body.dark .topbar{background:#1a1a1a;border-color:#333}
+.topbar-logo{font-size:20px;font-weight:800;color:#06c167}
+.topbar-store{font-size:14px;color:#666;flex:1}
+body.dark .topbar-store{color:#aaa}
+.topbar-btns{display:flex;gap:8px}
+.icon-btn{padding:7px 12px;border-radius:8px;border:none;background:#f0f0f0;font-size:13px;cursor:pointer;font-weight:500}
+body.dark .icon-btn{background:#2a2a2a;color:#f0f0f0}
+.nav-tabs{display:flex;gap:0;border-bottom:1px solid #eee;background:#fff;overflow-x:auto;scrollbar-width:none}
+body.dark .nav-tabs{background:#1a1a1a;border-color:#333}
+.nav-tabs::-webkit-scrollbar{display:none}
+.nav-tab{padding:12px 16px;border:none;background:none;font-size:14px;font-weight:500;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;color:#666}
+body.dark .nav-tab{color:#aaa}
+.nav-tab.active{color:#06c167;border-bottom-color:#06c167}
+.page{display:none;padding:16px;padding-bottom:30px}
 .page.active{display:block}
-
-/* STAT CARDS */
-.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:20px}
-.stat-card{background:#fff;border-radius:14px;padding:18px;box-shadow:var(--shadow)}
-.stat-card .label{font-size:11px;color:var(--mid);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
-.stat-card .value{font-size:30px;font-weight:800}
-.stat-card .sub{font-size:11px;color:#888;margin-top:3px}
-.stat-card.green .value{color:var(--brand)}
-.stat-card.orange .value{color:#f39c12}
-.stat-card.red .value{color:#e74c3c}
-.stat-card.blue .value{color:#3498db}
-
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}
+.stat-card{background:#fff;border-radius:14px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.07);text-align:center}
+body.dark .stat-card{background:#1e1e1e}
+.stat-val{font-size:28px;font-weight:800;color:#06c167}
+.stat-label{font-size:13px;color:#888;margin-top:4px}
+.alert-banner{background:#fff3cd;border:1px solid #ffecb5;border-radius:10px;padding:12px 16px;margin-bottom:12px;display:none;font-size:14px}
 /* KANBAN */
-.kanban{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
-.kanban-col{background:#fff;border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
-.kanban-col-header{padding:12px 14px;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:space-between}
-.kanban-col-header .count{background:rgba(255,255,255,.3);border-radius:50px;padding:2px 9px;font-size:11px}
-.col-placed .kanban-col-header{background:#3498db;color:#fff}
-.col-accepted .kanban-col-header{background:#9b59b6;color:#fff}
-.col-preparing .kanban-col-header{background:#f39c12;color:#fff}
-.col-picked .kanban-col-header{background:#1abc9c;color:#fff}
-.col-delivered .kanban-col-header{background:var(--brand);color:#fff}
-.kanban-cards{padding:8px;min-height:80px;display:flex;flex-direction:column;gap:7px;max-height:440px;overflow-y:auto}
-.order-card{background:var(--light);border-radius:10px;padding:11px;border-left:3px solid var(--border);transition:box-shadow .2s}
-.order-card:hover{box-shadow:var(--shadow)}
-.oc-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
-.oc-id{font-size:11px;font-weight:700;color:var(--mid)}
-.oc-time{font-size:10px;color:#aaa}
-.oc-customer{font-size:13px;font-weight:600;margin-bottom:2px}
-.oc-items{font-size:11px;color:#888;margin-bottom:6px;line-height:1.4}
-.oc-total{font-size:12px;font-weight:700;color:var(--brand)}
-.oc-payment{font-size:10px;color:var(--mid)}
-.oc-driver{font-size:11px;color:#888;margin-top:3px}
-.oc-actions{display:flex;gap:5px;margin-top:7px;flex-wrap:wrap}
-.oc-btn{padding:5px 9px;border-radius:6px;font-size:11px;font-weight:700;border:none;cursor:pointer;white-space:nowrap}
-.oc-btn.accept{background:#9b59b6;color:#fff}
-.oc-btn.prepare{background:#f39c12;color:#fff}
-.oc-btn.ready{background:#1abc9c;color:#fff}
-.oc-btn.assign{background:var(--brand);color:#fff}
-.oc-btn.complete{background:var(--brand);color:#fff}
-.oc-btn.cancel{background:#e74c3c;color:#fff}
-.oc-btn.refund{background:#f39c12;color:#fff}
-.oc-btn.enroute{background:#ccc;color:#666;cursor:not-allowed}
-.empty-col{text-align:center;padding:20px;color:#ccc;font-size:12px}
-
-/* CHART */
-.chart-card{background:#fff;border-radius:14px;padding:18px;box-shadow:var(--shadow);margin-bottom:20px}
-.chart-card h3{font-size:14px;font-weight:700;margin-bottom:14px}
-.chart-wrap{height:180px;position:relative}
-
+.kanban{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none}
+.kanban::-webkit-scrollbar{display:none}
+.kanban-col{min-width:260px;background:#f0f0f0;border-radius:14px;overflow:hidden;flex-shrink:0}
+body.dark .kanban-col{background:#222}
+.kanban-hdr{padding:12px 14px;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:space-between}
+.kanban-hdr .count{background:rgba(0,0,0,0.1);border-radius:10px;padding:2px 8px;font-size:12px}
+.kanban-body{padding:8px;display:flex;flex-direction:column;gap:8px;min-height:100px;max-height:calc(100vh - 280px);overflow-y:auto}
+.kanban-col.col-placed .kanban-hdr{background:#fef3c7;color:#92400e}
+.kanban-col.col-accepted .kanban-hdr{background:#e0f2fe;color:#0369a1}
+.kanban-col.col-preparing .kanban-hdr{background:#fce7f3;color:#9d174d}
+.kanban-col.col-picked_up .kanban-hdr{background:#d1fae5;color:#065f46}
+.kanban-col.col-delivered .kanban-hdr{background:#e5e7eb;color:#374151}
+.order-card{background:#fff;border-radius:10px;padding:12px;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
+body.dark .order-card{background:#2a2a2a}
+.order-card-id{font-size:12px;color:#aaa;margin-bottom:4px}
+.order-card-name{font-size:14px;font-weight:700;margin-bottom:2px}
+.order-card-items{font-size:12px;color:#888;margin-bottom:8px;max-height:40px;overflow:hidden}
+.order-card-meta{display:flex;justify-content:space-between;font-size:12px;color:#888}
+.card-btns{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.card-btn{padding:5px 10px;border-radius:6px;border:none;font-size:12px;font-weight:600;cursor:pointer}
+.btn-green{background:#06c167;color:#fff}
+.btn-red{background:#ef4444;color:#fff}
+.btn-blue{background:#3b82f6;color:#fff}
+.btn-gray{background:#e5e7eb;color:#374151}
+/* FORM */
+.form-group{margin-bottom:12px}
+.form-label{font-size:13px;color:#666;margin-bottom:4px;display:block}
+body.dark .form-label{color:#aaa}
+.input-field{width:100%;padding:10px 14px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:14px;outline:none;font-family:inherit;background:#fff}
+body.dark .input-field{background:#2a2a2a;border-color:#444;color:#f0f0f0}
+.input-field:focus{border-color:#06c167}
+.select-field{width:100%;padding:10px 14px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:14px;outline:none;appearance:none;background:#fff;cursor:pointer}
+body.dark .select-field{background:#2a2a2a;border-color:#444;color:#f0f0f0}
+.btn-primary{padding:11px 20px;background:#06c167;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer}
+.btn-danger{padding:11px 20px;background:#ef4444;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer}
+.btn-outline{padding:9px 16px;border:1.5px solid #06c167;color:#06c167;background:#fff;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer}
+body.dark .btn-outline{background:#1a1a1a}
+/* PRODUCTS */
+.products-list{display:flex;flex-direction:column;gap:10px}
+.product-row{background:#fff;border-radius:12px;padding:12px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 4px rgba(0,0,0,0.07)}
+body.dark .product-row{background:#1e1e1e}
+.product-emoji-big{font-size:36px;flex-shrink:0}
+.product-details{flex:1}
+.product-name{font-weight:700;font-size:15px}
+.product-desc{font-size:12px;color:#888}
+.product-price{font-size:15px;font-weight:700;color:#06c167}
+.product-row-btns{display:flex;flex-direction:column;gap:4px}
+.toggle-switch{position:relative;display:inline-block;width:40px;height:22px}
+.toggle-switch input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;cursor:pointer;inset:0;background:#ccc;border-radius:11px;transition:.3s}
+.toggle-slider:before{content:'';position:absolute;width:16px;height:16px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s}
+input:checked+.toggle-slider{background:#06c167}
+input:checked+.toggle-slider:before{transform:translateX(18px)}
 /* MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:center;justify-content:center;padding:16px}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:400;display:none;align-items:center;justify-content:center;padding:16px}
 .modal-overlay.open{display:flex}
-.modal-box{background:#fff;border-radius:16px;width:100%;max-width:420px;padding:22px;box-shadow:0 8px 40px rgba(0,0,0,.18)}
-.modal-box h3{font-size:16px;font-weight:700;margin-bottom:14px}
-.driver-list{display:flex;flex-direction:column;gap:7px;max-height:260px;overflow-y:auto;margin-bottom:14px}
-.driver-row{display:flex;align-items:center;justify-content:space-between;padding:11px 13px;background:var(--light);border-radius:10px;border:1.5px solid transparent;cursor:pointer;transition:all .2s}
-.driver-row:hover,.driver-row.sel{border-color:var(--brand);background:#f0faf5}
-.driver-name{font-size:13px;font-weight:600}
-.driver-meta{font-size:11px;color:#888}
-.driver-status{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:600}
-.status-available{background:#d5f5e3;color:var(--brand)}
-.status-busy{background:#fdecea;color:#e74c3c}
-.status-offline{background:#eee;color:#888}
-.modal-actions{display:flex;gap:8px}
-.btn-modal{flex:1;padding:10px;border-radius:10px;font-size:13px;font-weight:700}
-.btn-assign-confirm{background:var(--brand);color:#fff}
-.btn-cancel-modal{background:var(--light);color:var(--dark)}
-
-/* REFUND MODAL */
-.refund-box{background:#fff;border-radius:16px;width:100%;max-width:380px;padding:22px;box-shadow:0 8px 40px rgba(0,0,0,.18);text-align:center}
-.refund-box h3{font-size:16px;font-weight:700;margin-bottom:8px}
-.refund-box p{font-size:13px;color:#888;margin-bottom:16px}
-.refund-reason{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-family:inherit;margin-bottom:14px}
-.btn-refund-confirm{width:100%;padding:12px;background:#e74c3c;color:#fff;border-radius:10px;font-size:14px;font-weight:700;margin-bottom:7px}
-.btn-refund-cancel{width:100%;padding:10px;background:var(--light);color:var(--dark);border-radius:10px;font-size:13px;font-weight:600}
-
-/* ALERT */
-.alert-banner{position:fixed;top:66px;right:20px;background:var(--brand);color:#fff;padding:13px 18px;border-radius:12px;font-size:13px;font-weight:700;z-index:300;box-shadow:var(--shadow);display:none;animation:pulse 1s ease infinite alternate}
-@keyframes pulse{from{transform:scale(1)}to{transform:scale(1.03)}}
-.refresh-tag{font-size:11px;color:#888;font-weight:400}
-
+.modal{background:#fff;border-radius:16px;padding:20px;width:100%;max-width:440px;max-height:80vh;overflow-y:auto}
+body.dark .modal{background:#1a1a1a}
+.modal-title{font-size:18px;font-weight:700;margin-bottom:16px}
 /* REVIEWS */
-.review-card{background:#fff;border-radius:14px;padding:16px;box-shadow:var(--shadow);margin-bottom:12px}
-.review-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.review-customer{font-size:14px;font-weight:700}
-.review-date{font-size:11px;color:#aaa}
-.review-stars{font-size:13px;margin-bottom:6px}
-.review-comment{font-size:13px;color:var(--mid);line-height:1.5;font-style:italic}
-.review-order{font-size:11px;color:#aaa;margin-top:6px}
-.rating-summary{background:#fff;border-radius:14px;padding:18px;box-shadow:var(--shadow);margin-bottom:16px;display:flex;gap:28px;align-items:center}
-.rating-big{text-align:center}
-.rating-big .num{font-size:42px;font-weight:800;color:var(--brand)}
-.rating-big .lbl{font-size:11px;color:#888}
-.rating-bars{flex:1}
-.rbar{display:flex;align-items:center;gap:8px;margin-bottom:4px;font-size:12px}
-.rbar-bg{flex:1;height:6px;background:var(--border);border-radius:50px;overflow:hidden}
-.rbar-fill{height:100%;background:var(--brand);border-radius:50px}
-
-/* ORDERS TABLE */
-.orders-table-wrap{background:#fff;border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
-.orders-filter{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
-.filter-btn{padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;border:none;cursor:pointer;transition:all .2s}
+.review-card{background:#fff;border-radius:12px;padding:14px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:10px}
+body.dark .review-card{background:#1e1e1e}
+.review-stars{color:#f59e0b;font-size:18px;margin-bottom:4px}
+/* ANALYTICS */
+.chart-card{background:#fff;border-radius:14px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.07);margin-bottom:16px}
+body.dark .chart-card{background:#1e1e1e}
+.chart-title{font-size:15px;font-weight:700;margin-bottom:12px}
+/* PROMO */
+.promo-row{background:#fff;border-radius:12px;padding:12px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:8px}
+body.dark .promo-row{background:#1e1e1e}
+/* SECTION HDR */
+.section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.section-hdr h2{font-size:16px;font-weight:700}
+/* TOAST */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);background:#1a1a1a;color:#fff;padding:10px 18px;border-radius:10px;font-size:14px;z-index:9999;transition:transform .3s;white-space:nowrap}
+body.dark .toast{background:#333}
+.toast.show{transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
-
-<div class="alert-banner" id="alertBanner">🔔 New order received!</div>
-
-<div class="layout">
-  <div class="sidebar">
-    <div class="sidebar-logo">⚡ Swiftly</div>
-    <div class="sidebar-nav">
-      <div class="nav-item active" onclick="showPage('dashboard',this)">📊 <span data-i18n="dashboard">Dashboard</span></div>
-      <div class="nav-item" onclick="showPage('orders',this)">📋 <span data-i18n="orders">Orders</span></div>
-      <div class="nav-item" onclick="window.location='/manager/products'">🍕 <span data-i18n="menu">Menu</span></div>
-      <div class="nav-item" onclick="showPage('drivers',this)">🛵 <span data-i18n="drivers">Drivers</span></div>
-      <div class="nav-item" onclick="showPage('reviews',this)">⭐ <span data-i18n="reviews">Reviews</span></div>
-    </div>
-    <div class="sidebar-footer">
-      <div class="sidebar-user">Logged in as<span>{{ user.name }}</span></div>
-      <a href="/logout" class="btn-logout" data-i18n="logout">Log out</a>
-      <div class="lang-bar">
-        <button class="lang-btn active" onclick="setLang('en')">EN</button>
-        <button class="lang-btn" onclick="setLang('es')">ES</button>
-        <button class="lang-btn" onclick="setLang('fr')">FR</button>
-        <button class="lang-btn" onclick="setLang('ar')">AR</button>
-        <button class="lang-btn" onclick="setLang('hi')">HI</button>
-        <button class="lang-btn" onclick="setLang('ml')">ML</button>
-      </div>
-    </div>
+<nav class="topbar">
+  <span class="topbar-logo">⚡Swiftly</span>
+  <span class="topbar-store">Manager Dashboard</span>
+  <div class="topbar-btns">
+    <button class="icon-btn" onclick="toggleDark()">🌙</button>
+    <button class="icon-btn" onclick="if(confirm('Logout?'))location='/logout'">Logout</button>
   </div>
+</nav>
 
-  <div class="main">
-    <div class="topbar">
-      <h1 id="pageTitle">Dashboard <span class="refresh-tag" id="refreshTag"></span></h1>
-      {% if store %}<div class="store-badge">🏪 {{ store.name }}</div>{% endif %}
-    </div>
+<div id="alertBanner" class="alert-banner">🔔 <span id="alertText"></span></div>
 
-    <!-- DASHBOARD PAGE -->
-    <div class="page active" id="page-dashboard">
-      <div class="stats-row" id="statsRow">
-        <div class="stat-card green"><div class="label" data-i18n="revenue_today">Revenue today</div><div class="value" id="statRevenue">—</div><div class="sub">Delivered orders</div></div>
-        <div class="stat-card orange"><div class="label" data-i18n="active_orders">Active orders</div><div class="value" id="statPending">—</div><div class="sub">In progress</div></div>
-        <div class="stat-card blue"><div class="label" data-i18n="total_orders">Total orders</div><div class="value" id="statTotal">—</div><div class="sub">All time</div></div>
-        <div class="stat-card"><div class="label" data-i18n="completed">Completed</div><div class="value" id="statDelivered">—</div><div class="sub">Delivered</div></div>
-      </div>
-      <div class="chart-card">
-        <h3>📈 <span data-i18n="revenue_trend">Revenue trend (recent orders)</span></h3>
-        <div class="chart-wrap"><canvas id="revenueChart"></canvas></div>
-      </div>
-      <h2 style="font-size:15px;font-weight:700;margin-bottom:12px" data-i18n="live_board">Live order board</h2>
-      <div class="kanban" id="kanbanBoard"></div>
-    </div>
+<div class="nav-tabs">
+  <button class="nav-tab active" onclick="showPage('overview',this)">📊 Overview</button>
+  <button class="nav-tab" onclick="showPage('orders',this)">🛍️ Orders</button>
+  <button class="nav-tab" onclick="showPage('products',this)">🍽️ Menu</button>
+  <button class="nav-tab" onclick="showPage('drivers',this)">🏍️ Drivers</button>
+  <button class="nav-tab" onclick="showPage('analytics',this)">📈 Analytics</button>
+  <button class="nav-tab" onclick="showPage('reviews',this)">⭐ Reviews</button>
+  <button class="nav-tab" onclick="showPage('promos',this)">🎟️ Promos</button>
+  <button class="nav-tab" onclick="showPage('settings',this)">⚙️ Settings</button>
+</div>
 
-    <!-- ORDERS PAGE -->
-    <div class="page" id="page-orders">
-      <div class="orders-filter">
-        <button class="filter-btn" style="background:var(--brand);color:#fff" onclick="loadOrders('all')" data-i18n="all">All</button>
-        <button class="filter-btn" style="background:#3498db;color:#fff" onclick="loadOrders('placed')" data-i18n="placed">Placed</button>
-        <button class="filter-btn" style="background:#9b59b6;color:#fff" onclick="loadOrders('accepted')">Accepted</button>
-        <button class="filter-btn" style="background:#f39c12;color:#fff" onclick="loadOrders('preparing')" data-i18n="preparing">Preparing</button>
-        <button class="filter-btn" style="background:var(--brand);color:#fff" onclick="loadOrders('delivered')" data-i18n="delivered">Delivered</button>
-        <button class="filter-btn" style="background:#e74c3c;color:#fff" onclick="loadOrders('cancelled')">Cancelled</button>
-      </div>
-      <div class="orders-table-wrap" id="ordersTable"></div>
-    </div>
+<!-- OVERVIEW -->
+<div id="page-overview" class="page active">
+  <div class="stats-grid" id="statsGrid">
+    <div class="stat-card"><div class="stat-val" id="st-revenue">£0</div><div class="stat-label">Today's Revenue</div></div>
+    <div class="stat-card"><div class="stat-val" id="st-pending">0</div><div class="stat-label">Active Orders</div></div>
+    <div class="stat-card"><div class="stat-val" id="st-total">0</div><div class="stat-label">Total Orders</div></div>
+    <div class="stat-card"><div class="stat-val" id="st-delivered">0</div><div class="stat-label">Delivered</div></div>
+  </div>
+  <div class="chart-card">
+    <div class="chart-title">Revenue Last 7 Days</div>
+    <canvas id="miniRevenueChart" height="120"></canvas>
+  </div>
+  <h2 style="font-size:16px;font-weight:700;margin-bottom:12px">Live Orders</h2>
+  <div class="kanban" id="kanban"></div>
+</div>
 
-    <!-- DRIVERS PAGE -->
-    <div class="page" id="page-drivers">
-      <div id="driversPanel" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px"></div>
-    </div>
+<!-- ORDERS TABLE -->
+<div id="page-orders" class="page">
+  <div class="section-hdr">
+    <h2>All Orders</h2>
+    <select class="select-field" style="width:auto" onchange="loadAllOrders(this.value)">
+      <option value="">All</option>
+      <option value="placed">Placed</option>
+      <option value="accepted">Accepted</option>
+      <option value="preparing">Preparing</option>
+      <option value="picked_up">On the way</option>
+      <option value="delivered">Delivered</option>
+      <option value="cancelled">Cancelled</option>
+    </select>
+  </div>
+  <div id="ordersTable"></div>
+</div>
 
-    <!-- REVIEWS PAGE -->
-    <div class="page" id="page-reviews">
-      <div id="ratingSummary"></div>
-      <div id="reviewsList"></div>
-    </div>
+<!-- PRODUCTS -->
+<div id="page-products" class="page">
+  <div class="section-hdr">
+    <h2>Menu Items</h2>
+    <button class="btn-primary" onclick="openAddProduct()">+ Add Item</button>
+  </div>
+  <div id="productsList" class="products-list"></div>
+</div>
+
+<!-- DRIVERS -->
+<div id="page-drivers" class="page">
+  <div class="section-hdr"><h2>Drivers</h2></div>
+  <div id="driversList"></div>
+</div>
+
+<!-- ANALYTICS -->
+<div id="page-analytics" class="page">
+  <div class="chart-card">
+    <div class="chart-title">📈 Daily Revenue (7 days)</div>
+    <canvas id="revenueChart" height="180"></canvas>
+  </div>
+  <div class="chart-card">
+    <div class="chart-title">🏆 Best Sellers</div>
+    <div id="bestSellers"></div>
+  </div>
+  <div class="chart-card">
+    <div class="chart-title">💳 Payment Methods</div>
+    <canvas id="paymentChart" height="160"></canvas>
+  </div>
+  <div class="chart-card">
+    <div class="chart-title">⏰ Orders by Hour</div>
+    <canvas id="hourlyChart" height="160"></canvas>
   </div>
 </div>
 
-<!-- ASSIGN DRIVER MODAL -->
+<!-- REVIEWS -->
+<div id="page-reviews" class="page">
+  <div class="section-hdr"><h2>Customer Reviews</h2></div>
+  <div id="reviewsList"></div>
+</div>
+
+<!-- PROMOS -->
+<div id="page-promos" class="page">
+  <div class="section-hdr">
+    <h2>Promo Codes</h2>
+    <button class="btn-primary" onclick="openAddPromo()">+ Create</button>
+  </div>
+  <div id="promoList"></div>
+</div>
+
+<!-- SETTINGS -->
+<div id="page-settings" class="page">
+  <div class="section-hdr"><h2>Store Settings</h2></div>
+  <div id="settingsForm">
+    <div class="form-group"><label class="form-label">Store Name</label><input class="input-field" id="s-name"></div>
+    <div class="form-group"><label class="form-label">Category</label>
+      <select class="select-field" id="s-category">
+        <option value="food">Food</option><option value="grocery">Grocery</option><option value="medicine">Pharmacy</option><option value="general">General</option>
+      </select>
+    </div>
+    <div class="form-group"><label class="form-label">Description</label><input class="input-field" id="s-description"></div>
+    <div class="form-group"><label class="form-label">Address</label><input class="input-field" id="s-address"></div>
+    <div class="form-group"><label class="form-label">Phone</label><input class="input-field" id="s-phone"></div>
+    <div class="form-group"><label class="form-label">Emoji</label><input class="input-field" id="s-emoji" style="font-size:24px;width:80px"></div>
+    <div class="form-group"><label class="form-label">Delivery Time (e.g. 20-35)</label><input class="input-field" id="s-delivery_time"></div>
+    <div class="form-group"><label class="form-label">Delivery Fee (£)</label><input class="input-field" type="number" step="0.01" id="s-delivery_fee"></div>
+    <div class="form-group"><label class="form-label">Free Delivery Over (£, 0 = off)</label><input class="input-field" type="number" step="0.01" id="s-free_delivery_threshold"></div>
+    <div class="form-group"><label class="form-label">Min Order (£)</label><input class="input-field" type="number" step="0.01" id="s-min_order"></div>
+    <div class="form-group" style="display:flex;align-items:center;gap:12px">
+      <label class="form-label" style="margin:0">Store is Open</label>
+      <label class="toggle-switch"><input type="checkbox" id="s-is_open" checked><span class="toggle-slider"></span></label>
+    </div>
+    <button class="btn-primary" onclick="saveSettings()" style="margin-top:8px">Save Settings</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Modals -->
+<div class="modal-overlay" id="productModal">
+  <div class="modal">
+    <div class="modal-title" id="productModalTitle">Add Menu Item</div>
+    <div id="productModalContent"></div>
+  </div>
+</div>
 <div class="modal-overlay" id="assignModal">
-  <div class="modal-box">
-    <h3>🛵 <span data-i18n="assign_driver">Assign Driver</span></h3>
-    <div class="driver-list" id="driverPickList"></div>
-    <div class="modal-actions">
-      <button class="btn-modal btn-cancel-modal" onclick="closeAssign()" data-i18n="cancel">Cancel</button>
-      <button class="btn-modal btn-assign-confirm" onclick="confirmAssign()"><span data-i18n="assign">Assign</span> →</button>
-    </div>
+  <div class="modal">
+    <div class="modal-title">Assign Driver</div>
+    <div id="assignModalContent"></div>
   </div>
 </div>
-
-<!-- REFUND MODAL -->
-<div class="modal-overlay" id="refundModal">
-  <div class="refund-box">
-    <h3>💰 <span data-i18n="issue_refund">Issue Refund</span></h3>
-    <p data-i18n="refund_desc">This will cancel the order and notify the customer of the refund.</p>
-    <textarea class="refund-reason" id="refundReason" rows="3" placeholder="Reason for refund (e.g. item unavailable, wrong order)..."></textarea>
-    <button class="btn-refund-confirm" onclick="confirmRefund()" data-i18n="confirm_refund">Confirm Refund & Cancel</button>
-    <button class="btn-refund-cancel" onclick="closeRefund()" data-i18n="cancel">Cancel</button>
+<div class="modal-overlay" id="promoModal">
+  <div class="modal">
+    <div class="modal-title">Create Promo Code</div>
+    <div id="promoModalContent"></div>
+  </div>
+</div>
+<div class="modal-overlay" id="chatModal">
+  <div class="modal">
+    <div class="modal-title">💬 Chat with Customer</div>
+    <div id="chatModalContent"></div>
   </div>
 </div>
 
 <script>
-const LANGS={
-  en:{dashboard:'Dashboard',orders:'Orders',menu:'Menu',drivers:'Drivers',reviews:'Reviews',logout:'Log out',revenue_today:'Revenue today',active_orders:'Active orders',total_orders:'Total orders',completed:'Completed',revenue_trend:'Revenue trend',live_board:'Live order board',all:'All',placed:'Placed',preparing:'Preparing',delivered:'Delivered',assign_driver:'Assign Driver',cancel:'Cancel',assign:'Assign',issue_refund:'Issue Refund',refund_desc:'This will cancel the order and notify the customer.',confirm_refund:'Confirm Refund & Cancel'},
-  es:{dashboard:'Panel',orders:'Pedidos',menu:'Menu',drivers:'Conductores',reviews:'Resenas',logout:'Salir',revenue_today:'Ingresos hoy',active_orders:'Pedidos activos',total_orders:'Pedidos totales',completed:'Completados',revenue_trend:'Tendencia de ingresos',live_board:'Tablero en vivo',all:'Todos',placed:'Pedido',preparing:'Preparando',delivered:'Entregado',assign_driver:'Asignar conductor',cancel:'Cancelar',assign:'Asignar',issue_refund:'Emitir reembolso',refund_desc:'Esto cancelara el pedido.',confirm_refund:'Confirmar reembolso'},
-  fr:{dashboard:'Tableau de bord',orders:'Commandes',menu:'Menu',drivers:'Chauffeurs',reviews:'Avis',logout:'Deconnexion',revenue_today:"Chiffre d'affaires",active_orders:'Commandes actives',total_orders:'Total commandes',completed:'Terminees',revenue_trend:'Tendance',live_board:'Tableau en direct',all:'Tout',placed:'Passee',preparing:'Preparation',delivered:'Livree',assign_driver:'Assigner chauffeur',cancel:'Annuler',assign:'Assigner',issue_refund:'Rembourser',refund_desc:'Cela annulera la commande.',confirm_refund:'Confirmer le remboursement'},
-  ar:{dashboard:'لوحة التحكم',orders:'الطلبات',menu:'القائمة',drivers:'السائقون',reviews:'التقييمات',logout:'تسجيل الخروج',revenue_today:'الايراد اليوم',active_orders:'الطلبات النشطة',total_orders:'اجمالي الطلبات',completed:'مكتملة',revenue_trend:'اتجاه الايرادات',live_board:'لوحة الطلبات المباشرة',all:'الكل',placed:'تم الطلب',preparing:'قيد التحضير',delivered:'تم التسليم',assign_driver:'تعيين سائق',cancel:'الغاء',assign:'تعيين',issue_refund:'اصدار استرداد',refund_desc:'سيتم الغاء الطلب.',confirm_refund:'تاكيد الاسترداد'},
-  hi:{dashboard:'Dashboard',orders:'Orders',menu:'Menu',drivers:'Drivers',reviews:'Samiksha',logout:'Log Out',revenue_today:'Aaj ki aay',active_orders:'Sakriya orders',total_orders:'Kul orders',completed:'Poore',revenue_trend:'Aay pravritti',live_board:'Live order board',all:'Sab',placed:'Rakha gaya',preparing:'Taiyari',delivered:'Deliver',assign_driver:'Driver assign karein',cancel:'Radd karein',assign:'Assign karein',issue_refund:'Refund karein',refund_desc:'Order cancel ho jayega.',confirm_refund:'Refund ki pushti karein'},
-  ml:{dashboard:'Dashboard',orders:'Orders',menu:'Menu',drivers:'Drivers',reviews:'Anubhavangal',logout:'Log Out',revenue_today:'Indathe varumanam',active_orders:'Sakriya orders',total_orders:'Mొtt orders',completed:'Purthiyayi',revenue_trend:'Varumaana pravanatha',live_board:'Live order board',all:'Ellam',placed:'Order cheytu',preparing:'Tayyaredukkunnu',delivered:'Deliver cheytu',assign_driver:'Driver niyanikkuka',cancel:'Radd cheyyuka',assign:'Niyanikkuka',issue_refund:'Refund naluka',refund_desc:'Order cancel cheyyum.',confirm_refund:'Refund ushtiram cheyyuka'},
-};
+let storeId = null, storeData = null;
+let currentAssignOrder = null;
+let chatOrderId = null, chatPollInterval = null;
+let revenueChart = null, paymentChart = null, hourlyChart = null, miniChart = null;
+let darkMode = localStorage.getItem('sw_dark') === '1';
+if (darkMode) document.body.classList.add('dark');
 
-let curLang=localStorage.getItem('sw_lang')||'en';
-function t(k){return(LANGS[curLang]||LANGS.en)[k]||k;}
-function applyLang(){
-  document.querySelectorAll('[data-i18n]').forEach(el=>{
-    const k=el.getAttribute('data-i18n');
-    if(el.tagName==='INPUT'||el.tagName==='TEXTAREA')el.placeholder=t(k);
-    else el.textContent=t(k);
-  });
-  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===curLang.toUpperCase()));
-}
-function setLang(l){curLang=l;localStorage.setItem('sw_lang',l);applyLang();}
-
-// STATE
-let allOrders=[],assigningOrderId=null,selectedDriverId=null,refundingOrderId=null;
-let revenueChart=null,prevOrderCount=0;
-
-// NAV
-function showPage(name,el){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.getElementById('page-'+name).classList.add('active');
-  el.classList.add('active');
-  document.getElementById('pageTitle').textContent={
-    dashboard:t('dashboard'),orders:t('orders'),drivers:t('drivers'),reviews:t('reviews')
-  }[name]||name;
-  if(name==='dashboard'){loadAll();loadStats();}
-  if(name==='orders')loadOrders('all');
-  if(name==='drivers')loadDrivers();
-  if(name==='reviews')loadReviews();
+function toggleDark() {
+  darkMode = !darkMode;
+  document.body.classList.toggle('dark', darkMode);
+  localStorage.setItem('sw_dark', darkMode ? '1' : '0');
 }
 
-// STATS
-async function loadStats(){
-  try{
-    const r=await fetch('/api/stats');
-    const s=await r.json();
-    document.getElementById('statRevenue').textContent='£'+Number(s.revenue||0).toFixed(2);
-    document.getElementById('statPending').textContent=s.pending||0;
-    document.getElementById('statTotal').textContent=s.total||0;
-    document.getElementById('statDelivered').textContent=s.delivered||0;
-  }catch(e){}
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
 }
 
-// KANBAN (dashboard)
-async function loadAll(){
-  try{
-    const r=await fetch('/api/orders');
-    const orders=await r.json();
-    // New order alert
-    if(prevOrderCount>0&&orders.length>prevOrderCount){
-      document.getElementById('alertBanner').style.display='block';
-      setTimeout(()=>document.getElementById('alertBanner').style.display='none',5000);
+function showPage(p, btn) {
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + p).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (p === 'overview') { loadStats(); loadKanban(); }
+  if (p === 'orders') loadAllOrders();
+  if (p === 'products') loadProducts();
+  if (p === 'drivers') loadDrivers();
+  if (p === 'analytics') loadAnalytics();
+  if (p === 'reviews') loadReviews();
+  if (p === 'promos') loadPromos();
+  if (p === 'settings') loadSettings();
+}
+
+// ── INIT ──
+(async () => {
+  const r = await fetch('/api/stores');
+  const stores = await r.json();
+  if (stores.length) { storeData = stores[0]; storeId = stores[0].id; }
+  loadStats(); loadKanban();
+  setInterval(() => {
+    if (document.getElementById('page-overview').classList.contains('active')) {
+      loadStats(); loadKanban();
     }
-    prevOrderCount=orders.length;
-    allOrders=orders;
-    renderKanban(orders);
-    updateRevenueChart(orders);
-  }catch(e){}
+  }, 30000);
+})();
+
+// ── STATS ──
+async function loadStats() {
+  const r = await fetch('/api/stats');
+  const d = await r.json();
+  document.getElementById('st-revenue').textContent = '£' + Number(d.revenue||0).toFixed(2);
+  document.getElementById('st-pending').textContent = d.pending || 0;
+  document.getElementById('st-total').textContent = d.total || 0;
+  document.getElementById('st-delivered').textContent = d.delivered || 0;
+  if (d.pending > 0) showAlert(`${d.pending} active order${d.pending>1?'s':''} need attention!`);
 }
 
-function renderKanban(orders){
-  const cols={placed:[],accepted:[],preparing:[],picked_up:[],delivered:[]};
-  orders.forEach(o=>{if(cols[o.status])cols[o.status].push(o);});
-  const labels={placed:'Placed',accepted:'Accepted',preparing:'Preparing',picked_up:'Picked Up',delivered:'Delivered'};
-  const colClass={placed:'col-placed',accepted:'col-accepted',preparing:'col-preparing',picked_up:'col-picked',delivered:'col-delivered'};
-  document.getElementById('kanbanBoard').innerHTML=Object.entries(cols).map(([status,orders])=>`
-    <div class="kanban-col ${colClass[status]}">
-      <div class="kanban-col-header">${labels[status]}<span class="count">${orders.length}</span></div>
-      <div class="kanban-cards">
-        ${orders.length?orders.map(o=>renderOrderCard(o)).join(''):'<div class="empty-col">No orders</div>'}
+function showAlert(msg) {
+  const el = document.getElementById('alertBanner');
+  document.getElementById('alertText').textContent = msg;
+  el.style.display = 'block';
+}
+
+// ── KANBAN ──
+const STATUS_FLOW = ['placed','accepted','preparing','picked_up','delivered'];
+const STATUS_LABELS = { placed:'Placed', accepted:'Accepted', preparing:'Preparing', picked_up:'On the way', delivered:'Delivered', cancelled:'Cancelled' };
+const STATUS_NEXT = { placed:'accepted', accepted:'preparing', preparing:'picked_up', picked_up:'delivered' };
+const STATUS_NEXT_LABEL = { placed:'Accept', accepted:'Start Prep', preparing:'Ready for Pickup', picked_up:'Mark Delivered' };
+
+async function loadKanban() {
+  const r = await fetch('/api/orders?status=all');
+  const orders = await r.json();
+  const active = orders.filter(o => !['delivered','cancelled'].includes(o.status));
+  const cols = {};
+  STATUS_FLOW.forEach(s => cols[s] = []);
+  active.forEach(o => { if (cols[o.status]) cols[o.status].push(o); });
+
+  // Render mini revenue chart
+  loadMiniRevenue();
+
+  const html = STATUS_FLOW.slice(0, 4).map(status => {
+    const items = cols[status] || [];
+    return `<div class="kanban-col col-${status}">
+      <div class="kanban-hdr">${statusIcon(status)} ${STATUS_LABELS[status]}<span class="count">${items.length}</span></div>
+      <div class="kanban-body">${items.map(o => renderKanbanCard(o)).join('')}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('kanban').innerHTML = html;
+}
+
+function statusIcon(s) { return {placed:'📋',accepted:'✅',preparing:'👨‍🍳',picked_up:'🏍️',delivered:'🎉'}[s] || ''; }
+
+function renderKanbanCard(o) {
+  const items = (() => { try { const a = typeof o.items_json==='string'?JSON.parse(o.items_json):o.items_json; return a.map(i=>`${i.qty}× ${i.name}`).join(', '); } catch(e) { return ''; } })();
+  const nextStatus = STATUS_NEXT[o.status];
+  const nextLabel = STATUS_NEXT_LABEL[o.status];
+  const advBtn = nextStatus ? `<button class="card-btn btn-green" onclick="advanceOrder(${o.id},'${nextStatus}')">${nextLabel}</button>` : '';
+  const assignBtn = o.status === 'preparing' ? `<button class="card-btn btn-blue" onclick="openAssign(${o.id})">Assign Driver</button>` : '';
+  const refundBtn = `<button class="card-btn btn-red" onclick="cancelOrder(${o.id})">Cancel</button>`;
+  const chatBtn = `<button class="card-btn btn-gray" onclick="openManagerChat(${o.id})">💬</button>`;
+  const tip = o.tip > 0 ? `<span style="color:#06c167">+£${Number(o.tip).toFixed(2)} tip</span>` : '';
+  const sched = o.scheduled_for ? `<div style="font-size:11px;color:#f59e0b;margin-top:2px">📅 ${o.scheduled_for}</div>` : '';
+  return `<div class="order-card">
+    <div class="order-card-id">#${o.id} · ${timeAgo(o.created_at)} ${tip}</div>
+    <div class="order-card-name">${o.customer_name}</div>
+    <div class="order-card-items">${items}</div>
+    ${sched}
+    <div class="order-card-meta"><span>£${Number(o.total).toFixed(2)}</span><span>${o.payment_method||'cash'}</span></div>
+    <div class="card-btns">${advBtn}${assignBtn}${chatBtn}${refundBtn}</div>
+  </div>`;
+}
+
+async function advanceOrder(oid, status) {
+  await fetch(`/api/orders/${oid}/status`, { method:'PATCH', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ status }) });
+  loadKanban(); loadStats();
+  toast(`Order #${oid} → ${STATUS_LABELS[status]}`);
+}
+
+async function cancelOrder(oid) {
+  if (!confirm('Cancel this order?')) return;
+  await fetch(`/api/orders/${oid}/status`, { method:'PATCH', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ status:'cancelled' }) });
+  loadKanban(); loadStats(); loadAllOrders();
+  toast('Order cancelled');
+}
+
+// ── ALL ORDERS ──
+async function loadAllOrders(status) {
+  let url = '/api/orders';
+  if (status) url += '?status=' + status;
+  const r = await fetch(url);
+  const orders = await r.json();
+  const el = document.getElementById('ordersTable');
+  if (!orders.length) { el.innerHTML = '<p style="color:#aaa;text-align:center;padding:30px">No orders</p>'; return; }
+  el.innerHTML = orders.map(o => {
+    const items = (() => { try { const a=typeof o.items_json==='string'?JSON.parse(o.items_json):o.items_json; return a.map(i=>`${i.qty}×${i.name}`).join(', '); } catch(e){return '';} })();
+    const statusClass = `status-${o.status}`;
+    return `<div class="order-card" style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-weight:700">#${o.id} — ${o.customer_name}</span>
+        <span class="order-status-chip ${statusClass}" style="padding:3px 10px;border-radius:10px;font-size:12px;font-weight:600">${STATUS_LABELS[o.status]||o.status}</span>
+      </div>
+      <div style="font-size:13px;color:#888;margin-bottom:4px">${items}</div>
+      <div style="font-size:13px;display:flex;justify-content:space-between">
+        <span>£${Number(o.total).toFixed(2)} · ${o.payment_method||'cash'}</span>
+        <span style="color:#aaa">${timeAgo(o.created_at)}</span>
+      </div>
+      <div style="font-size:12px;color:#888;margin-top:4px">📍 ${o.customer_address||''}</div>
+      ${o.driver_name ? `<div style="font-size:12px;color:#06c167;margin-top:2px">🏍️ Driver: ${o.driver_name}</div>` : ''}
+      <div class="card-btns" style="margin-top:8px">
+        ${STATUS_NEXT[o.status]?`<button class="card-btn btn-green" onclick="advanceOrder(${o.id},'${STATUS_NEXT[o.status]}')">${STATUS_NEXT_LABEL[o.status]}</button>`:''}
+        <button class="card-btn btn-gray" onclick="openManagerChat(${o.id})">💬 Chat</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── PRODUCTS ──
+async function loadProducts() {
+  const r = await fetch('/api/products', { method:'GET' }).catch(()=>null);
+  // No dedicated products GET — load via store
+  const storeRes = await fetch(`/api/stores/${storeId}/products`);
+  const products = await storeRes.json();
+  const el = document.getElementById('productsList');
+  if (!products.length) { el.innerHTML = '<p style="color:#aaa;text-align:center;padding:30px">No menu items yet</p>'; return; }
+
+  // Group by category
+  const cats = {};
+  products.forEach(p => { const c = p.category||'main'; if (!cats[c]) cats[c] = []; cats[c].push(p); });
+
+  let html = '';
+  Object.keys(cats).forEach(c => {
+    html += `<div style="font-size:13px;font-weight:700;color:#888;margin:12px 0 6px;text-transform:uppercase;letter-spacing:1px">${c}</div>`;
+    html += cats[c].map(p => {
+      let dietary = []; try { dietary = JSON.parse(p.dietary_labels||'[]'); } catch(e){}
+      return `<div class="product-row">
+        <span class="product-emoji-big">${p.emoji||'📦'}</span>
+        <div class="product-details">
+          <div class="product-name">${p.name}</div>
+          <div class="product-desc">${p.description||''}</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">
+            ${dietary.map(d=>`<span style="font-size:10px;padding:2px 6px;background:#f0f0f0;border-radius:8px">${d}</span>`).join('')}
+          </div>
+          <div class="product-price">£${Number(p.price).toFixed(2)} · ${p.order_count||0} orders</div>
+        </div>
+        <div class="product-row-btns">
+          <label class="toggle-switch">
+            <input type="checkbox" ${p.available?'checked':''} onchange="toggleProduct(${p.id},this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+          <button class="card-btn btn-blue" style="margin-top:6px" onclick="openEditProduct(${JSON.stringify(p).replace(/"/g,'&quot;')})">Edit</button>
+          <button class="card-btn btn-red" style="margin-top:4px" onclick="deleteProduct(${p.id})">Delete</button>
+        </div>
+      </div>`;
+    }).join('');
+  });
+  el.innerHTML = html;
+}
+
+async function toggleProduct(pid, avail) {
+  await fetch(`/api/products/${pid}`, { method:'PATCH', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ is_available: avail }) });
+  toast(avail ? 'Item enabled' : 'Item disabled');
+}
+
+async function deleteProduct(pid) {
+  if (!confirm('Delete this item?')) return;
+  await fetch(`/api/products/${pid}`, { method:'DELETE' });
+  toast('Item deleted'); loadProducts();
+}
+
+function openAddProduct() {
+  document.getElementById('productModalTitle').textContent = 'Add Menu Item';
+  document.getElementById('productModalContent').innerHTML = productForm({});
+  document.getElementById('productModal').classList.add('open');
+}
+
+function openEditProduct(p) {
+  document.getElementById('productModalTitle').textContent = 'Edit Menu Item';
+  document.getElementById('productModalContent').innerHTML = productForm(p);
+  document.getElementById('productModal').classList.add('open');
+}
+
+function productForm(p) {
+  let dietary = []; try { dietary = JSON.parse(p.dietary_labels||'[]'); } catch(e){}
+  const allLabels = ['vegan','vegetarian','gluten_free','halal','spicy'];
+  return `
+    <div class="form-group"><label class="form-label">Name*</label><input class="input-field" id="pf-name" value="${p.name||''}"></div>
+    <div class="form-group"><label class="form-label">Description</label><input class="input-field" id="pf-desc" value="${p.description||''}"></div>
+    <div class="form-group"><label class="form-label">Price (£)*</label><input class="input-field" type="number" step="0.01" id="pf-price" value="${p.price||''}"></div>
+    <div class="form-group"><label class="form-label">Emoji</label><input class="input-field" id="pf-emoji" value="${p.emoji||'📦'}" style="width:80px;font-size:24px"></div>
+    <div class="form-group"><label class="form-label">Category</label>
+      <input class="input-field" id="pf-category" placeholder="e.g. main, sides, desserts" value="${p.category||'main'}">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Dietary Labels</label>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px">
+        ${allLabels.map(l => `<label style="display:flex;align-items:center;gap:4px;font-size:13px;cursor:pointer"><input type="checkbox" value="${l}" ${dietary.includes(l)?'checked':''}> ${l.replace('_',' ')}</label>`).join('')}
       </div>
     </div>
-  `).join('');
-}
-
-function renderOrderCard(o){
-  let items=[];try{items=JSON.parse(o.items_json||'[]');}catch(e){}
-  const itemStr=items.map(i=>(i.qty||1)+'x '+(i.name||'')).join(', ');
-  const date=o.created_at?new Date((o.created_at||'').replace(' ','T')).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):'';
-  let actions='';
-  if(o.status==='placed')
-    actions=`<button class="oc-btn accept" onclick="advance(${o.id},'accepted')">Accept</button>
-             <button class="oc-btn refund" onclick="openRefund(${o.id})">Refund</button>`;
-  else if(o.status==='accepted')
-    actions=`<button class="oc-btn prepare" onclick="advance(${o.id},'preparing')">Mark Preparing</button>
-             <button class="oc-btn refund" onclick="openRefund(${o.id})">Refund</button>`;
-  else if(o.status==='preparing')
-    actions=`<button class="oc-btn assign" onclick="openAssign(${o.id})">Assign Driver</button>
-             <button class="oc-btn refund" onclick="openRefund(${o.id})">Refund</button>`;
-  else if(o.status==='picked_up')
-    actions=`<button class="oc-btn enroute" disabled>En Route</button>
-             <button class="oc-btn complete" onclick="advance(${o.id},'delivered')">Mark Delivered</button>`;
-  else if(o.status==='delivered')
-    actions=`<span style="color:var(--brand);font-size:11px;font-weight:700">✓ Delivered</span>`;
-  return `
-    <div class="order-card">
-      <div class="oc-header"><span class="oc-id">#${o.id}</span><span class="oc-time">${date}</span></div>
-      <div class="oc-customer">${o.customer_name||'Customer'}</div>
-      <div class="oc-items">${itemStr}</div>
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <span class="oc-total">£${Number(o.total||0).toFixed(2)}</span>
-        <span class="oc-payment">${o.payment_method||'cash'}</span>
-      </div>
-      ${o.driver_name?`<div class="oc-driver">🛵 ${o.driver_name}</div>`:''}
-      <div class="oc-actions">${actions}</div>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button class="btn-primary" onclick="saveProduct(${p.id||0})">${p.id?'Update':'Add Item'}</button>
+      <button class="btn-outline" onclick="closeModal('productModal')">Cancel</button>
     </div>`;
 }
 
-async function advance(oid,status){
-  try{
-    await fetch('/api/orders/'+oid+'/status',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status})});
-    loadAll();loadStats();
-  }catch(e){}
+async function saveProduct(pid) {
+  const dietary = [...document.querySelectorAll('#productModalContent input[type=checkbox]:checked')].map(c => c.value);
+  const body = {
+    name: document.getElementById('pf-name').value,
+    description: document.getElementById('pf-desc').value,
+    price: parseFloat(document.getElementById('pf-price').value),
+    emoji: document.getElementById('pf-emoji').value,
+    category: document.getElementById('pf-category').value,
+    dietary_labels: dietary,
+  };
+  let r;
+  if (pid) r = await fetch(`/api/products/${pid}`, { method:'PATCH', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
+  else r = await fetch('/api/products', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
+  closeModal('productModal');
+  toast(pid ? 'Item updated ✅' : 'Item added ✅');
+  loadProducts();
 }
 
-// ORDERS PAGE (table view)
-async function loadOrders(statusFilter){
-  const url=statusFilter&&statusFilter!=='all'?'/api/orders?status='+statusFilter:'/api/orders';
-  try{
-    const r=await fetch(url);
-    const orders=await r.json();
-    const wrap=document.getElementById('ordersTable');
-    if(!orders.length){wrap.innerHTML='<div style="padding:24px;text-align:center;color:#888">No orders found.</div>';return;}
-    wrap.innerHTML=`<table style="width:100%;border-collapse:collapse;font-size:13px">
-      <thead style="background:var(--light)"><tr>
-        <th style="padding:10px 12px;text-align:left;font-weight:700">#</th>
-        <th style="padding:10px 12px;text-align:left;font-weight:700">Customer</th>
-        <th style="padding:10px 12px;text-align:left;font-weight:700">Items</th>
-        <th style="padding:10px 12px;text-align:left;font-weight:700">Total</th>
-        <th style="padding:10px 12px;text-align:left;font-weight:700">Status</th>
-        <th style="padding:10px 12px;text-align:left;font-weight:700">Driver</th>
-        <th style="padding:10px 12px;text-align:left;font-weight:700">Actions</th>
-      </tr></thead>
-      <tbody>${orders.map(o=>{
-        let items=[];try{items=JSON.parse(o.items_json||'[]');}catch(e){}
-        const itemStr=items.map(i=>(i.qty||1)+'x '+i.name).slice(0,2).join(', ')+(items.length>2?'...':'');
-        let actions='';
-        if(o.status==='placed') actions=`<button class="oc-btn accept" onclick="advance(${o.id},'accepted');loadOrders('${statusFilter||'all'}')">Accept</button>`;
-        else if(o.status==='accepted') actions=`<button class="oc-btn prepare" onclick="advance(${o.id},'preparing');loadOrders('${statusFilter||'all'}')">Preparing</button>`;
-        else if(o.status==='preparing') actions=`<button class="oc-btn assign" onclick="openAssign(${o.id})">Assign Driver</button>`;
-        else if(o.status==='picked_up') actions=`<button class="oc-btn complete" onclick="advance(${o.id},'delivered');loadOrders('${statusFilter||'all'}')">Delivered</button>`;
-        if(!['delivered','cancelled'].includes(o.status)) actions+=` <button class="oc-btn refund" onclick="openRefund(${o.id})">Refund</button>`;
-        return `<tr style="border-bottom:1px solid var(--border)">
-          <td style="padding:10px 12px;font-weight:700">#${o.id}</td>
-          <td style="padding:10px 12px">${o.customer_name||'—'}</td>
-          <td style="padding:10px 12px;color:#888">${itemStr}</td>
-          <td style="padding:10px 12px;font-weight:700;color:var(--brand)">£${Number(o.total||0).toFixed(2)}</td>
-          <td style="padding:10px 12px"><span style="padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--light)">${(o.status||'').replace('_',' ')}</span></td>
-          <td style="padding:10px 12px">${o.driver_name||'—'}</td>
-          <td style="padding:10px 12px;white-space:nowrap">${actions}</td>
-        </tr>`;
-      }).join('')}</tbody>
-    </table>`;
-  }catch(e){}
-}
-
-// ASSIGN DRIVER MODAL
-async function openAssign(oid){
-  assigningOrderId=oid;selectedDriverId=null;
-  document.getElementById('assignModal').classList.add('open');
-  document.getElementById('driverPickList').innerHTML='<div style="text-align:center;padding:16px;color:#888">Loading drivers...</div>';
-  try{
-    const r=await fetch('/api/drivers?status=available');
-    const drivers=await r.json();
-    if(!drivers.length){document.getElementById('driverPickList').innerHTML='<div style="text-align:center;padding:16px;color:#888">No available drivers right now.</div>';return;}
-    document.getElementById('driverPickList').innerHTML=drivers.map(d=>`
-      <div class="driver-row" id="dr-${d.id}" onclick="selectDriver(${d.id},this)">
-        <div><div class="driver-name">${d.name}</div><div class="driver-meta">${d.vehicle||'Bike'} · ${d.license_plate||'—'}</div></div>
-        <span class="driver-status status-available">Available</span>
-      </div>`).join('');
-  }catch(e){document.getElementById('driverPickList').innerHTML='<div style="padding:16px;color:#e74c3c">Failed to load drivers.</div>';}
-}
-function selectDriver(id,el){
-  selectedDriverId=id;
-  document.querySelectorAll('.driver-row').forEach(r=>r.classList.remove('sel'));
-  el.classList.add('sel');
-}
-function closeAssign(){document.getElementById('assignModal').classList.remove('open');assigningOrderId=null;selectedDriverId=null;}
-async function confirmAssign(){
-  if(!selectedDriverId){alert('Please select a driver.');return;}
-  try{
-    await fetch('/api/orders/'+assigningOrderId+'/status',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:'picked_up',driver_id:selectedDriverId})});
-    closeAssign();loadAll();loadStats();
-  }catch(e){alert('Failed to assign driver.');}
-}
-
-// REFUND MODAL
-function openRefund(oid){refundingOrderId=oid;document.getElementById('refundModal').classList.add('open');}
-function closeRefund(){document.getElementById('refundModal').classList.remove('open');refundingOrderId=null;}
-async function confirmRefund(){
-  try{
-    await fetch('/api/orders/'+refundingOrderId+'/status',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:'cancelled'})});
-    closeRefund();loadAll();loadStats();
-  }catch(e){alert('Failed to process refund.');}
-}
-
-// DRIVERS PAGE
-async function loadDrivers(){
-  try{
-    const r=await fetch('/api/drivers');
-    const drivers=await r.json();
-    const panel=document.getElementById('driversPanel');
-    if(!drivers.length){panel.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:#888">No drivers registered.</div>';return;}
-    panel.innerHTML=drivers.map(d=>`
-      <div style="background:#fff;border-radius:14px;padding:18px;box-shadow:var(--shadow)">
-        <div style="font-size:28px;margin-bottom:8px">🛵</div>
-        <div style="font-size:15px;font-weight:700;margin-bottom:4px">${d.name||'Driver'}</div>
-        <div style="font-size:12px;color:#888;margin-bottom:8px">${d.vehicle||'Bike'} · ${d.license_plate||'—'}</div>
-        <div style="font-size:12px;margin-bottom:4px">📱 ${d.phone||'—'}</div>
-        <div style="font-size:12px;margin-bottom:8px">⭐ ${Number(d.rating||5).toFixed(1)} · ${d.total_deliveries||0} deliveries</div>
-        <span class="driver-status ${d.status==='available'?'status-available':d.status==='busy'?'status-busy':'status-offline'}">${d.status||'offline'}</span>
-        <div style="font-size:12px;color:var(--brand);margin-top:8px;font-weight:700">£${Number(d.earnings||0).toFixed(2)} earned</div>
-      </div>`).join('');
-  }catch(e){}
-}
-
-// REVIEWS PAGE
-async function loadReviews(){
-  try{
-    const r=await fetch('/api/reviews');
-    const reviews=await r.json();
-    renderReviews(reviews);
-  }catch(e){document.getElementById('reviewsList').innerHTML='<div style="padding:24px;color:#e74c3c">Failed to load reviews.</div>';}
-}
-
-function renderReviews(reviews){
-  const summary=document.getElementById('ratingSummary');
-  const list=document.getElementById('reviewsList');
-  if(!reviews.length){
-    summary.innerHTML='';
-    list.innerHTML='<div style="padding:40px;text-align:center;color:#888">No reviews yet.</div>';
-    return;
-  }
-  const avg=reviews.reduce((s,r)=>s+Number(r.store_rating||5),0)/reviews.length;
-  const counts=[5,4,3,2,1].map(n=>reviews.filter(r=>Number(r.store_rating)===n).length);
-  summary.innerHTML=`
-    <div class="rating-summary">
-      <div class="rating-big">
-        <div class="num">${avg.toFixed(1)}</div>
-        <div>${'⭐'.repeat(Math.round(avg))}</div>
-        <div class="lbl">${reviews.length} review${reviews.length!==1?'s':''}</div>
+// ── DRIVERS ──
+async function loadDrivers() {
+  const r = await fetch('/api/drivers');
+  const drivers = await r.json();
+  const el = document.getElementById('driversList');
+  if (!drivers.length) { el.innerHTML = '<p style="color:#aaa;text-align:center;padding:30px">No drivers registered</p>'; return; }
+  el.innerHTML = drivers.map(d => `
+    <div class="order-card" style="margin-bottom:10px;display:flex;align-items:center;gap:12px">
+      <span style="font-size:32px">${d.vehicle==='Bicycle'?'🚲':'🏍️'}</span>
+      <div style="flex:1">
+        <div style="font-weight:700">${d.name}</div>
+        <div style="font-size:13px;color:#888">${d.vehicle} · ${d.license_plate||'N/A'}</div>
+        <div style="font-size:13px;color:#888">⭐ ${Number(d.rating||5).toFixed(1)} · ${d.total_deliveries||0} deliveries · £${Number(d.earnings||0).toFixed(2)} earned</div>
       </div>
-      <div class="rating-bars">
-        ${[5,4,3,2,1].map((n,i)=>`
-          <div class="rbar">
-            <span>${n}★</span>
-            <div class="rbar-bg"><div class="rbar-fill" style="width:${reviews.length?counts[i]/reviews.length*100:0}%"></div></div>
-            <span style="min-width:20px">${counts[i]}</span>
-          </div>`).join('')}
+      <div style="text-align:right">
+        <div style="font-size:12px;padding:4px 8px;border-radius:8px;font-weight:600;${d.status==='available'?'background:#d1fae5;color:#065f46':d.status==='busy'?'background:#fce7f3;color:#9d174d':'background:#e5e7eb;color:#374151'}">${d.status||'offline'}</div>
       </div>
-    </div>`;
-  list.innerHTML=reviews.map(r=>`
-    <div class="review-card">
-      <div class="review-top">
-        <span class="review-customer">${r.customer_name||'Customer'}</span>
-        <span class="review-date">${r.created_at?new Date((r.created_at||'').replace(' ','T')).toLocaleDateString():''}</span>
-      </div>
-      <div class="review-stars">
-        Store: ${'⭐'.repeat(Number(r.store_rating)||5)}
-        ${r.driver_rating?` · Driver: ${'⭐'.repeat(Number(r.driver_rating))}`: ''}
-      </div>
-      ${r.comment?`<div class="review-comment">"${r.comment}"</div>`:''}
-      <div class="review-order">Order #${r.order_id} · £${Number(r.total||0).toFixed(2)}</div>
     </div>`).join('');
 }
 
-// REVENUE CHART
-function updateRevenueChart(orders){
-  const ctx=document.getElementById('revenueChart');
-  if(!ctx)return;
-  const delivered=orders.filter(o=>o.status==='delivered').slice(-10);
-  const labels=delivered.map(o=>'#'+o.id);
-  const data=delivered.map(o=>Number(o.total||0));
-  if(revenueChart)revenueChart.destroy();
-  revenueChart=new Chart(ctx,{
-    type:'bar',
-    data:{labels,datasets:[{label:'Revenue (£)',data,backgroundColor:'#06c167',borderRadius:6}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'£'+v}}}}
+function openAssign(oid) {
+  currentAssignOrder = oid;
+  fetch('/api/drivers?status=available').then(r=>r.json()).then(drivers => {
+    document.getElementById('assignModalContent').innerHTML = `
+      <p style="font-size:14px;color:#888;margin-bottom:12px">Select an available driver for order #${oid}</p>
+      ${drivers.length === 0 ? '<p style="color:#aaa">No available drivers</p>' : drivers.map(d=>`
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:#f5f5f5;border-radius:10px;margin-bottom:8px">
+          <div><div style="font-weight:600">${d.name}</div><div style="font-size:13px;color:#888">${d.vehicle} · ⭐${Number(d.rating||5).toFixed(1)}</div></div>
+          <button class="btn-primary" onclick="confirmAssign(${d.id})">Assign</button>
+        </div>`).join('')}
+      <button class="btn-outline" style="margin-top:8px;width:100%" onclick="closeModal('assignModal')">Cancel</button>`;
+    document.getElementById('assignModal').classList.add('open');
   });
 }
 
-// AUTO REFRESH
-setInterval(()=>{
-  const activePage=document.querySelector('.page.active');
-  if(activePage&&activePage.id==='page-dashboard'){loadAll();loadStats();}
-},30000);
+async function confirmAssign(driverId) {
+  await fetch(`/api/orders/${currentAssignOrder}/status`, {
+    method:'PATCH', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ status:'picked_up', driver_id: driverId })
+  });
+  closeModal('assignModal');
+  toast('Driver assigned ✅');
+  loadKanban();
+}
 
-applyLang();
-loadStats();
-loadAll();
+// ── MINI CHART ──
+async function loadMiniRevenue() {
+  const r = await fetch('/api/analytics');
+  const d = await r.json();
+  const daily = d.daily || [];
+  const labels = daily.map(r=>r.date.slice(5));
+  const vals = daily.map(r=>r.revenue);
+  if (miniChart) miniChart.destroy();
+  const ctx = document.getElementById('miniRevenueChart');
+  if (!ctx) return;
+  miniChart = new Chart(ctx, { type:'line', data:{ labels, datasets:[{ data:vals, borderColor:'#06c167', backgroundColor:'rgba(6,193,103,0.1)', fill:true, tension:0.4, pointRadius:3 }] }, options:{ plugins:{legend:{display:false}}, scales:{ y:{beginAtZero:true, ticks:{callback:v=>'£'+v}}, x:{} } } });
+}
+
+// ── ANALYTICS ──
+async function loadAnalytics() {
+  const r = await fetch('/api/analytics');
+  const d = await r.json();
+  const daily = d.daily || [];
+  const best = d.best_sellers || [];
+  const payments = d.payments || [];
+  const hourly = d.hourly || [];
+
+  // Revenue chart
+  if (revenueChart) revenueChart.destroy();
+  revenueChart = new Chart(document.getElementById('revenueChart'), {
+    type:'bar',
+    data:{ labels: daily.map(r=>r.date.slice(5)), datasets:[{ label:'Revenue £', data: daily.map(r=>r.revenue), backgroundColor:'rgba(6,193,103,0.7)', borderRadius:8 }] },
+    options:{ plugins:{legend:{display:false}}, scales:{ y:{beginAtZero:true, ticks:{callback:v=>'£'+v}} } }
+  });
+
+  // Best sellers
+  document.getElementById('bestSellers').innerHTML = best.map((b,i) =>
+    `<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+      <div style="width:26px;height:26px;border-radius:50%;background:#06c167;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center">${i+1}</div>
+      <div style="flex:1;font-size:14px;font-weight:500">${b.emoji||''} ${b.name}</div>
+      <div style="font-size:14px;font-weight:700;color:#06c167">${b.cnt} orders</div>
+    </div>`).join('') || '<p style="color:#aaa">No data yet</p>';
+
+  // Payment chart
+  if (paymentChart) paymentChart.destroy();
+  if (payments.length) {
+    paymentChart = new Chart(document.getElementById('paymentChart'), {
+      type:'doughnut',
+      data:{ labels: payments.map(p=>p.payment_method), datasets:[{ data: payments.map(p=>p.cnt), backgroundColor:['#06c167','#3b82f6','#f59e0b','#ef4444'] }] },
+      options:{ plugins:{ legend:{ position:'bottom' } } }
+    });
+  }
+
+  // Hourly chart
+  if (hourlyChart) hourlyChart.destroy();
+  if (hourly.length) {
+    hourlyChart = new Chart(document.getElementById('hourlyChart'), {
+      type:'bar',
+      data:{ labels: hourly.map(h=>h.hour+':00'), datasets:[{ label:'Orders', data: hourly.map(h=>h.orders), backgroundColor:'rgba(59,130,246,0.7)', borderRadius:6 }] },
+      options:{ plugins:{legend:{display:false}}, scales:{ y:{beginAtZero:true} } }
+    });
+  }
+}
+
+// ── REVIEWS ──
+async function loadReviews() {
+  const r = await fetch('/api/reviews');
+  const reviews = await r.json();
+  const el = document.getElementById('reviewsList');
+  if (!reviews.length) { el.innerHTML = '<p style="color:#aaa;text-align:center;padding:30px">No reviews yet</p>'; return; }
+  el.innerHTML = reviews.map(rv => `
+    <div class="review-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-weight:600">${rv.customer_name||'Customer'}</span>
+        <span style="font-size:12px;color:#aaa">${timeAgo(rv.created_at)}</span>
+      </div>
+      <div class="review-stars">${'⭐'.repeat(rv.store_rating||5)}</div>
+      ${rv.comment ? `<div style="font-size:14px;color:#555;margin-top:4px">"${rv.comment}"</div>` : ''}
+      <div style="font-size:12px;color:#aaa;margin-top:6px">Order #${rv.order_id} · £${Number(rv.total||0).toFixed(2)}</div>
+    </div>`).join('');
+}
+
+// ── PROMOS ──
+async function loadPromos() {
+  const r = await fetch('/api/promo');
+  const promos = await r.json();
+  const el = document.getElementById('promoList');
+  if (!promos.length) { el.innerHTML = '<p style="color:#aaa;text-align:center;padding:30px">No promo codes yet</p>'; return; }
+  el.innerHTML = promos.map(p => `
+    <div class="promo-row">
+      <div>
+        <div style="font-weight:700;font-size:16px">${p.code}</div>
+        <div style="font-size:13px;color:#888">${p.discount_type==='percent'?p.discount_value+'% off':'£'+p.discount_value+' off'} · min £${p.min_order||0} · ${p.uses_count}/${p.max_uses} used</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="padding:4px 8px;border-radius:8px;font-size:12px;font-weight:600;${p.is_active?'background:#d1fae5;color:#065f46':'background:#fee2e2;color:#991b1b'}">${p.is_active?'Active':'Inactive'}</span>
+        ${p.is_active?`<button class="card-btn btn-red" onclick="deletePromo(${p.id})">Deactivate</button>`:''}
+      </div>
+    </div>`).join('');
+}
+
+function openAddPromo() {
+  document.getElementById('promoModalContent').innerHTML = `
+    <div class="form-group"><label class="form-label">Code</label><input class="input-field" id="pm-code" placeholder="SAVE10" style="text-transform:uppercase"></div>
+    <div class="form-group"><label class="form-label">Discount Type</label>
+      <select class="select-field" id="pm-type"><option value="percent">Percent (%)</option><option value="fixed">Fixed (£)</option></select>
+    </div>
+    <div class="form-group"><label class="form-label">Discount Value</label><input class="input-field" type="number" id="pm-value" placeholder="10"></div>
+    <div class="form-group"><label class="form-label">Min Order (£)</label><input class="input-field" type="number" id="pm-min" value="0"></div>
+    <div class="form-group"><label class="form-label">Max Uses</label><input class="input-field" type="number" id="pm-uses" value="100"></div>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button class="btn-primary" onclick="savePromo()">Create Code</button>
+      <button class="btn-outline" onclick="closeModal('promoModal')">Cancel</button>
+    </div>`;
+  document.getElementById('promoModal').classList.add('open');
+}
+
+async function savePromo() {
+  const body = {
+    code: document.getElementById('pm-code').value.toUpperCase().trim(),
+    discount_type: document.getElementById('pm-type').value,
+    discount_value: parseFloat(document.getElementById('pm-value').value),
+    min_order: parseFloat(document.getElementById('pm-min').value||0),
+    max_uses: parseInt(document.getElementById('pm-uses').value||100),
+  };
+  if (!body.code || !body.discount_value) { toast('Fill all required fields'); return; }
+  await fetch('/api/promo', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
+  closeModal('promoModal');
+  toast('✅ Promo code created');
+  loadPromos();
+}
+
+async function deletePromo(pid) {
+  await fetch('/api/promo/' + pid, { method:'DELETE' });
+  toast('Promo deactivated'); loadPromos();
+}
+
+// ── CHAT ──
+function openManagerChat(oid) {
+  chatOrderId = oid;
+  document.getElementById('chatModalContent').innerHTML = `
+    <div style="font-size:13px;color:#888;margin-bottom:8px">Order #${oid}</div>
+    <div id="chatBox" style="height:220px;overflow-y:auto;padding:10px;background:#f9f9f9;border-radius:10px;display:flex;flex-direction:column;gap:6px"></div>
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <input id="chatMsg" class="input-field" placeholder="Type message..." style="margin:0" onkeydown="if(event.key==='Enter')sendManagerChat()">
+      <button class="btn-primary" style="padding:10px 16px" onclick="sendManagerChat()">Send</button>
+    </div>
+    <button class="btn-outline" style="margin-top:8px;width:100%" onclick="closeModal('chatModal')">Close</button>`;
+  document.getElementById('chatModal').classList.add('open');
+  loadManagerChat();
+  if (chatPollInterval) clearInterval(chatPollInterval);
+  chatPollInterval = setInterval(loadManagerChat, 5000);
+}
+
+async function loadManagerChat() {
+  if (!chatOrderId) return;
+  const r = await fetch(`/api/chat/${chatOrderId}`);
+  const msgs = await r.json();
+  const box = document.getElementById('chatBox');
+  if (!box) return;
+  box.innerHTML = msgs.map(m => `
+    <div>
+      <div style="max-width:80%;padding:8px 12px;border-radius:10px;font-size:13px;${m.sender_role==='manager'?'background:#06c167;color:#fff;margin-left:auto':'background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.1)'}">${m.message}</div>
+      <div style="font-size:11px;color:#aaa;text-align:${m.sender_role==='manager'?'right':'left'};margin-bottom:4px">${m.sender_name} · ${timeAgo(m.created_at)}</div>
+    </div>`).join('');
+  box.scrollTop = box.scrollHeight;
+}
+
+async function sendManagerChat() {
+  const inp = document.getElementById('chatMsg');
+  const msg = inp.value.trim();
+  if (!msg) return;
+  inp.value = '';
+  await fetch(`/api/chat/${chatOrderId}`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ message: msg }) });
+  loadManagerChat();
+}
+
+// ── SETTINGS ──
+async function loadSettings() {
+  if (!storeId) return;
+  const r = await fetch('/api/stores');
+  const stores = await r.json();
+  const s = stores[0];
+  if (!s) return;
+  storeData = s;
+  ['name','category','description','address','phone','emoji','delivery_time','delivery_fee','free_delivery_threshold','min_order'].forEach(f => {
+    const el = document.getElementById('s-' + f);
+    if (el) el.value = s[f] || '';
+  });
+  const openEl = document.getElementById('s-is_open');
+  if (openEl) openEl.checked = !!s.is_open;
+}
+
+async function saveSettings() {
+  if (!storeId) return;
+  const body = {};
+  ['name','category','description','address','phone','emoji','delivery_time'].forEach(f => {
+    const el = document.getElementById('s-' + f);
+    if (el) body[f] = el.value;
+  });
+  ['delivery_fee','free_delivery_threshold','min_order'].forEach(f => {
+    const el = document.getElementById('s-' + f);
+    if (el) body[f] = parseFloat(el.value) || 0;
+  });
+  body.is_open = document.getElementById('s-is_open').checked ? 1 : 0;
+  await fetch(`/api/stores/${storeId}`, { method:'PATCH', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
+  toast('✅ Settings saved');
+}
+
+// ── MODAL UTILS ──
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  if (id === 'chatModal' && chatPollInterval) { clearInterval(chatPollInterval); chatPollInterval = null; }
+}
+document.querySelectorAll('.modal-overlay').forEach(m => m.addEventListener('click', e => { if (e.target === m) { closeModal(m.id); } }));
+
+// ── UTILS ──
+function timeAgo(ts) {
+  if (!ts) return '';
+  const d = new Date(ts.replace ? ts.replace(' ','T')+'Z' : ts);
+  const s = Math.floor((Date.now() - d) / 1000);
+  if (s < 60) return 'just now';
+  if (s < 3600) return Math.floor(s/60) + 'm ago';
+  if (s < 86400) return Math.floor(s/3600) + 'h ago';
+  return Math.floor(s/86400) + 'd ago';
+}
+
+const STATUS_CHK = { placed:'status-placed', accepted:'status-accepted', preparing:'status-accepted', picked_up:'status-picked_up', delivered:'status-delivered', cancelled:'status-cancelled' };
 </script>
+<style>
+.order-status-chip.status-placed{background:#fff3cd;color:#856404}
+.order-status-chip.status-accepted,.order-status-chip.status-preparing{background:#cff4fc;color:#055160}
+.order-status-chip.status-picked_up{background:#e2f0d9;color:#1a5e20}
+.order-status-chip.status-delivered{background:#d1e7dd;color:#0f5132}
+.order-status-chip.status-cancelled{background:#f8d7da;color:#842029}
+</style>
 </body>
 </html>
