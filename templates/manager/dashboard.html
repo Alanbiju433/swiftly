@@ -274,7 +274,7 @@ body.dark .toast{background:#333}
 </div>
 
 <script>
-let storeId = null, storeData = null;
+let storeId = {{ store.id if store else 'null' }}, storeData = {{ store | tojson if store else 'null' }};
 let currentAssignOrder = null;
 let chatOrderId = null, chatPollInterval = null;
 let revenueChart = null, paymentChart = null, hourlyChart = null, miniChart = null;
@@ -310,9 +310,6 @@ function showPage(p, btn) {
 
 // ── INIT ──
 (async () => {
-  const r = await fetch('/api/stores');
-  const stores = await r.json();
-  if (stores.length) { storeData = stores[0]; storeId = stores[0].id; }
   loadStats(); loadKanban();
   setInterval(() => {
     if (document.getElementById('page-overview').classList.contains('active')) {
@@ -433,8 +430,6 @@ async function loadAllOrders(status) {
 
 // ── PRODUCTS ──
 async function loadProducts() {
-  const r = await fetch('/api/products', { method:'GET' }).catch(()=>null);
-  // No dedicated products GET — load via store
   const storeRes = await fetch(`/api/stores/${storeId}/products`);
   const products = await storeRes.json();
   const el = document.getElementById('productsList');
@@ -584,8 +579,8 @@ async function confirmAssign(driverId) {
 
 // ── MINI CHART ──
 async function loadMiniRevenue() {
-  const r = await fetch('/api/analytics');
-  const d = await r.json();
+  let d = {};
+  try { const r = await fetch('/api/analytics'); d = await r.json(); } catch(e) {}
   const daily = d.daily || [];
   const labels = daily.map(r=>r.date.slice(5));
   const vals = daily.map(r=>r.revenue);
@@ -757,9 +752,10 @@ async function sendManagerChat() {
 // ── SETTINGS ──
 async function loadSettings() {
   if (!storeId) return;
+  // Refresh store data for settings
   const r = await fetch('/api/stores');
   const stores = await r.json();
-  const s = stores[0];
+  const s = stores.find(st => st.id === storeId);
   if (!s) return;
   storeData = s;
   ['name','category','description','address','phone','emoji','delivery_time','delivery_fee','free_delivery_threshold','min_order'].forEach(f => {
