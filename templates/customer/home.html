@@ -3,988 +3,1351 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Swiftly — Food Delivery</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#06c167">
+<link rel="manifest" href="/manifest.json">
+<title>Swiftly</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--brand:#06c167;--brand-d:#059954;--dark:#1a1a1a;--mid:#545454;--light:#f6f6f6;--border:#e8e8e8;--white:#fff;--shadow:0 2px 16px rgba(0,0,0,.10)}
-body{font-family:'Inter',sans-serif;background:#fff;color:var(--dark)}
-a{text-decoration:none;color:inherit}
-button{cursor:pointer;font-family:inherit;border:none;outline:none}
-
-/* NAV */
-nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--border);padding:0 20px;height:64px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.logo{font-size:22px;font-weight:800;color:var(--brand);letter-spacing:-1px;white-space:nowrap}
-.nav-search{flex:1;max-width:380px;position:relative}
-.nav-search input{width:100%;padding:10px 16px 10px 40px;border:1px solid var(--border);border-radius:8px;font-size:14px;background:var(--light)}
-.nav-search .si{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#888;font-size:16px}
-.nav-right{display:flex;align-items:center;gap:8px}
-.nav-user{font-size:13px;font-weight:500}
-.btn-nav{padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none}
-.btn-orders{background:var(--light);color:var(--dark)}
-.btn-logout{background:var(--light);color:var(--mid)}
-.btn-cart{position:relative;padding:8px 16px;background:var(--brand);color:#fff;border-radius:8px;font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px}
-.cart-badge{background:#fff;color:var(--brand);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800}
-.lang-bar{display:flex;gap:4px}
-.lang-btn{background:none;border:none;cursor:pointer;font-size:11px;color:#888;padding:4px 6px;border-radius:4px;font-weight:600}
-.lang-btn.active,.lang-btn:hover{background:var(--light);color:var(--dark)}
-
-/* HERO */
-.hero{background:linear-gradient(135deg,#000 0%,#1a1a1a 60%,#06c167 100%);padding:52px 24px;text-align:center;color:#fff;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1400&h=500&fit=crop') center/cover;opacity:.22}
-.hero-content{position:relative;max-width:600px;margin:0 auto}
-.hero h1{font-size:clamp(26px,5vw,50px);font-weight:800;line-height:1.1;margin-bottom:10px}
-.hero h1 span{color:var(--brand)}
-.hero p{font-size:15px;opacity:.85;margin-bottom:24px}
-.hero-search{display:flex;gap:8px;background:#fff;border-radius:12px;padding:6px;max-width:460px;margin:0 auto}
-.hero-search input{flex:1;border:none;outline:none;padding:10px 14px;font-size:15px;border-radius:8px}
-.hero-search button{background:var(--brand);color:#fff;padding:10px 22px;border-radius:8px;font-weight:700;font-size:14px}
-
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f7f7f7;color:#1a1a1a}
+body.dark{background:#111;color:#f0f0f0}
+/* TOP NAV */
+.topbar{background:#fff;border-bottom:1px solid #eee;padding:12px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:200}
+body.dark .topbar{background:#1a1a1a;border-color:#333}
+.topbar-logo{font-size:22px;font-weight:800;color:#06c167;text-decoration:none;flex-shrink:0}
+.topbar-search{flex:1;background:#f2f2f2;border:none;border-radius:24px;padding:10px 16px;font-size:15px;outline:none}
+body.dark .topbar-search{background:#2a2a2a;color:#f0f0f0}
+.topbar-btns{display:flex;gap:8px;flex-shrink:0}
+.icon-btn{width:38px;height:38px;border-radius:50%;border:none;background:#f2f2f2;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+body.dark .icon-btn{background:#2a2a2a}
 /* CATEGORIES */
-.section{max-width:1200px;margin:0 auto;padding:28px 24px 0}
-.section-title{font-size:20px;font-weight:700;margin-bottom:14px}
-.cats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}
-.cat-pill{padding:8px 16px;border-radius:50px;border:1.5px solid var(--border);font-size:13px;font-weight:600;background:#fff;transition:all .2s;cursor:pointer;white-space:nowrap}
-.cat-pill.active,.cat-pill:hover{background:var(--brand);color:#fff;border-color:var(--brand)}
-
-/* STORE GRID */
-.stores-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;margin-top:20px;padding-bottom:40px}
-.store-card{border-radius:16px;overflow:hidden;border:1px solid var(--border);background:#fff;cursor:pointer;transition:transform .2s,box-shadow .2s}
-.store-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
-.store-img{width:100%;height:160px;object-fit:cover;display:block}
-.store-img-placeholder{width:100%;height:160px;background:var(--light);display:flex;align-items:center;justify-content:center;font-size:52px}
+.cats{display:flex;gap:10px;padding:12px 16px;overflow-x:auto;scrollbar-width:none;background:#fff}
+body.dark .cats{background:#1a1a1a}
+.cats::-webkit-scrollbar{display:none}
+.cat-btn{flex-shrink:0;padding:8px 16px;border-radius:20px;border:1.5px solid #e0e0e0;background:#fff;font-size:14px;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:5px}
+body.dark .cat-btn{background:#2a2a2a;border-color:#444;color:#f0f0f0}
+.cat-btn.active{background:#06c167;color:#fff;border-color:#06c167}
+/* ADDRESS BAR */
+.addr-bar{background:#fff;padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #eee;cursor:pointer}
+body.dark .addr-bar{background:#1a1a1a;border-color:#333}
+.addr-bar-text{font-size:14px;font-weight:500;flex:1}
+/* PROMOTIONS */
+.promo-banner{margin:12px 16px;background:linear-gradient(135deg,#06c167,#04a052);border-radius:16px;padding:16px;color:#fff;display:flex;align-items:center;justify-content:space-between}
+.promo-banner h3{font-size:18px;font-weight:700}
+.promo-banner p{font-size:13px;opacity:0.9;margin-top:2px}
+.promo-code-chip{background:rgba(255,255,255,0.25);border-radius:8px;padding:6px 12px;font-size:14px;font-weight:700;cursor:pointer}
+/* SECTION HEADERS */
+.section-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 8px}
+.section-hdr h2{font-size:18px;font-weight:700}
+.section-hdr a{font-size:14px;color:#06c167;text-decoration:none}
+/* STORE CARDS */
+.stores-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;padding:0 16px 16px}
+.store-card{background:#fff;border-radius:16px;overflow:hidden;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.07);transition:transform .15s}
+body.dark .store-card{background:#1e1e1e;box-shadow:0 2px 8px rgba(0,0,0,0.3)}
+.store-card:hover{transform:translateY(-2px)}
+.store-img{width:100%;height:140px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;font-size:56px;position:relative}
+.store-badge{position:absolute;top:8px;right:8px;background:#06c167;color:#fff;padding:3px 8px;border-radius:10px;font-size:12px;font-weight:600}
+.store-fav-btn{position:absolute;top:8px;left:8px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.9);border:none;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .store-info{padding:12px}
-.store-name{font-size:15px;font-weight:700;margin-bottom:4px}
-.store-meta{display:flex;gap:10px;font-size:12px;color:var(--mid)}
-.store-desc{font-size:12px;color:#888;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.store-closed{opacity:.5;pointer-events:none}
-
-/* OVERLAY BASE */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:flex-end;justify-content:center}
-.overlay.open{display:flex}
-
+.store-name{font-size:16px;font-weight:700;margin-bottom:4px}
+.store-meta{display:flex;gap:12px;font-size:13px;color:#666}
+body.dark .store-meta{color:#aaa}
+.store-meta span{display:flex;align-items:center;gap:3px}
+.free-del{color:#06c167;font-size:12px;font-weight:600;margin-top:6px}
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #eee;display:flex;z-index:300;padding-bottom:env(safe-area-inset-bottom)}
+body.dark .bottom-nav{background:#1a1a1a;border-color:#333}
+.nav-btn{flex:1;padding:10px 4px 8px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:#999}
+.nav-btn.active{color:#06c167}
+.nav-btn .nav-icon{font-size:22px}
+.cart-badge{position:relative;display:inline-block}
+.cart-count{position:absolute;top:-6px;right:-10px;background:#ff4b4b;color:#fff;border-radius:10px;font-size:10px;font-weight:700;padding:1px 5px;min-width:16px;text-align:center}
+/* PAGES */
+.page{display:none;padding-bottom:80px}
+.page.active{display:block}
+/* DRAWER */
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:400;opacity:0;pointer-events:none;transition:opacity .2s}
+.drawer-overlay.open{opacity:1;pointer-events:all}
+.drawer{position:fixed;bottom:0;left:0;right:0;background:#fff;border-radius:24px 24px 0 0;z-index:500;transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);max-height:90vh;overflow-y:auto}
+body.dark .drawer{background:#1a1a1a}
+.drawer.open{transform:translateY(0)}
+.drawer-handle{width:40px;height:4px;background:#e0e0e0;border-radius:2px;margin:12px auto 0}
+.drawer-header{padding:16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eee}
+body.dark .drawer-header{border-color:#333}
+.drawer-title{font-size:18px;font-weight:700}
+.close-btn{width:32px;height:32px;border-radius:50%;border:none;background:#f2f2f2;font-size:18px;cursor:pointer}
+body.dark .close-btn{background:#333}
 /* STORE MODAL */
-.store-modal{background:#fff;width:100%;max-width:700px;max-height:88vh;border-radius:20px 20px 0 0;overflow:hidden;display:flex;flex-direction:column;animation:slideUp .3s ease}
-@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.modal-header{position:relative}
-.modal-hero-img{width:100%;height:190px;object-fit:cover}
-.modal-hero-placeholder{width:100%;height:190px;background:var(--light);display:flex;align-items:center;justify-content:center;font-size:68px}
-.modal-close{position:absolute;top:12px;right:12px;background:#fff;border:none;border-radius:50%;width:34px;height:34px;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow)}
-.modal-store-info{padding:16px 20px 10px}
-.modal-store-name{font-size:21px;font-weight:800}
-.modal-store-sub{font-size:13px;color:var(--mid);margin-top:4px;display:flex;gap:14px}
-.modal-body{flex:1;overflow-y:auto;padding:0 20px 20px}
-.product-item{display:flex;align-items:center;gap:12px;padding:12px;border:1.5px solid var(--border);border-radius:12px;margin-bottom:10px;transition:border-color .2s}
-.product-item:hover{border-color:var(--brand)}
-.product-emoji{font-size:34px;width:48px;text-align:center}
-.product-img{width:64px;height:64px;object-fit:cover;border-radius:10px}
-.product-details{flex:1}
-.product-name{font-size:14px;font-weight:600}
-.product-desc{font-size:12px;color:#888;margin-top:2px}
-.product-price{font-size:14px;font-weight:700;color:var(--brand);margin-top:4px}
-.add-btn{background:var(--brand);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.store-modal{padding-bottom:120px}
+.store-modal-img{width:100%;height:180px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;font-size:80px;position:relative}
+.store-modal-info{padding:16px}
+.store-modal-info h2{font-size:24px;font-weight:800}
+.store-modal-meta{display:flex;gap:16px;margin:8px 0;font-size:14px;color:#666;flex-wrap:wrap}
+body.dark .store-modal-meta{color:#aaa}
+/* CATEGORY TABS */
+.cat-tabs{display:flex;gap:0;border-bottom:1px solid #eee;overflow-x:auto;scrollbar-width:none;position:sticky;top:0;background:#fff;z-index:10}
+body.dark .cat-tabs{background:#1a1a1a;border-color:#333}
+.cat-tabs::-webkit-scrollbar{display:none}
+.cat-tab{padding:12px 16px;border:none;background:none;font-size:14px;font-weight:500;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;color:#666}
+body.dark .cat-tab{color:#aaa}
+.cat-tab.active{color:#06c167;border-bottom-color:#06c167}
+/* PRODUCT LIST */
+.product-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid #f0f0f0;cursor:pointer}
+body.dark .product-item{border-color:#2a2a2a}
+.product-item:hover{background:#f9f9f9}
+body.dark .product-item:hover{background:#222}
+.product-emoji{font-size:40px;flex-shrink:0}
+.product-info{flex:1}
+.product-name{font-size:15px;font-weight:600}
+.product-desc{font-size:13px;color:#888;margin:2px 0}
+.product-price{font-size:15px;font-weight:700;color:#06c167}
+.dietary-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+.dietary-tag{font-size:10px;padding:2px 6px;border-radius:10px;font-weight:600}
+.dietary-tag.vegan{background:#e8f5e9;color:#2e7d32}
+.dietary-tag.vegetarian{background:#f3e5f5;color:#6a1b9a}
+.dietary-tag.gluten_free{background:#fff8e1;color:#f57f17}
+.dietary-tag.popular{background:#fff3e0;color:#e65100}
+.add-btn{width:32px;height:32px;border-radius:50%;background:#06c167;color:#fff;border:none;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+/* CART */
+.cart-bar{position:fixed;bottom:70px;left:16px;right:16px;background:#06c167;color:#fff;border-radius:16px;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;box-shadow:0 4px 20px rgba(6,193,103,0.4);z-index:250;transform:translateY(200%);transition:transform .3s}
+.cart-bar.visible{transform:translateY(0)}
+.cart-bar-left{display:flex;align-items:center;gap:10px}
+.cart-circle{background:rgba(0,0,0,0.2);border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+/* CHECKOUT */
+.checkout-section{padding:16px}
+.checkout-section h3{font-size:15px;font-weight:600;margin-bottom:10px}
+.checkout-item{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:14px}
+body.dark .checkout-item{border-color:#333}
 .qty-ctrl{display:flex;align-items:center;gap:8px}
-.qty-ctrl button{background:var(--light);border:1.5px solid var(--border);border-radius:6px;width:28px;height:28px;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center}
-.qty-ctrl .qty{font-size:14px;font-weight:700;min-width:18px;text-align:center}
-
-/* CART DRAWER */
-.cart-drawer{position:fixed;top:0;right:0;bottom:0;width:350px;max-width:100vw;background:#fff;z-index:300;box-shadow:-4px 0 32px rgba(0,0,0,.15);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s ease}
-.cart-drawer.open{transform:translateX(0)}
-.cart-header{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.cart-header h2{font-size:17px;font-weight:700}
-.cart-items{flex:1;overflow-y:auto;padding:14px}
-.cart-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
-.cart-item-emoji{font-size:26px;width:36px;text-align:center}
-.cart-item-details{flex:1}
-.cart-item-name{font-size:13px;font-weight:600}
-.cart-item-price{font-size:12px;color:var(--mid)}
-.cart-empty{text-align:center;padding:48px 20px;color:#888}
-.cart-empty .ce-icon{font-size:52px;margin-bottom:10px}
-.cart-footer{padding:18px;border-top:1px solid var(--border)}
-.cart-totals{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;font-size:13px}
-.cart-totals .row{display:flex;justify-content:space-between}
-.cart-totals .row.total{font-weight:700;font-size:15px;border-top:1px solid var(--border);padding-top:8px;margin-top:4px}
-.btn-checkout{width:100%;padding:13px;background:var(--brand);color:#fff;border-radius:10px;font-size:15px;font-weight:700}
-.btn-clear{width:100%;padding:9px;background:var(--light);color:var(--mid);border-radius:10px;font-size:12px;font-weight:600;margin-top:7px}
-
-/* CHECKOUT MODAL */
-.co-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:400;display:none;align-items:center;justify-content:center;padding:16px}
-.co-overlay.open{display:flex}
-.co-modal{background:#fff;width:100%;max-width:480px;border-radius:20px;overflow:hidden;display:flex;flex-direction:column;max-height:92vh}
-.co-modal-hdr{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.co-modal-hdr h2{font-size:17px;font-weight:700}
-.co-body{flex:1;overflow-y:auto;padding:18px 22px}
-.co-section{margin-bottom:18px}
-.co-label{font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px}
-.co-input{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;transition:border-color .2s}
-.co-input:focus{border-color:var(--brand);outline:none}
-.pay-opts{display:grid;grid-template-columns:1fr 1fr;gap:7px}
-.pay-opt{padding:11px;border:2px solid var(--border);border-radius:10px;cursor:pointer;text-align:center;transition:all .2s}
-.pay-opt:hover{border-color:var(--brand)}
-.pay-opt.selected{border-color:var(--brand);background:#f0faf5}
-.pay-opt .pay-icon{font-size:22px;margin-bottom:3px}
-.pay-opt .pay-name{font-size:11px;font-weight:700}
-.co-summary{background:var(--light);border-radius:10px;padding:12px}
-.co-summary .row{display:flex;justify-content:space-between;font-size:13px;padding:3px 0}
-.co-summary .row.total{font-weight:700;font-size:15px;border-top:1px solid var(--border);margin-top:5px;padding-top:7px}
-.btn-place{width:100%;padding:13px;background:var(--brand);color:#fff;border-radius:10px;font-size:15px;font-weight:700;margin-top:14px}
-.btn-place:disabled{background:#ccc;cursor:not-allowed}
-
-/* CARD PAYMENT MODAL */
-.card-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:600;display:none;align-items:center;justify-content:center;padding:16px}
-.card-overlay.open{display:flex}
-.card-modal{background:#fff;width:100%;max-width:400px;border-radius:20px;padding:24px}
-.card-modal h3{font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.card-field{margin-bottom:14px}
-.card-field label{display:block;font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
-.card-input{width:100%;padding:12px 14px;border:2px solid var(--border);border-radius:10px;font-size:15px;font-family:'Inter',monospace;letter-spacing:1px;transition:border-color .2s}
-.card-input:focus{border-color:var(--brand);outline:none}
-.card-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.btn-pay-card{width:100%;padding:14px;background:var(--brand);color:#fff;border-radius:10px;font-size:15px;font-weight:700;margin-top:6px}
-.card-logo-row{display:flex;gap:8px;margin-bottom:14px}
-.card-logo{padding:4px 10px;background:var(--light);border-radius:6px;font-size:11px;font-weight:700;color:var(--mid)}
-.card-secure{font-size:11px;color:#888;text-align:center;margin-top:10px}
-
-/* GPAY SHEET */
-.gpay-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:600;display:none;align-items:flex-end;justify-content:center}
-.gpay-overlay.open{display:flex}
-.gpay-sheet{background:#fff;width:100%;max-width:480px;border-radius:20px 20px 0 0;padding:24px;animation:slideUp .3s ease}
-.gpay-hdr{display:flex;align-items:center;gap:10px;margin-bottom:16px}
-.gpay-logo{font-size:28px}
-.gpay-hdr-text h3{font-size:16px;font-weight:700}
-.gpay-hdr-text p{font-size:12px;color:#888}
-.gpay-card-row{display:flex;align-items:center;gap:10px;padding:12px 14px;border:2px solid var(--brand);border-radius:12px;margin-bottom:14px}
-.gpay-card-icon{font-size:24px}
-.gpay-card-info{flex:1}
-.gpay-card-name{font-size:13px;font-weight:600}
-.gpay-card-num{font-size:12px;color:#888}
-.gpay-total{display:flex;justify-content:space-between;font-size:16px;font-weight:700;padding:10px 0;border-top:1px solid var(--border);margin-bottom:14px}
-.btn-gpay{width:100%;padding:14px;background:#1a73e8;color:#fff;border-radius:12px;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-gpay-cancel{width:100%;padding:11px;background:none;color:#888;font-size:13px;font-weight:600;margin-top:6px}
-
-/* APPLE PAY SHEET */
-.applepay-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:600;display:none;align-items:flex-end;justify-content:center}
-.applepay-overlay.open{display:flex}
-.applepay-sheet{background:#f5f5f7;width:100%;max-width:480px;border-radius:20px 20px 0 0;padding:24px;animation:slideUp .3s ease}
-.applepay-hdr{text-align:center;margin-bottom:16px}
-.applepay-hdr .ap-icon{font-size:36px;margin-bottom:6px}
-.applepay-hdr h3{font-size:16px;font-weight:700}
-.applepay-hdr p{font-size:12px;color:#888}
-.applepay-card{background:#fff;border-radius:14px;padding:14px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
-.applepay-card-icon{font-size:28px}
-.applepay-card-info{flex:1}
-.applepay-card-name{font-size:13px;font-weight:600}
-.applepay-card-num{font-size:12px;color:#888}
-.applepay-total{background:#fff;border-radius:12px;padding:14px;margin-bottom:14px}
-.applepay-total .row{display:flex;justify-content:space-between;font-size:13px;padding:3px 0}
-.applepay-total .row.bold{font-weight:700;font-size:15px}
-.btn-applepay{width:100%;padding:14px;background:#000;color:#fff;border-radius:12px;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-applepay-cancel{width:100%;padding:11px;background:none;color:#888;font-size:13px;font-weight:600;margin-top:6px}
-
+.qty-btn{width:28px;height:28px;border-radius:50%;border:1px solid #ddd;background:#fff;font-size:16px;cursor:pointer}
+body.dark .qty-btn{background:#333;border-color:#555;color:#f0f0f0}
+.checkout-row{display:flex;justify-content:space-between;padding:6px 0;font-size:14px}
+.checkout-row.total{font-size:17px;font-weight:700;border-top:1px solid #eee;padding-top:12px;margin-top:4px}
+body.dark .checkout-row.total{border-color:#333}
+.tip-btns{display:flex;gap:8px;margin:8px 0}
+.tip-btn{flex:1;padding:8px;border-radius:10px;border:1.5px solid #e0e0e0;background:#fff;font-size:13px;font-weight:600;cursor:pointer;text-align:center}
+body.dark .tip-btn{background:#2a2a2a;border-color:#444;color:#f0f0f0}
+.tip-btn.active{background:#06c167;color:#fff;border-color:#06c167}
+.promo-row{display:flex;gap:8px;margin:8px 0}
+.promo-input{flex:1;padding:10px 14px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:14px;outline:none}
+body.dark .promo-input{background:#2a2a2a;border-color:#444;color:#f0f0f0}
+.input-field{width:100%;padding:12px 14px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:14px;outline:none;font-family:inherit;background:#fff;margin-bottom:10px}
+body.dark .input-field{background:#2a2a2a;border-color:#444;color:#f0f0f0}
+.input-field:focus{border-color:#06c167}
+.select-field{width:100%;padding:12px 14px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:14px;outline:none;appearance:none;background:#fff;cursor:pointer;margin-bottom:10px}
+body.dark .select-field{background:#2a2a2a;border-color:#444;color:#f0f0f0}
+.pay-methods{display:flex;gap:8px;margin:8px 0;flex-wrap:wrap}
+.pay-btn{flex:1;min-width:80px;padding:10px 6px;border-radius:12px;border:1.5px solid #e0e0e0;background:#fff;font-size:13px;font-weight:600;cursor:pointer;text-align:center}
+body.dark .pay-btn{background:#2a2a2a;border-color:#444;color:#f0f0f0}
+.pay-btn.active{border-color:#06c167;background:#e8f9f1;color:#06c167}
+body.dark .pay-btn.active{background:#0a2a1a}
+.btn-primary{width:100%;padding:14px;background:#06c167;color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;margin-top:8px}
+.btn-primary:disabled{opacity:0.5;cursor:not-allowed}
+.btn-outline{width:100%;padding:12px;background:#fff;color:#06c167;border:1.5px solid #06c167;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer}
+body.dark .btn-outline{background:#1a1a1a}
 /* ORDER TRACKER */
-.tracker-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;display:none;align-items:center;justify-content:center;padding:16px}
-.tracker-overlay.open{display:flex}
-.tracker-modal{background:#fff;width:100%;max-width:440px;border-radius:20px;padding:26px 22px;text-align:center;max-height:90vh;overflow-y:auto}
-.tracker-modal h2{font-size:19px;font-weight:700;margin-bottom:4px}
-.tracker-sub{font-size:12px;color:var(--mid);margin-bottom:20px}
-.track-steps{display:flex;justify-content:space-between;position:relative;margin-bottom:24px}
-.track-steps::before{content:'';position:absolute;top:17px;left:10%;right:10%;height:3px;background:var(--border);z-index:0}
-.track-fill{position:absolute;top:17px;left:10%;height:3px;background:var(--brand);z-index:1;transition:width .6s ease}
-.track-step{display:flex;flex-direction:column;align-items:center;gap:5px;position:relative;z-index:2}
-.ts-circle{width:34px;height:34px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;transition:background .4s}
-.ts-circle.done{background:var(--brand)}
-.ts-label{font-size:9px;font-weight:600;color:var(--mid);white-space:nowrap}
-.tracker-info{background:var(--light);border-radius:12px;padding:12px;text-align:left;margin-bottom:14px;font-size:13px}
-.tracker-info p{margin:3px 0}
-.btn-close-tracker{width:100%;padding:11px;background:var(--light);color:var(--dark);border-radius:10px;font-size:13px;font-weight:600;margin-top:4px}
-
-/* RATING MODAL */
-.rate-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:700;display:none;align-items:center;justify-content:center;padding:16px}
-.rate-overlay.open{display:flex}
-.rate-modal{background:#fff;width:100%;max-width:400px;border-radius:20px;padding:24px;text-align:center}
-.rate-modal h3{font-size:18px;font-weight:700;margin-bottom:4px}
-.rate-modal p{font-size:13px;color:#888;margin-bottom:20px}
-.rate-section{margin-bottom:18px;text-align:left}
-.rate-section label{font-size:12px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:8px}
-.stars{display:flex;gap:6px;justify-content:center;margin-bottom:4px}
-.star{font-size:32px;cursor:pointer;transition:transform .1s;filter:grayscale(1)}
-.star.on{filter:none;transform:scale(1.1)}
-.rate-comment{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-family:inherit;resize:none;transition:border-color .2s}
-.rate-comment:focus{border-color:var(--brand);outline:none}
-.btn-submit-rate{width:100%;padding:13px;background:var(--brand);color:#fff;border-radius:10px;font-size:15px;font-weight:700;margin-top:10px}
-.btn-skip-rate{width:100%;padding:10px;background:none;color:#888;font-size:13px;font-weight:600;margin-top:6px}
-
-/* MY ORDERS DRAWER */
-.orders-drawer{position:fixed;top:0;left:0;bottom:0;width:400px;max-width:100vw;background:#fff;z-index:300;box-shadow:4px 0 32px rgba(0,0,0,.15);display:flex;flex-direction:column;transform:translateX(-100%);transition:transform .3s ease}
-.orders-drawer.open{transform:translateX(0)}
-.orders-hdr{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.orders-hdr h2{font-size:17px;font-weight:700}
-.orders-body{flex:1;overflow-y:auto;padding:14px}
-.order-item{background:var(--light);border-radius:14px;padding:14px;margin-bottom:10px;cursor:pointer;transition:box-shadow .2s;border:1.5px solid transparent}
-.order-item:hover{box-shadow:var(--shadow);border-color:var(--brand)}
-.order-item-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.order-item-id{font-size:12px;font-weight:700;color:var(--mid)}
-.order-item-time{font-size:11px;color:#aaa}
-.order-item-store{font-size:14px;font-weight:700;margin-bottom:3px}
-.order-item-items{font-size:12px;color:#888;margin-bottom:8px}
-.order-item-footer{display:flex;justify-content:space-between;align-items:center}
-.order-item-total{font-size:14px;font-weight:700;color:var(--brand)}
-.status-pill{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
-.sp-placed{background:#dbeafe;color:#1d4ed8}
-.sp-accepted{background:#f3e8ff;color:#7c3aed}
-.sp-preparing{background:#fef3c7;color:#b45309}
-.sp-picked_up{background:#d1fae5;color:#065f46}
-.sp-delivered{background:#d1fae5;color:var(--brand)}
-.sp-cancelled{background:#fee2e2;color:#dc2626}
-.order-item-rate{font-size:11px;font-weight:700;color:var(--brand);padding:3px 8px;border-radius:6px;background:#f0faf5;border:none;cursor:pointer}
-
+.tracker-steps{padding:16px}
+.tracker-step{display:flex;align-items:center;gap:12px;padding:12px 0;position:relative}
+.tracker-step:not(:last-child)::after{content:'';position:absolute;left:19px;top:44px;width:2px;height:calc(100% - 20px);background:#e0e0e0}
+.step-circle{width:40px;height:40px;border-radius:50%;background:#e0e0e0;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;z-index:1}
+.step-circle.done{background:#06c167}
+.step-circle.active{background:#06c167;box-shadow:0 0 0 4px rgba(6,193,103,0.3)}
+.step-info{flex:1}
+.step-title{font-size:15px;font-weight:600}
+.step-desc{font-size:13px;color:#888;margin-top:2px}
+.countdown-bar{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:14px;margin:12px 16px;display:flex;align-items:center;gap:10px}
+.countdown-time{font-size:28px;font-weight:800;color:#06c167}
+.live-map{height:200px;border-radius:16px;margin:12px 16px;overflow:hidden;background:#e0e0e0}
+/* CHAT */
+.chat-box{height:260px;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;background:#f9f9f9}
+body.dark .chat-box{background:#111}
+.chat-msg{max-width:75%;padding:8px 12px;border-radius:12px;font-size:14px}
+.chat-msg.mine{background:#06c167;color:#fff;margin-left:auto;border-bottom-right-radius:4px}
+.chat-msg.theirs{background:#fff;margin-right:auto;border-bottom-left-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
+body.dark .chat-msg.theirs{background:#2a2a2a}
+.chat-meta{font-size:11px;opacity:0.7;margin-top:2px}
+.chat-input-row{display:flex;gap:8px;padding:10px 16px;border-top:1px solid #eee}
+body.dark .chat-input-row{border-color:#333}
+.chat-input{flex:1;padding:10px 14px;border:1.5px solid #e0e0e0;border-radius:20px;font-size:14px;outline:none}
+body.dark .chat-input{background:#2a2a2a;border-color:#444;color:#f0f0f0}
+.chat-send{width:40px;height:40px;border-radius:50%;background:#06c167;color:#fff;border:none;font-size:18px;cursor:pointer}
+/* MY ORDERS */
+.orders-list{padding:16px;display:flex;flex-direction:column;gap:12px}
+.order-card{background:#fff;border-radius:14px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,0.07)}
+body.dark .order-card{background:#1e1e1e}
+.order-card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.order-store{font-size:15px;font-weight:700}
+.order-status-chip{padding:3px 10px;border-radius:10px;font-size:12px;font-weight:600}
+.status-placed{background:#fff3cd;color:#856404}
+.status-accepted,.status-preparing{background:#cff4fc;color:#055160}
+.status-picked_up{background:#e2f0d9;color:#1a5e20}
+.status-delivered{background:#d1e7dd;color:#0f5132}
+.status-cancelled{background:#f8d7da;color:#842029}
+.order-items{font-size:13px;color:#888;margin-bottom:8px}
+.order-meta{display:flex;justify-content:space-between;font-size:13px}
+.order-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.btn-sm{padding:7px 14px;border-radius:8px;border:none;font-size:13px;font-weight:600;cursor:pointer}
+.btn-sm-green{background:#e8f9f1;color:#06c167}
+.btn-sm-outline{background:transparent;border:1px solid #ddd;color:#555}
+body.dark .btn-sm-outline{border-color:#444;color:#aaa}
+/* FAVOURITES PAGE */
+.empty-state{text-align:center;padding:60px 20px;color:#aaa}
+.empty-state .es-icon{font-size:60px;margin-bottom:12px}
+/* PROFILE PAGE */
+.profile-header{background:linear-gradient(135deg,#06c167,#04a052);padding:30px 16px 24px;color:#fff;text-align:center}
+.profile-avatar{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 10px}
+.profile-name{font-size:22px;font-weight:800}
+.profile-email{font-size:14px;opacity:0.9}
+.loyalty-card{background:#fff;margin:16px;border-radius:16px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.07)}
+body.dark .loyalty-card{background:#1e1e1e}
+.loyalty-pts{font-size:36px;font-weight:800;color:#06c167}
+.profile-menu-item{display:flex;align-items:center;gap:14px;padding:14px 16px;border-bottom:1px solid #f0f0f0;cursor:pointer}
+body.dark .profile-menu-item{border-color:#333}
+.profile-menu-item:hover{background:#f9f9f9}
+body.dark .profile-menu-item:hover{background:#222}
+.profile-menu-icon{font-size:20px;width:36px}
 /* TOAST */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:#1a1a1a;color:#fff;padding:12px 24px;border-radius:50px;font-size:14px;font-weight:600;z-index:800;transition:transform .3s ease;pointer-events:none}
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(100px);background:#1a1a1a;color:#fff;padding:12px 20px;border-radius:12px;font-size:14px;font-weight:500;z-index:9999;transition:transform .3s;white-space:nowrap;max-width:80vw}
+body.dark .toast{background:#333}
 .toast.show{transform:translateX(-50%) translateY(0)}
-.spinner{display:inline-block;width:30px;height:30px;border:3px solid var(--border);border-top-color:var(--brand);border-radius:50%;animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading-state{text-align:center;padding:60px;color:#888}
-@media(max-width:600px){
-  .hero{padding:36px 14px}
-  .stores-grid{grid-template-columns:1fr}
-  .cart-drawer{width:100vw}
-  .orders-drawer{width:100vw}
-  .nav-user,.lang-bar{display:none}
-}
+/* RATING */
+.stars{display:flex;gap:6px;justify-content:center;font-size:32px;cursor:pointer;margin:12px 0}
+.star{opacity:0.3;transition:opacity .1s}
+.star.lit{opacity:1}
+/* ADDR PICKER */
+.addr-suggestions{background:#fff;border:1px solid #e0e0e0;border-radius:10px;overflow:hidden;margin-top:4px}
+body.dark .addr-suggestions{background:#2a2a2a;border-color:#444}
+.addr-suggestion{padding:10px 14px;cursor:pointer;font-size:14px;border-bottom:1px solid #f0f0f0}
+body.dark .addr-suggestion{border-color:#333}
+.addr-suggestion:hover{background:#f5f5f5}
+body.dark .addr-suggestion:hover{background:#333}
+/* PWA INSTALL */
+.pwa-banner{background:#06c167;color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;font-size:14px}
+.pwa-banner button{background:rgba(255,255,255,0.25);border:none;color:#fff;padding:6px 14px;border-radius:8px;font-weight:600;cursor:pointer;font-size:13px}
+/* SCHEDULE */
+.schedule-info{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:14px;color:#166534}
 </style>
 </head>
 <body>
+<!-- PWA Install Banner -->
+<div class="pwa-banner" id="pwaBanner" style="display:none">
+  <span>📱 Add Swiftly to your home screen!</span>
+  <button onclick="installPwa()">Install</button>
+</div>
 
-<nav>
-  <div class="logo">⚡ Swiftly</div>
-  <div class="nav-search">
-    <span class="si">🔍</span>
-    <input type="text" id="navSearch" placeholder="Search restaurants, food..." oninput="filterStores()">
-  </div>
-  <div class="nav-right">
-    <div class="lang-bar">
-      <button class="lang-btn active" onclick="setLang('en')">EN</button>
-      <button class="lang-btn" onclick="setLang('es')">ES</button>
-      <button class="lang-btn" onclick="setLang('fr')">FR</button>
-      <button class="lang-btn" onclick="setLang('ar')">AR</button>
-      <button class="lang-btn" onclick="setLang('hi')">HI</button>
-      <button class="lang-btn" onclick="setLang('ml')">ML</button>
-    </div>
-    <span class="nav-user">👋 {{ user.name.split()[0] }}</span>
-    <button class="btn-nav btn-orders" onclick="openOrders()" data-i18n="my_orders">📦 My Orders</button>
-    <button class="btn-cart" onclick="toggleCart()">
-      🛒 <span data-i18n="cart">Cart</span> <span class="cart-badge" id="cartBadge">0</span>
-    </button>
-    <a href="/logout" class="btn-nav btn-logout" data-i18n="logout">Log out</a>
+<nav class="topbar">
+  <a class="topbar-logo" href="#">⚡Swiftly</a>
+  <input class="topbar-search" id="searchInput" type="text" placeholder="Search restaurants, groceries...">
+  <div class="topbar-btns">
+    <button class="icon-btn" onclick="toggleDark()" title="Dark mode">🌙</button>
+    <button class="icon-btn" onclick="showPage('profile')" title="Profile">👤</button>
+    <button class="icon-btn" onclick="showPage('notif')" title="Notifications">🔔</button>
   </div>
 </nav>
 
-<div class="hero">
-  <div class="hero-content">
-    <h1 data-i18n="hero_title">Delivery you can <span>count on</span></h1>
-    <p data-i18n="hero_sub">Food, groceries, medicine — delivered fast to your door</p>
-    <div class="hero-search">
-      <input type="text" id="heroSearch" placeholder="🔍  Search anything..." oninput="syncSearch()" data-i18n-ph="search_ph">
-      <button onclick="filterStores()" data-i18n="search">Search</button>
+<!-- Address bar -->
+<div class="addr-bar" onclick="openAddrPicker()">
+  <span style="font-size:18px">📍</span>
+  <div>
+    <div style="font-size:11px;color:#888">Deliver to</div>
+    <div class="addr-bar-text" id="currentAddrLabel">Set delivery address</div>
+  </div>
+  <span style="color:#06c167;font-size:18px">›</span>
+</div>
+
+<!-- PAGES -->
+<div id="page-home" class="page active">
+  <!-- Promotion Banner -->
+  <div class="promo-banner">
+    <div>
+      <h3>🎉 First order?</h3>
+      <p>Use code WELCOME10 for 10% off</p>
     </div>
+    <div class="promo-code-chip" onclick="copyPromo('WELCOME10')">WELCOME10</div>
+  </div>
+  <!-- Categories -->
+  <div class="cats" id="catBar">
+    <button class="cat-btn active" onclick="filterCat('all',this)">🍽️ All</button>
+    <button class="cat-btn" onclick="filterCat('food',this)">🍔 Food</button>
+    <button class="cat-btn" onclick="filterCat('grocery',this)">🛒 Grocery</button>
+    <button class="cat-btn" onclick="filterCat('medicine',this)">💊 Pharmacy</button>
+    <button class="cat-btn" onclick="filterCat('general',this)">📦 General</button>
+  </div>
+  <div class="section-hdr"><h2>⭐ Popular Stores</h2></div>
+  <div class="stores-grid" id="storesGrid"></div>
+</div>
+
+<div id="page-favs" class="page">
+  <div class="section-hdr"><h2>❤️ Favourites</h2></div>
+  <div id="favsGrid" class="stores-grid"></div>
+</div>
+
+<div id="page-orders" class="page">
+  <div class="section-hdr"><h2>🛍️ My Orders</h2></div>
+  <div id="ordersList" class="orders-list"></div>
+</div>
+
+<div id="page-profile" class="page">
+  <div class="profile-header">
+    <div class="profile-avatar">👤</div>
+    <div class="profile-name" id="profileName">Loading...</div>
+    <div class="profile-email" id="profileEmail"></div>
+  </div>
+  <div class="loyalty-card">
+    <div style="font-size:14px;color:#888;margin-bottom:4px">💎 Loyalty Points</div>
+    <div class="loyalty-pts" id="loyaltyPts">0</div>
+    <div style="font-size:13px;color:#888">£1 spent = 1 point · Redeem coming soon</div>
+  </div>
+  <div id="profileMenu">
+    <div class="profile-menu-item" onclick="openSavedAddresses()"><span class="profile-menu-icon">📍</span><div><div style="font-weight:600">Saved Addresses</div><div style="font-size:13px;color:#888">Manage your delivery addresses</div></div><span style="margin-left:auto;color:#ccc">›</span></div>
+    <div class="profile-menu-item" onclick="openPromoWallet()"><span class="profile-menu-icon">🎟️</span><div><div style="font-weight:600">Promo Codes</div><div style="font-size:13px;color:#888">Apply discount codes</div></div><span style="margin-left:auto;color:#ccc">›</span></div>
+    <div class="profile-menu-item" onclick="openEditProfile()"><span class="profile-menu-icon">✏️</span><div><div style="font-weight:600">Edit Profile</div><div style="font-size:13px;color:#888">Name, phone, password</div></div><span style="margin-left:auto;color:#ccc">›</span></div>
+    <div class="profile-menu-item" onclick="requestNotifPerms()"><span class="profile-menu-icon">🔔</span><div><div style="font-weight:600">Enable Notifications</div><div style="font-size:13px;color:#888">Get delivery updates</div></div><span style="margin-left:auto;color:#ccc">›</span></div>
+    <div class="profile-menu-item" onclick="toggleDark()"><span class="profile-menu-icon">🌙</span><div><div style="font-weight:600">Dark Mode</div><div style="font-size:13px;color:#888">Toggle appearance</div></div></div>
+    <div class="profile-menu-item" onclick="if(confirm('Log out?'))location='/logout'"><span class="profile-menu-icon">🚪</span><div><div style="font-weight:600;color:#e53e3e">Log Out</div></div><span style="margin-left:auto;color:#ccc">›</span></div>
   </div>
 </div>
 
-<div class="section">
-  <div class="cats">
-    <button class="cat-pill active" onclick="setCategory('all',this)" data-i18n="cat_all">🍽️ All</button>
-    <button class="cat-pill" onclick="setCategory('food',this)" data-i18n="cat_food">🍔 Food</button>
-    <button class="cat-pill" onclick="setCategory('grocery',this)" data-i18n="cat_grocery">🛒 Grocery</button>
-    <button class="cat-pill" onclick="setCategory('medicine',this)" data-i18n="cat_medicine">💊 Pharmacy</button>
-    <button class="cat-pill" onclick="setCategory('general',this)" data-i18n="cat_general">📦 General</button>
-  </div>
-  <div class="section-title" id="gridTitle">All restaurants</div>
-  <div class="stores-grid" id="storesGrid">
-    <div class="loading-state" style="grid-column:1/-1"><div class="spinner"></div><p style="margin-top:10px">Loading...</p></div>
-  </div>
+<div id="page-notif" class="page">
+  <div class="section-hdr"><h2>🔔 Notifications</h2></div>
+  <div id="notifList" class="orders-list"><div class="empty-state"><div class="es-icon">🔔</div><p>No notifications yet</p></div></div>
 </div>
 
-<!-- STORE MODAL -->
-<div class="overlay" id="storeOverlay" onclick="closeStore(event)">
-  <div class="store-modal">
-    <div class="modal-header">
-      <div id="modalHeroImg"></div>
-      <button class="modal-close" onclick="closeStoreModal()">✕</button>
-    </div>
-    <div class="modal-store-info">
-      <div class="modal-store-name" id="modalName"></div>
-      <div class="modal-store-sub" id="modalSub"></div>
-    </div>
-    <div class="modal-body">
-      <div id="productList"><div class="loading-state"><div class="spinner"></div></div></div>
-    </div>
+<!-- Bottom Nav -->
+<nav class="bottom-nav">
+  <button class="nav-btn active" id="nav-home" onclick="showPage('home')"><span class="nav-icon">🏠</span>Home</button>
+  <button class="nav-btn" id="nav-favs" onclick="showPage('favs')"><span class="nav-icon">❤️</span>Favourites</button>
+  <button class="nav-btn" id="nav-orders" onclick="showPage('orders')"><span class="nav-icon"><span class="cart-badge">🛍️<span class="cart-count" id="cartBadge" style="display:none">0</span></span></span>Orders</button>
+  <button class="nav-btn" id="nav-profile" onclick="showPage('profile')"><span class="nav-icon">👤</span>Profile</button>
+</nav>
+
+<!-- Cart Bar -->
+<div class="cart-bar" id="cartBar" onclick="openCheckout()">
+  <div class="cart-bar-left">
+    <div class="cart-circle" id="cartCircle">0</div>
+    <span id="cartBarLabel">View cart</span>
   </div>
+  <span id="cartBarTotal">£0.00</span>
 </div>
 
-<!-- CART DRAWER -->
-<div class="cart-drawer" id="cartDrawer">
-  <div class="cart-header">
-    <h2>🛒 <span data-i18n="your_cart">Your Cart</span></h2>
-    <button onclick="toggleCart()" style="background:none;font-size:20px;color:#888">✕</button>
-  </div>
-  <div class="cart-items" id="cartItems">
-    <div class="cart-empty"><div class="ce-icon">🛒</div><p data-i18n="cart_empty">Your cart is empty</p></div>
-  </div>
-  <div class="cart-footer" id="cartFooter" style="display:none">
-    <div class="cart-totals">
-      <div class="row"><span data-i18n="subtotal">Subtotal</span><span id="cartSubtotal">£0.00</span></div>
-      <div class="row"><span data-i18n="delivery_fee">Delivery fee</span><span id="cartDelivery">£0.00</span></div>
-      <div class="row total"><span data-i18n="total">Total</span><span id="cartTotal">£0.00</span></div>
-    </div>
-    <button class="btn-checkout" onclick="openCheckout()" data-i18n="checkout">Checkout →</button>
-    <button class="btn-clear" onclick="clearCart()" data-i18n="clear_cart">Clear cart</button>
-  </div>
-</div>
-
-<!-- MY ORDERS DRAWER -->
-<div class="orders-drawer" id="ordersDrawer">
-  <div class="orders-hdr">
-    <h2>📦 <span data-i18n="my_orders">My Orders</span></h2>
-    <button onclick="closeOrders()" style="background:none;font-size:20px;color:#888">✕</button>
-  </div>
-  <div class="orders-body" id="ordersBody">
-    <div class="loading-state"><div class="spinner"></div></div>
-  </div>
-</div>
-
-<!-- CHECKOUT MODAL -->
-<div class="co-overlay" id="checkoutOverlay">
-  <div class="co-modal">
-    <div class="co-modal-hdr">
-      <h2 data-i18n="checkout">Checkout</h2>
-      <button onclick="closeCheckout()" style="background:none;font-size:20px;color:#888">✕</button>
-    </div>
-    <div class="co-body">
-      <div class="co-section">
-        <div class="co-label" data-i18n="delivery_address">Delivery address</div>
-        <input type="text" class="co-input" id="coAddress" placeholder="Enter your delivery address">
-      </div>
-      <div class="co-section">
-        <div class="co-label" data-i18n="special_instructions">Special instructions</div>
-        <textarea class="co-input" id="coNotes" rows="2" placeholder="Allergies, gate code, etc."></textarea>
-      </div>
-      <div class="co-section">
-        <div class="co-label" data-i18n="payment">Payment method</div>
-        <div class="pay-opts">
-          <div class="pay-opt selected" onclick="selectPay('cash',this)">
-            <div class="pay-icon">💵</div>
-            <div class="pay-name" data-i18n="pay_cash">Cash on Delivery</div>
-          </div>
-          <div class="pay-opt" onclick="selectPay('card',this)">
-            <div class="pay-icon">💳</div>
-            <div class="pay-name" data-i18n="pay_card">Card</div>
-          </div>
-          <div class="pay-opt" onclick="selectPay('gpay',this)">
-            <div class="pay-icon">🟢</div>
-            <div class="pay-name">Google Pay</div>
-          </div>
-          <div class="pay-opt" onclick="selectPay('applepay',this)">
-            <div class="pay-icon">🍎</div>
-            <div class="pay-name">Apple Pay</div>
-          </div>
-        </div>
-      </div>
-      <div class="co-section">
-        <div class="co-label" data-i18n="order_summary">Order summary</div>
-        <div class="co-summary" id="coSummary"></div>
-      </div>
-      <button class="btn-place" id="btnPlace" onclick="placeOrder()" data-i18n="place_order">🚀 Place Order</button>
-    </div>
-  </div>
-</div>
-
-<!-- CARD PAYMENT MODAL -->
-<div class="card-overlay" id="cardOverlay">
-  <div class="card-modal">
-    <h3>💳 <span data-i18n="pay_card">Pay by Card</span></h3>
-    <div class="card-logo-row">
-      <span class="card-logo">VISA</span>
-      <span class="card-logo">MC</span>
-      <span class="card-logo">AMEX</span>
-    </div>
-    <div class="card-field">
-      <label>Card number</label>
-      <input class="card-input" id="cardNumber" type="text" maxlength="19" placeholder="1234 5678 9012 3456" oninput="fmtCard(this)">
-    </div>
-    <div class="card-row">
-      <div class="card-field">
-        <label>Expiry</label>
-        <input class="card-input" id="cardExpiry" type="text" maxlength="5" placeholder="MM/YY" oninput="fmtExpiry(this)">
-      </div>
-      <div class="card-field">
-        <label>CVV</label>
-        <input class="card-input" id="cardCvv" type="text" maxlength="4" placeholder="•••">
-      </div>
-    </div>
-    <div class="card-field">
-      <label>Name on card</label>
-      <input class="card-input" id="cardName" type="text" placeholder="JOHN SMITH" style="letter-spacing:0">
-    </div>
-    <button class="btn-pay-card" id="btnPayCard" onclick="confirmCard()">Pay <span id="cardPayAmt"></span></button>
-    <button onclick="closeCard()" style="width:100%;padding:10px;background:none;color:#888;font-size:13px;font-weight:600;margin-top:6px">Cancel</button>
-    <p class="card-secure">🔒 Secured with 256-bit encryption</p>
-  </div>
-</div>
-
-<!-- GPAY SHEET -->
-<div class="gpay-overlay" id="gpayOverlay">
-  <div class="gpay-sheet">
-    <div class="gpay-hdr">
-      <div class="gpay-logo">🟢</div>
-      <div class="gpay-hdr-text">
-        <h3>Google Pay</h3>
-        <p>Swiftly · Fast & secure checkout</p>
-      </div>
-    </div>
-    <div class="gpay-card-row">
-      <div class="gpay-card-icon">💳</div>
-      <div class="gpay-card-info">
-        <div class="gpay-card-name">Visa •••• 4242</div>
-        <div class="gpay-card-num">Default payment method</div>
-      </div>
-      <span style="color:var(--brand);font-size:12px;font-weight:700">✓ Selected</span>
-    </div>
-    <div class="gpay-total">
-      <span>Total</span>
-      <span id="gpayAmt"></span>
-    </div>
-    <button class="btn-gpay" onclick="confirmGpay()">
-      <span style="font-weight:800;font-size:18px">G</span> Pay with Google
-    </button>
-    <button class="btn-gpay-cancel" onclick="closeGpay()">Cancel</button>
-  </div>
-</div>
-
-<!-- APPLE PAY SHEET -->
-<div class="applepay-overlay" id="applepayOverlay">
-  <div class="applepay-sheet">
-    <div class="applepay-hdr">
-      <div class="ap-icon">🍎</div>
-      <h3>Apple Pay</h3>
-      <p>Swiftly Food Delivery</p>
-    </div>
-    <div class="applepay-card">
-      <div class="applepay-card-icon">💳</div>
-      <div class="applepay-card-info">
-        <div class="applepay-card-name">Apple Card •••• 1234</div>
-        <div class="applepay-card-num">Default card</div>
-      </div>
-    </div>
-    <div class="applepay-total">
-      <div class="row"><span>Subtotal</span><span id="apSubtotal"></span></div>
-      <div class="row"><span>Delivery</span><span id="apDelivery"></span></div>
-      <div class="row bold"><span>Total</span><span id="apTotal"></span></div>
-    </div>
-    <button class="btn-applepay" onclick="confirmApplePay()"> Pay</button>
-    <button class="btn-applepay-cancel" onclick="closeApplePay()">Cancel</button>
-  </div>
-</div>
-
-<!-- ORDER TRACKER -->
-<div class="tracker-overlay" id="trackerOverlay">
-  <div class="tracker-modal">
-    <h2 data-i18n="order_placed">Order placed! 🎉</h2>
-    <div class="tracker-sub" id="trackerSub"></div>
-    <div class="track-steps">
-      <div class="track-fill" id="trackFill" style="width:0%"></div>
-      <div class="track-step"><div class="ts-circle done" id="ts0">📋</div><div class="ts-label" data-i18n="step_placed">Placed</div></div>
-      <div class="track-step"><div class="ts-circle" id="ts1">✅</div><div class="ts-label" data-i18n="step_accepted">Accepted</div></div>
-      <div class="track-step"><div class="ts-circle" id="ts2">👨‍🍳</div><div class="ts-label" data-i18n="step_preparing">Preparing</div></div>
-      <div class="track-step"><div class="ts-circle" id="ts3">🛵</div><div class="ts-label" data-i18n="step_onway">On the way</div></div>
-      <div class="track-step"><div class="ts-circle" id="ts4">🏠</div><div class="ts-label" data-i18n="step_delivered">Delivered</div></div>
-    </div>
-    <div class="tracker-info" id="trackerInfo"></div>
-    <button class="btn-close-tracker" onclick="closeTracker()" data-i18n="close">Close</button>
-  </div>
-</div>
-
-<!-- RATING MODAL -->
-<div class="rate-overlay" id="rateOverlay">
-  <div class="rate-modal">
-    <h3>⭐ Rate your order</h3>
-    <p>How was your experience?</p>
-    <div class="rate-section">
-      <label>Restaurant</label>
-      <div class="stars" id="storeStars">
-        <span class="star on" onclick="setRating('store',1)">⭐</span>
-        <span class="star on" onclick="setRating('store',2)">⭐</span>
-        <span class="star on" onclick="setRating('store',3)">⭐</span>
-        <span class="star on" onclick="setRating('store',4)">⭐</span>
-        <span class="star on" onclick="setRating('store',5)">⭐</span>
-      </div>
-    </div>
-    <div class="rate-section">
-      <label>Driver</label>
-      <div class="stars" id="driverStars">
-        <span class="star on" onclick="setRating('driver',1)">⭐</span>
-        <span class="star on" onclick="setRating('driver',2)">⭐</span>
-        <span class="star on" onclick="setRating('driver',3)">⭐</span>
-        <span class="star on" onclick="setRating('driver',4)">⭐</span>
-        <span class="star on" onclick="setRating('driver',5)">⭐</span>
-      </div>
-    </div>
-    <div class="rate-section">
-      <label>Comment (optional)</label>
-      <textarea class="rate-comment" id="rateComment" rows="2" placeholder="Tell us about your experience..."></textarea>
-    </div>
-    <button class="btn-submit-rate" onclick="submitRate()">Submit Review</button>
-    <button class="btn-skip-rate" onclick="closeRate()">Skip</button>
-  </div>
-</div>
-
+<!-- Toast -->
 <div class="toast" id="toast"></div>
 
+<!-- OVERLAY + DRAWER -->
+<div class="drawer-overlay" id="overlay" onclick="closeAllDrawers()"></div>
+
+<!-- Store Drawer -->
+<div class="drawer" id="storeDrawer">
+  <div class="drawer-handle"></div>
+  <div id="storeDrawerContent"></div>
+</div>
+
+<!-- Checkout Drawer -->
+<div class="drawer" id="checkoutDrawer">
+  <div class="drawer-handle"></div>
+  <div class="drawer-header"><span class="drawer-title">🛒 Your Order</span><button class="close-btn" onclick="closeCheckout()">✕</button></div>
+  <div id="checkoutContent"></div>
+</div>
+
+<!-- Order Tracker Drawer -->
+<div class="drawer" id="trackerDrawer">
+  <div class="drawer-handle"></div>
+  <div class="drawer-header"><span class="drawer-title">🚀 Order Tracker</span><button class="close-btn" onclick="closeTracker()">✕</button></div>
+  <div id="trackerContent"></div>
+</div>
+
+<!-- Rating Drawer -->
+<div class="drawer" id="ratingDrawer">
+  <div class="drawer-handle"></div>
+  <div class="drawer-header"><span class="drawer-title">⭐ Rate your order</span><button class="close-btn" onclick="closeRating()">✕</button></div>
+  <div id="ratingContent"></div>
+</div>
+
+<!-- Address Picker Drawer -->
+<div class="drawer" id="addrDrawer">
+  <div class="drawer-handle"></div>
+  <div class="drawer-header"><span class="drawer-title">📍 Delivery Address</span><button class="close-btn" onclick="closeDrawer('addrDrawer')">✕</button></div>
+  <div id="addrDrawerContent" style="padding:16px"></div>
+</div>
+
+<!-- Saved Addresses Drawer -->
+<div class="drawer" id="savedAddrDrawer">
+  <div class="drawer-handle"></div>
+  <div class="drawer-header"><span class="drawer-title">📍 Saved Addresses</span><button class="close-btn" onclick="closeDrawer('savedAddrDrawer')">✕</button></div>
+  <div id="savedAddrContent" style="padding:16px"></div>
+</div>
+
+<!-- Promo Drawer -->
+<div class="drawer" id="promoDrawer">
+  <div class="drawer-handle"></div>
+  <div class="drawer-header"><span class="drawer-title">🎟️ Promo Codes</span><button class="close-btn" onclick="closeDrawer('promoDrawer')">✕</button></div>
+  <div id="promoContent" style="padding:16px"></div>
+</div>
+
+<!-- Edit Profile Drawer -->
+<div class="drawer" id="editProfileDrawer">
+  <div class="drawer-handle"></div>
+  <div class="drawer-header"><span class="drawer-title">✏️ Edit Profile</span><button class="close-btn" onclick="closeDrawer('editProfileDrawer')">✕</button></div>
+  <div id="editProfileContent" style="padding:16px"></div>
+</div>
+
+<!-- Customisation Drawer -->
+<div class="drawer" id="customDrawer">
+  <div class="drawer-handle"></div>
+  <div class="drawer-header"><span class="drawer-title">⚙️ Customise Item</span><button class="close-btn" onclick="closeDrawer('customDrawer')">✕</button></div>
+  <div id="customContent" style="padding:16px"></div>
+</div>
+
+<!-- Chat Drawer -->
+<div class="drawer" id="chatDrawer">
+  <div class="drawer-handle"></div>
+  <div class="drawer-header"><span class="drawer-title">💬 Chat with Store</span><button class="close-btn" onclick="closeDrawer('chatDrawer')">✕</button></div>
+  <div id="chatContent"></div>
+</div>
+
 <script>
-const LANGS={
-  en:{hero_title:'Delivery you can count on',hero_sub:'Food, groceries, medicine — delivered fast',search:'Search',search_ph:'Search anything...',my_orders:'My Orders',cart:'Cart',logout:'Log out',your_cart:'Your Cart',cart_empty:'Your cart is empty',subtotal:'Subtotal',delivery_fee:'Delivery fee',total:'Total',checkout:'Checkout',clear_cart:'Clear cart',delivery_address:'Delivery address',special_instructions:'Special instructions',payment:'Payment method',pay_cash:'Cash on Delivery',pay_card:'Card',order_summary:'Order summary',place_order:'Place Order',order_placed:'Order placed!',step_placed:'Placed',step_accepted:'Accepted',step_preparing:'Preparing',step_onway:'On the way',step_delivered:'Delivered',close:'Close',cat_all:'All',cat_food:'Food',cat_grocery:'Grocery',cat_medicine:'Pharmacy',cat_general:'General'},
-  es:{hero_title:'Entrega en la que puedes contar',hero_sub:'Comida, supermercado, medicina — entregado rapido',search:'Buscar',search_ph:'Busca cualquier cosa...',my_orders:'Mis pedidos',cart:'Carrito',logout:'Salir',your_cart:'Tu carrito',cart_empty:'Tu carrito esta vacio',subtotal:'Subtotal',delivery_fee:'Costo de envio',total:'Total',checkout:'Pagar',clear_cart:'Vaciar carrito',delivery_address:'Direccion de entrega',special_instructions:'Instrucciones especiales',payment:'Metodo de pago',pay_cash:'Pago en efectivo',pay_card:'Tarjeta',order_summary:'Resumen del pedido',place_order:'Hacer pedido',order_placed:'Pedido realizado!',step_placed:'Pedido',step_accepted:'Aceptado',step_preparing:'Preparando',step_onway:'En camino',step_delivered:'Entregado',close:'Cerrar',cat_all:'Todo',cat_food:'Comida',cat_grocery:'Supermercado',cat_medicine:'Farmacia',cat_general:'General'},
-  fr:{hero_title:'Une livraison fiable',hero_sub:'Nourriture, courses, medicaments — livres rapidement',search:'Chercher',search_ph:'Rechercher...',my_orders:'Mes commandes',cart:'Panier',logout:'Deconnexion',your_cart:'Votre panier',cart_empty:'Votre panier est vide',subtotal:'Sous-total',delivery_fee:'Frais de livraison',total:'Total',checkout:'Commander',clear_cart:'Vider le panier',delivery_address:'Adresse de livraison',special_instructions:'Instructions speciales',payment:'Mode de paiement',pay_cash:'Paiement a la livraison',pay_card:'Carte',order_summary:'Resume',place_order:'Passer la commande',order_placed:'Commande passee!',step_placed:'Passee',step_accepted:'Acceptee',step_preparing:'Preparation',step_onway:'En route',step_delivered:'Livree',close:'Fermer',cat_all:'Tout',cat_food:'Nourriture',cat_grocery:'Epicerie',cat_medicine:'Pharmacie',cat_general:'General'},
-  ar:{hero_title:'توصيل يمكنك الاعتماد عليه',hero_sub:'طعام، بقالة، دواء — يوصل بسرعة',search:'بحث',search_ph:'ابحث عن اي شيء...',my_orders:'طلباتي',cart:'سلة',logout:'تسجيل الخروج',your_cart:'سلتك',cart_empty:'سلتك فارغة',subtotal:'المجموع الفرعي',delivery_fee:'رسوم التوصيل',total:'الاجمالي',checkout:'الدفع',clear_cart:'مسح السلة',delivery_address:'عنوان التوصيل',special_instructions:'تعليمات خاصة',payment:'طريقة الدفع',pay_cash:'الدفع عند الاستلام',pay_card:'بطاقة',order_summary:'ملخص الطلب',place_order:'تاكيد الطلب',order_placed:'تم الطلب!',step_placed:'تم الطلب',step_accepted:'مقبول',step_preparing:'قيد التحضير',step_onway:'في الطريق',step_delivered:'تم التسليم',close:'اغلاق',cat_all:'الكل',cat_food:'طعام',cat_grocery:'بقالة',cat_medicine:'صيدلية',cat_general:'عام'},
-  hi:{hero_title:'Bharosemand Delivery',hero_sub:'Khana, kirana, dawai — jaldi delivery',search:'Khojein',search_ph:'Kuch bhi khojein...',my_orders:'Mere Orders',cart:'Cart',logout:'Log Out',your_cart:'Aapki Cart',cart_empty:'Cart khali hai',subtotal:'Subtotal',delivery_fee:'Delivery shulk',total:'Kul',checkout:'Checkout',clear_cart:'Cart saaf karein',delivery_address:'Delivery pata',special_instructions:'Vishesh nirdesh',payment:'Bhugtan vidhi',pay_cash:'Cash on Delivery',pay_card:'Card',order_summary:'Order savransh',place_order:'Order karein',order_placed:'Order ho gaya!',step_placed:'Rakha gaya',step_accepted:'Svikrit',step_preparing:'Taiyari ho rahi hai',step_onway:'Raste mein',step_delivered:'Deliver',close:'Band karein',cat_all:'Sab',cat_food:'Khana',cat_grocery:'Kirana',cat_medicine:'Pharmacy',cat_general:'Samanya'},
-  ml:{hero_title:'Vishvasaneeya Delivery',hero_sub:'Bakshanam, palacarak, marul — vegam delivery',search:'Tirayuka',search_ph:'Entum tirayuka...',my_orders:'Ente Orders',cart:'Cart',logout:'Log Out',your_cart:'Ningalute Cart',cart_empty:'Cart sunnyamanu',subtotal:'Upa-ake',delivery_fee:'Delivery fee',total:'Ake',checkout:'Checkout',clear_cart:'Cart maykyuka',delivery_address:'Delivery vilasam',special_instructions:'Prayeka nirdeshangal',payment:'Panamadaykkal',pay_cash:'Cash on Delivery',pay_card:'Card',order_summary:'Order sangrahm',place_order:'Order cheyyuka',order_placed:'Order cheytu!',step_placed:'Order cheytu',step_accepted:'Svikariccu',step_preparing:'Tayyaredukkunnu',step_onway:'Vaziyil',step_delivered:'Deliver cheytu',close:'Adaykkuka',cat_all:'Ellam',cat_food:'Bakshanam',cat_grocery:'Palacarak',cat_medicine:'Pharmacy',cat_general:'Potu'},
-};
+// ── STATE ──────────────────────────────────────────────────────────────────
+let cart = [], currentStoreId = null, currentStore = null, trackingOrderId = null;
+let ratingOrderId = null, storeRating = 5, driverRating = 5;
+let currentAddress = localStorage.getItem('sw_addr') || '';
+let darkMode = localStorage.getItem('sw_dark') === '1';
+let deferredInstall = null;
+let chatOrderId = null, chatPollInterval = null;
+let addrSuggestTimeout = null;
+let trackerPollInterval = null;
+let appliedPromo = null, promoDiscount = 0;
+let selectedTip = 0;
 
-let curLang=localStorage.getItem('sw_lang')||'en';
-function t(k){return(LANGS[curLang]||LANGS.en)[k]||k;}
-function applyLang(){
-  document.querySelectorAll('[data-i18n]').forEach(el=>{
-    const k=el.getAttribute('data-i18n');
-    if(el.tagName==='INPUT'||el.tagName==='TEXTAREA') el.placeholder=t(k);
-    else el.textContent=t(k);
-  });
-  document.querySelectorAll('[data-i18n-ph]').forEach(el=>el.placeholder=t(el.getAttribute('data-i18n-ph')));
-  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===curLang.toUpperCase()));
-}
-function setLang(l){curLang=l;localStorage.setItem('sw_lang',l);applyLang();}
+// ── INIT ──────────────────────────────────────────────────────────────────
+if (darkMode) document.body.classList.add('dark');
+if (currentAddress) document.getElementById('currentAddrLabel').textContent = currentAddress;
 
-// STATE
-let allStores=[],currentCategory='all',currentStore=null;
-let cart=[],cartStore=null,cartDeliveryFee=2.99;
-let currentPayment='cash';
-let trackerInterval=null,currentOrderId=null;
-let ratingOrderId=null,storeRating=5,driverRating=5;
-let _pendingAddr='';
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault(); deferredInstall = e;
+  document.getElementById('pwaBanner').style.display = 'flex';
+});
 
-// STORES
-async function loadStores(){
-  try{
-    const r=await fetch('/api/stores');
-    allStores=await r.json();
-    renderStores(allStores);
-  }catch(e){
-    document.getElementById('storesGrid').innerHTML='<div class="loading-state" style="grid-column:1/-1">Failed to load stores. Refresh to try again.</div>';
-  }
+function installPwa() {
+  if (!deferredInstall) return;
+  deferredInstall.prompt();
+  deferredInstall.userChoice.then(() => { document.getElementById('pwaBanner').style.display = 'none'; });
 }
 
-function renderStores(stores){
-  const grid=document.getElementById('storesGrid');
-  if(!stores.length){grid.innerHTML='<div class="loading-state" style="grid-column:1/-1">No stores found.</div>';return;}
-  grid.innerHTML=stores.map(s=>`
-    <div class="store-card${s.is_open?'':' store-closed'}" onclick="openStore(${s.id})">
-      ${s.image_url?`<img class="store-img" src="${s.image_url}" alt="${esc(s.name)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:``}
-      <div class="store-img-placeholder" style="${s.image_url?'display:none':''}">${s.emoji||'🏪'}</div>
-      <div class="store-info">
-        <div class="store-name">${s.name}</div>
-        <div class="store-meta">
-          <span>⭐ ${s.rating?Number(s.rating).toFixed(1):'5.0'}</span>
-          <span>🕐 ${s.delivery_time||'20-35'} min</span>
-          <span>£${Number(s.delivery_fee||0).toFixed(2)} delivery</span>
-        </div>
-        <div class="store-desc">${s.description||''}</div>
-      </div>
+// Register SW
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(()=>{});
+}
+
+loadStores();
+loadProfile();
+setInterval(loadStores, 60000);
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  loadStores(null, e.target.value);
+});
+
+// ── PAGES ──────────────────────────────────────────────────────────────────
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  const nb = document.getElementById('nav-' + page);
+  if (nb) nb.classList.add('active');
+  if (page === 'orders') loadOrders();
+  if (page === 'favs') loadFavourites();
+  if (page === 'profile') loadProfile();
+}
+
+// ── DARK MODE ──────────────────────────────────────────────────────────────
+function toggleDark() {
+  darkMode = !darkMode;
+  document.body.classList.toggle('dark', darkMode);
+  localStorage.setItem('sw_dark', darkMode ? '1' : '0');
+}
+
+// ── TOAST ──────────────────────────────────────────────────────────────────
+function toast(msg, dur = 2500) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), dur);
+}
+
+// ── STORES ──────────────────────────────────────────────────────────────────
+let currentCat = 'all';
+function filterCat(cat, btn) {
+  currentCat = cat;
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  loadStores(cat);
+}
+
+async function loadStores(cat, q) {
+  cat = cat || currentCat;
+  let url = `/api/stores?category=${cat}`;
+  if (q) url += `&q=${encodeURIComponent(q)}`;
+  const r = await fetch(url);
+  const stores = await r.json();
+  const grid = document.getElementById('storesGrid');
+  if (!stores.length) { grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">🍽️</div><p>No stores found</p></div>'; return; }
+  grid.innerHTML = stores.map(s => renderStoreCard(s)).join('');
+}
+
+function renderStoreCard(s) {
+  const fav = s.is_favourite ? '❤️' : '🤍';
+  const freeDel = s.free_delivery_threshold > 0 ? `<div class="free-del">🎉 Free delivery over £${s.free_delivery_threshold.toFixed(2)}</div>` : '';
+  return `<div class="store-card" onclick="openStore(${s.id})">
+    <div class="store-img" style="background:${storeGradient(s.id)}">
+      <span>${s.emoji || '🏪'}</span>
+      <button class="store-fav-btn" onclick="event.stopPropagation();toggleFav(${s.id},this)">${fav}</button>
+      ${s.is_open ? '' : '<div class="store-badge" style="background:#999">Closed</div>'}
     </div>
-  `).join('');
-}
-
-function setCategory(cat,el){
-  currentCategory=cat;
-  document.querySelectorAll('.cat-pill').forEach(p=>p.classList.remove('active'));
-  el.classList.add('active');
-  filterStores();
-}
-
-function filterStores(){
-  const q=(document.getElementById('navSearch').value||document.getElementById('heroSearch').value||'').toLowerCase().trim();
-  let filtered=allStores;
-  if(currentCategory!=='all') filtered=filtered.filter(s=>s.category===currentCategory);
-  if(q) filtered=filtered.filter(s=>s.name.toLowerCase().includes(q)||(s.description||'').toLowerCase().includes(q));
-  renderStores(filtered);
-}
-
-function syncSearch(){
-  document.getElementById('navSearch').value=document.getElementById('heroSearch').value;
-  filterStores();
-}
-
-function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-
-// STORE MODAL
-async function openStore(sid){
-  currentStore=allStores.find(s=>s.id===sid);
-  if(!currentStore)return;
-  document.getElementById('modalName').textContent=currentStore.name;
-  document.getElementById('modalSub').innerHTML=`
-    <span>⭐ ${currentStore.rating?Number(currentStore.rating).toFixed(1):'5.0'}</span>
-    <span>🕐 ${currentStore.delivery_time||'20-35'} min</span>
-    <span>£${Number(currentStore.delivery_fee||0).toFixed(2)} delivery</span>
-    ${currentStore.address?`<span>${currentStore.address}</span>`:''}
-  `;
-  const heroDiv=document.getElementById('modalHeroImg');
-  heroDiv.innerHTML=currentStore.image_url
-    ?`<img class="modal-hero-img" src="${currentStore.image_url}" alt="${esc(currentStore.name)}">`
-    :`<div class="modal-hero-placeholder">${currentStore.emoji||'🏪'}</div>`;
-  document.getElementById('productList').innerHTML='<div class="loading-state"><div class="spinner"></div></div>';
-  document.getElementById('storeOverlay').classList.add('open');
-  try{
-    const r=await fetch(`/api/stores/${sid}/products`);
-    const products=await r.json();
-    renderProducts(products);
-  }catch(e){
-    document.getElementById('productList').innerHTML='<div class="loading-state">Failed to load menu.</div>';
-  }
-}
-
-function renderProducts(products){
-  if(!products.length){document.getElementById('productList').innerHTML='<div class="loading-state">No items available.</div>';return;}
-  document.getElementById('productList').innerHTML=products.map(p=>{
-    const inCart=cart.find(c=>c.id===p.id);
-    const qty=inCart?inCart.qty:0;
-    return `
-      <div class="product-item">
-        <div class="product-emoji">${p.emoji||'📦'}</div>
-        <div class="product-details">
-          <div class="product-name">${p.name}</div>
-          <div class="product-desc">${p.description||''}</div>
-          <div class="product-price">£${Number(p.price).toFixed(2)}</div>
-        </div>
-        <div id="pc-${p.id}">
-          ${qty===0
-            ?`<button class="add-btn" onclick="addToCart(${p.id},'${(p.name||'').replace(/'/g,"\\'")}',${p.price},'${p.emoji||'📦'}')">Add</button>`
-            :`<div class="qty-ctrl"><button onclick="changeQty(${p.id},-1)">−</button><span class="qty">${qty}</span><button onclick="changeQty(${p.id},1)">+</button></div>`
-          }
-        </div>
-      </div>`;
-  }).join('');
-}
-
-function closeStore(e){if(e.target===document.getElementById('storeOverlay'))closeStoreModal();}
-function closeStoreModal(){document.getElementById('storeOverlay').classList.remove('open');}
-
-// CART
-function addToCart(id,name,price,emoji){
-  if(cartStore&&cartStore.id!==currentStore.id){
-    if(!confirm('Your cart has items from another store. Clear it?'))return;
-    cart=[];
-  }
-  cartStore=currentStore;
-  cartDeliveryFee=Number(currentStore.delivery_fee||2.99);
-  const ex=cart.find(c=>c.id===id);
-  if(ex)ex.qty++;
-  else cart.push({id,name,price:Number(price),emoji,qty:1});
-  updateCartUI();
-  refreshProdCtrl(id);
-  showToast(name+' added to cart');
-}
-
-function changeQty(id,delta){
-  const item=cart.find(c=>c.id===id);
-  if(!item)return;
-  item.qty+=delta;
-  if(item.qty<=0)cart=cart.filter(c=>c.id!==id);
-  updateCartUI();
-  refreshProdCtrl(id);
-}
-
-function refreshProdCtrl(id){
-  const ctrl=document.getElementById('pc-'+id);
-  if(!ctrl)return;
-  const item=cart.find(c=>c.id===id);
-  if(!item||item.qty===0){
-    ctrl.innerHTML=`<button class="add-btn" onclick="addToCart(${id},'${(item&&item.name||'').replace(/'/g,"\\'")}',0,'📦')">Add</button>`;
-    // Re-render whole product list to get name/price right
-    fetch(`/api/stores/${currentStore.id}/products`).then(r=>r.json()).then(renderProducts).catch(()=>{});
-    return;
-  }
-  ctrl.innerHTML=`<div class="qty-ctrl"><button onclick="changeQty(${id},-1)">−</button><span class="qty">${item.qty}</span><button onclick="changeQty(${id},1)">+</button></div>`;
-}
-
-function updateCartUI(){
-  const sub=cart.reduce((s,i)=>s+i.price*i.qty,0);
-  const count=cart.reduce((s,i)=>s+i.qty,0);
-  document.getElementById('cartBadge').textContent=count;
-  const itemsDiv=document.getElementById('cartItems');
-  const footer=document.getElementById('cartFooter');
-  if(!cart.length){
-    itemsDiv.innerHTML='<div class="cart-empty"><div class="ce-icon">🛒</div><p>Your cart is empty</p></div>';
-    footer.style.display='none';
-    return;
-  }
-  itemsDiv.innerHTML=cart.map(i=>`
-    <div class="cart-item">
-      <div class="cart-item-emoji">${i.emoji}</div>
-      <div class="cart-item-details">
-        <div class="cart-item-name">${i.name}</div>
-        <div class="cart-item-price">£${(i.price*i.qty).toFixed(2)} (x${i.qty})</div>
+    <div class="store-info">
+      <div class="store-name">${s.name}</div>
+      <div class="store-meta">
+        <span>⭐ ${Number(s.rating||5).toFixed(1)}</span>
+        <span>⏱ ${s.delivery_time||'20-35'} min</span>
+        <span>🚚 £${Number(s.delivery_fee||2.99).toFixed(2)}</span>
       </div>
-      <div class="qty-ctrl" style="gap:6px">
-        <button onclick="changeQty(${i.id},-1)" style="width:24px;height:24px;font-size:13px">−</button>
-        <span style="font-size:13px;font-weight:700;min-width:14px;text-align:center">${i.qty}</span>
-        <button onclick="changeQty(${i.id},1)" style="width:24px;height:24px;font-size:13px">+</button>
+      ${freeDel}
+      <div style="font-size:12px;color:#888;margin-top:4px">${s.description||''}</div>
+    </div>
+  </div>`;
+}
+
+function storeGradient(id) {
+  const grads = ['135deg,#667eea,#764ba2','135deg,#f093fb,#f5576c','135deg,#4facfe,#00f2fe','135deg,#43e97b,#38f9d7','135deg,#fa709a,#fee140','135deg,#a18cd1,#fbc2eb'];
+  return `linear-gradient(${grads[id % grads.length]})`;
+}
+
+// ── FAVOURITES ──────────────────────────────────────────────────────────────
+async function toggleFav(storeId, btn) {
+  const isFav = btn.textContent === '❤️';
+  const method = isFav ? 'DELETE' : 'POST';
+  await fetch(`/api/favourites/${storeId}`, { method });
+  btn.textContent = isFav ? '🤍' : '❤️';
+  toast(isFav ? 'Removed from favourites' : 'Added to favourites ❤️');
+}
+
+async function loadFavourites() {
+  const r = await fetch('/api/favourites');
+  const stores = await r.json();
+  const grid = document.getElementById('favsGrid');
+  if (!stores.length) { grid.innerHTML = '<div class="empty-state"><div class="es-icon">❤️</div><p>No favourite stores yet.<br>Tap ❤️ on a store to save it.</p></div>'; return; }
+  stores.forEach(s => s.is_favourite = true);
+  grid.innerHTML = stores.map(s => renderStoreCard(s)).join('');
+}
+
+// ── STORE MODAL ──────────────────────────────────────────────────────────────
+async function openStore(sid) {
+  const r = await fetch(`/api/stores/${sid}/products`);
+  const prods = await r.json();
+  const sr = await fetch('/api/stores');
+  const all = await sr.json();
+  currentStore = all.find(s => s.id === sid) || { id: sid, name: 'Store', emoji: '🏪', delivery_fee: 2.99, min_order: 0, delivery_time: '20-35', rating: 5, free_delivery_threshold: 0 };
+  currentStoreId = sid;
+  if (cart.length && cart[0].store_id !== sid) { cart = []; updateCartUI(); }
+
+  // Group by category
+  const cats = {};
+  prods.forEach(p => { const c = p.category || 'main'; if (!cats[c]) cats[c] = []; cats[c].push(p); });
+
+  const catOrder = Object.keys(cats);
+  const catTabs = catOrder.map((c,i) => `<button class="cat-tab ${i===0?'active':''}" onclick="scrollToCategory('${c}',this)">${catLabel(c)}</button>`).join('');
+  const freeDelMsg = currentStore.free_delivery_threshold > 0 ? `<div class="free-del" style="margin-top:4px">🎉 Free delivery on orders over £${currentStore.free_delivery_threshold.toFixed(2)}</div>` : '';
+
+  let prodHTML = '';
+  catOrder.forEach(c => {
+    prodHTML += `<div class="section-hdr" id="cat-${c}" style="padding-top:16px"><h2>${catLabel(c)}</h2></div>`;
+    prodHTML += cats[c].map(p => renderProduct(p)).join('');
+  });
+
+  document.getElementById('storeDrawerContent').innerHTML = `
+    <div class="store-modal">
+      <div class="store-modal-img" style="background:${storeGradient(sid)}"><span>${currentStore.emoji || '🏪'}</span></div>
+      <div class="store-modal-info">
+        <h2>${currentStore.name}</h2>
+        <div class="store-modal-meta">
+          <span>⭐ ${Number(currentStore.rating||5).toFixed(1)}</span>
+          <span>⏱ ${currentStore.delivery_time||'20-35'} min</span>
+          <span>🚚 £${Number(currentStore.delivery_fee||2.99).toFixed(2)} delivery</span>
+          ${currentStore.min_order > 0 ? `<span>Min £${currentStore.min_order.toFixed(2)}</span>` : ''}
+        </div>
+        ${freeDelMsg}
+      </div>
+      <div class="cat-tabs">${catTabs}</div>
+      ${prodHTML}
+    </div>`;
+
+  openDrawer('storeDrawer');
+}
+
+function catLabel(c) {
+  const map = { main:'Main', starters:'Starters', sides:'Sides', desserts:'Desserts', drinks:'Drinks', pizza:'Pizza', burgers:'Burgers', sushi:'Sushi', rolls:'Rolls', hot_dishes:'Hot Dishes', dairy:'Dairy', bakery:'Bakery', dry_goods:'Dry Goods', meat:'Meat', vitamins:'Vitamins', pain_relief:'Pain Relief', allergy:'Allergy', first_aid:'First Aid', cables:'Cables', accessories:'Accessories', audio:'Audio' };
+  return map[c] || c.replace(/_/g,' ').replace(/\b\w/g,l=>l.toUpperCase());
+}
+
+function scrollToCategory(cat, btn) {
+  document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  const el = document.getElementById('cat-' + cat);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function renderProduct(p) {
+  let labels = [];
+  try { labels = JSON.parse(p.dietary_labels || '[]'); } catch(e) {}
+  const tagHTML = labels.map(l => `<span class="dietary-tag ${l}">${dietaryIcon(l)} ${l.replace('_',' ')}</span>`).join('');
+  const popularTag = p.order_count > 5 ? '<span class="dietary-tag popular">🔥 Popular</span>' : '';
+  return `<div class="product-item" onclick="openCustomise(${JSON.stringify(p).replace(/"/g,'&quot;')})">
+    <span class="product-emoji">${p.emoji || '📦'}</span>
+    <div class="product-info">
+      <div class="product-name">${p.name}</div>
+      <div class="product-desc">${p.description || ''}</div>
+      <div class="dietary-tags">${popularTag}${tagHTML}</div>
+      <div class="product-price">£${Number(p.price).toFixed(2)}</div>
+    </div>
+    <button class="add-btn" onclick="event.stopPropagation();addToCart(${JSON.stringify(p).replace(/"/g,'&quot;')})">+</button>
+  </div>`;
+}
+
+function dietaryIcon(l) { return {vegan:'🌱',vegetarian:'🥕',gluten_free:'🌾',halal:'☪️',spicy:'🌶️'}[l] || ''; }
+
+// ── ITEM CUSTOMISATION ──────────────────────────────────────────────────────
+function openCustomise(prod) {
+  let labels = [];
+  try { labels = JSON.parse(prod.dietary_labels || '[]'); } catch(e) {}
+  const tagHTML = labels.map(l => `<span class="dietary-tag ${l}">${dietaryIcon(l)} ${l.replace('_',' ')}</span>`).join('');
+  document.getElementById('customContent').innerHTML = `
+    <div style="text-align:center;font-size:72px;padding:16px 0">${prod.emoji || '📦'}</div>
+    <div style="padding:0 16px 16px">
+      <h3 style="font-size:20px;font-weight:800">${prod.name}</h3>
+      <p style="color:#888;margin:6px 0 10px">${prod.description || ''}</p>
+      <div class="dietary-tags" style="margin-bottom:12px">${tagHTML}</div>
+      <h4 style="margin-bottom:8px">Any special requests?</h4>
+      <textarea class="input-field" id="customNotes" rows="3" placeholder="e.g. no onions, extra sauce, well done..."></textarea>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin:8px 0 12px">
+        <b style="font-size:18px;color:#06c167">£${Number(prod.price).toFixed(2)}</b>
+        <div class="qty-ctrl">
+          <button class="qty-btn" onclick="adjCustomQty(-1)">−</button>
+          <span id="customQty" style="font-size:16px;font-weight:700">1</span>
+          <button class="qty-btn" onclick="adjCustomQty(1)">+</button>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="addToCartCustom(${JSON.stringify(prod).replace(/"/g,'&quot;')})">Add to Cart · £${Number(prod.price).toFixed(2)}</button>
+    </div>`;
+  openDrawer('customDrawer');
+}
+
+let customQty = 1;
+function adjCustomQty(d) {
+  customQty = Math.max(1, customQty + d);
+  document.getElementById('customQty').textContent = customQty;
+}
+
+function addToCartCustom(prod) {
+  const notes = document.getElementById('customNotes').value.trim();
+  const p = { ...prod, qty: customQty, notes };
+  _addToCart(p);
+  customQty = 1;
+  closeDrawer('customDrawer');
+}
+
+// ── CART ──────────────────────────────────────────────────────────────────
+function addToCart(prod) {
+  _addToCart({ ...prod, qty: 1 });
+}
+
+function _addToCart(prod) {
+  if (currentStoreId && prod.store_id !== currentStoreId) { toast('Clear cart to order from another store'); return; }
+  if (!currentStoreId) currentStoreId = prod.store_id;
+  const key = prod.id + (prod.notes || '');
+  const ex = cart.find(c => c.id === prod.id && (c.notes||'') === (prod.notes||''));
+  if (ex) ex.qty += prod.qty || 1;
+  else cart.push({ ...prod, qty: prod.qty || 1, store_id: currentStoreId });
+  updateCartUI();
+  toast(`${prod.emoji || '✅'} Added to cart`);
+}
+
+function updateCartUI() {
+  const total = cart.reduce((s,c) => s + c.price * c.qty, 0);
+  const qty = cart.reduce((s,c) => s + c.qty, 0);
+  const bar = document.getElementById('cartBar');
+  const badge = document.getElementById('cartBadge');
+  document.getElementById('cartCircle').textContent = qty;
+  document.getElementById('cartBarLabel').textContent = qty === 1 ? '1 item' : `${qty} items`;
+  document.getElementById('cartBarTotal').textContent = `£${total.toFixed(2)}`;
+  if (qty > 0) { bar.classList.add('visible'); badge.style.display = 'block'; badge.textContent = qty; }
+  else { bar.classList.remove('visible'); badge.style.display = 'none'; }
+}
+
+function changeQty(idx, d) {
+  cart[idx].qty += d;
+  if (cart[idx].qty <= 0) cart.splice(idx, 1);
+  updateCartUI();
+  renderCheckout();
+}
+
+// ── CHECKOUT ──────────────────────────────────────────────────────────────
+function openCheckout() {
+  appliedPromo = null; promoDiscount = 0; selectedTip = 0;
+  renderCheckout();
+  openDrawer('checkoutDrawer');
+}
+function closeCheckout() { closeDrawer('checkoutDrawer'); }
+
+function renderCheckout() {
+  const sub = cart.reduce((s,c) => s + c.price * c.qty, 0);
+  let dfee = currentStore ? Number(currentStore.delivery_fee) : 2.99;
+  if (currentStore && currentStore.free_delivery_threshold > 0 && sub >= currentStore.free_delivery_threshold) dfee = 0;
+  const total = Math.max(0, sub + dfee + selectedTip - promoDiscount);
+  const cartRows = cart.map((c,i) => `
+    <div class="checkout-item">
+      <span>${c.emoji||'📦'} ${c.name}${c.notes?'<br><small style="color:#888">'+c.notes+'</small>':''}</span>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="qty-ctrl">
+          <button class="qty-btn" onclick="changeQty(${i},-1)">−</button>
+          <span>${c.qty}</span>
+          <button class="qty-btn" onclick="changeQty(${i},1)">+</button>
+        </div>
+        <span style="font-weight:600;min-width:52px;text-align:right">£${(c.price*c.qty).toFixed(2)}</span>
       </div>
     </div>`).join('');
-  document.getElementById('cartSubtotal').textContent='£'+sub.toFixed(2);
-  document.getElementById('cartDelivery').textContent='£'+cartDeliveryFee.toFixed(2);
-  document.getElementById('cartTotal').textContent='£'+(sub+cartDeliveryFee).toFixed(2);
-  footer.style.display='block';
+
+  const tipBtns = [0,1,2,3].map(v => `<button class="tip-btn${selectedTip===v?' active':''}" onclick="setTip(${v})">${v===0?'None':'£'+v}</button>`).join('');
+  const promoStatus = appliedPromo ? `<div style="color:#06c167;font-size:13px;margin-top:4px">✅ ${appliedPromo.label} applied!</div>` : '';
+  const freeDelNote = dfee === 0 ? '<span style="color:#06c167;font-size:12px">🎉 Free delivery!</span>' : '';
+
+  document.getElementById('checkoutContent').innerHTML = `
+    <div class="checkout-section">
+      <h3>Your items</h3>
+      ${cartRows}
+    </div>
+    <div class="checkout-section">
+      <h3>Delivery address</h3>
+      <div style="display:flex;gap:8px;align-items:center;background:#f5f5f5;border-radius:10px;padding:10px 14px;cursor:pointer" onclick="openAddrPickerInCheckout()">
+        <span>📍</span>
+        <span id="coAddr" style="flex:1;font-size:14px">${currentAddress || 'Set address'}</span>
+        <span style="color:#06c167;font-size:13px">Change</span>
+      </div>
+      <div style="margin-top:8px">
+        <label style="font-size:13px;color:#888">Or enter address:</label>
+        <input class="input-field" id="addrInput" placeholder="123 High Street, London" value="${currentAddress||''}">
+      </div>
+    </div>
+    <div class="checkout-section">
+      <h3>🕐 Schedule (optional)</h3>
+      <input class="input-field" type="datetime-local" id="schedInput">
+      <div class="schedule-info" id="schedInfo" style="display:none">📅 Order will be placed for the scheduled time</div>
+    </div>
+    <div class="checkout-section">
+      <h3>💰 Tip your driver</h3>
+      <div class="tip-btns">${tipBtns}</div>
+    </div>
+    <div class="checkout-section">
+      <h3>🎟️ Promo code</h3>
+      <div class="promo-row">
+        <input class="promo-input" id="promoInput" placeholder="Enter code" value="${appliedPromo?appliedPromo.code:''}">
+        <button class="btn-sm btn-sm-green" onclick="applyPromo()">Apply</button>
+      </div>
+      ${promoStatus}
+    </div>
+    <div class="checkout-section">
+      <h3>💳 Payment method</h3>
+      <div class="pay-methods">
+        <button class="pay-btn active" id="pay-cash" onclick="setPayMethod('cash',this)">💵 Cash</button>
+        <button class="pay-btn" id="pay-card" onclick="setPayMethod('card',this)">💳 Card</button>
+        <button class="pay-btn" id="pay-gpay" onclick="setPayMethod('gpay',this)">G Pay</button>
+        <button class="pay-btn" id="pay-apple" onclick="setPayMethod('apple',this)">🍎 Pay</button>
+      </div>
+    </div>
+    <div class="checkout-section">
+      <h3>Special instructions</h3>
+      <textarea class="input-field" id="orderNotes" rows="2" placeholder="Leave instructions for the restaurant..."></textarea>
+    </div>
+    <div class="checkout-section">
+      <div class="checkout-row"><span>Subtotal</span><span>£${sub.toFixed(2)}</span></div>
+      <div class="checkout-row"><span>Delivery fee</span><span>${dfee===0?'<span style="color:#06c167">FREE</span>':'£'+dfee.toFixed(2)}</span></div>
+      ${selectedTip>0?`<div class="checkout-row"><span>Driver tip</span><span>£${selectedTip.toFixed(2)}</span></div>`:''}
+      ${promoDiscount>0?`<div class="checkout-row" style="color:#06c167"><span>Promo discount</span><span>−£${promoDiscount.toFixed(2)}</span></div>`:''}
+      <div class="checkout-row total"><span>Total</span><span>£${total.toFixed(2)}</span></div>
+    </div>
+    <div class="checkout-section">
+      <button class="btn-primary" onclick="placeOrder()">Place Order · £${total.toFixed(2)}</button>
+    </div>`;
+
+  document.getElementById('schedInput').addEventListener('change', e => {
+    document.getElementById('schedInfo').style.display = e.target.value ? 'flex' : 'none';
+  });
 }
 
-function clearCart(){cart=[];cartStore=null;updateCartUI();}
-function toggleCart(){document.getElementById('cartDrawer').classList.toggle('open');}
-
-// CHECKOUT
-function openCheckout(){
-  if(!cart.length){showToast('Cart is empty');return;}
-  document.getElementById('cartDrawer').classList.remove('open');
-  const sub=cart.reduce((s,i)=>s+i.price*i.qty,0);
-  const total=sub+cartDeliveryFee;
-  document.getElementById('coSummary').innerHTML=`
-    <div class="row"><span>Subtotal</span><span>£${sub.toFixed(2)}</span></div>
-    <div class="row"><span>Delivery</span><span>£${cartDeliveryFee.toFixed(2)}</span></div>
-    <div class="row total"><span>Total</span><span>£${total.toFixed(2)}</span></div>`;
-  document.getElementById('checkoutOverlay').classList.add('open');
-}
-function closeCheckout(){document.getElementById('checkoutOverlay').classList.remove('open');}
-
-function selectPay(method,el){
-  currentPayment=method;
-  document.querySelectorAll('.pay-opt').forEach(o=>o.classList.remove('selected'));
-  el.classList.add('selected');
+let payMethod = 'cash';
+function setPayMethod(m, btn) {
+  payMethod = m;
+  document.querySelectorAll('.pay-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
 }
 
-async function placeOrder(){
-  const addr=document.getElementById('coAddress').value.trim();
-  if(!addr){showToast('Please enter your delivery address');return;}
-  _pendingAddr=addr;
-  closeCheckout();
-  const total=cart.reduce((s,i)=>s+i.price*i.qty,0)+cartDeliveryFee;
-  if(currentPayment==='card'){
-    document.getElementById('cardPayAmt').textContent='£'+total.toFixed(2);
-    document.getElementById('cardOverlay').classList.add('open');
-  }else if(currentPayment==='gpay'){
-    document.getElementById('gpayAmt').textContent='£'+total.toFixed(2);
-    document.getElementById('gpayOverlay').classList.add('open');
-  }else if(currentPayment==='applepay'){
-    const sub=cart.reduce((s,i)=>s+i.price*i.qty,0);
-    document.getElementById('apSubtotal').textContent='£'+sub.toFixed(2);
-    document.getElementById('apDelivery').textContent='£'+cartDeliveryFee.toFixed(2);
-    document.getElementById('apTotal').textContent='£'+total.toFixed(2);
-    document.getElementById('applepayOverlay').classList.add('open');
-  }else{
-    await doPlaceOrder(addr);
+function setTip(v) {
+  selectedTip = v;
+  renderCheckout();
+}
+
+async function applyPromo() {
+  const code = document.getElementById('promoInput').value.trim().toUpperCase();
+  if (!code) return;
+  const sub = cart.reduce((s,c) => s + c.price * c.qty, 0);
+  const r = await fetch('/api/promo/validate', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ code, total: sub }) });
+  const data = await r.json();
+  if (data.valid) {
+    appliedPromo = { code, label: data.label };
+    promoDiscount = data.discount;
+    toast('Promo applied! ' + data.label);
+  } else {
+    toast('❌ ' + data.error);
+    appliedPromo = null; promoDiscount = 0;
   }
+  renderCheckout();
 }
 
-async function doPlaceOrder(addr){
-  const notes=(document.getElementById('coNotes')||{}).value||'';
-  const payload={
-    store_id:cartStore?cartStore.id:null,
-    items:cart.map(i=>({id:i.id,name:i.name,price:i.price,qty:i.qty,emoji:i.emoji})),
-    address:addr,notes,payment_method:currentPayment
+function openAddrPickerInCheckout() { openAddrPicker(true); }
+
+async function placeOrder() {
+  const addr = (document.getElementById('addrInput') && document.getElementById('addrInput').value.trim()) || currentAddress;
+  if (!addr) { toast('Please set a delivery address'); return; }
+  const sched = document.getElementById('schedInput') ? document.getElementById('schedInput').value : '';
+  const notes = document.getElementById('orderNotes') ? document.getElementById('orderNotes').value : '';
+  if (payMethod === 'card') { await confirmCard(addr, sched, notes); return; }
+  if (payMethod === 'gpay') { await confirmGpay(addr, sched, notes); return; }
+  if (payMethod === 'apple') { await confirmApplePay(addr, sched, notes); return; }
+  await doPlaceOrder(addr, notes, 'cash', null, sched);
+}
+
+async function confirmCard(addr, sched, notes) {
+  toast('💳 Processing card payment...');
+  // With real Stripe, create intent first. For now, simulate.
+  await doPlaceOrder(addr, notes, 'card', null, sched);
+}
+
+async function confirmGpay(addr, sched, notes) {
+  toast('G Pay processing...');
+  await doPlaceOrder(addr, notes, 'gpay', null, sched);
+}
+
+async function confirmApplePay(addr, sched, notes) {
+  toast('🍎 Apple Pay processing...');
+  await doPlaceOrder(addr, notes, 'apple_pay', null, sched);
+}
+
+async function doPlaceOrder(addr, notes, payMtd, payIntentId, sched) {
+  if (!cart.length || !currentStoreId) return;
+  currentAddress = addr;
+  localStorage.setItem('sw_addr', addr);
+  document.getElementById('currentAddrLabel').textContent = addr;
+  const sub = cart.reduce((s,c) => s + c.price*c.qty, 0);
+  let dfee = currentStore ? Number(currentStore.delivery_fee) : 2.99;
+  if (currentStore && currentStore.free_delivery_threshold > 0 && sub >= currentStore.free_delivery_threshold) dfee = 0;
+  const body = {
+    store_id: currentStoreId,
+    items: cart.map(c => ({ id:c.id, name:c.name, price:c.price, qty:c.qty, emoji:c.emoji, notes:c.notes||'' })),
+    address: addr,
+    notes,
+    payment_method: payMtd,
+    payment_intent_id: payIntentId,
+    tip: selectedTip,
+    promo_code: appliedPromo ? appliedPromo.code : '',
+    scheduled_for: sched || null,
   };
-  try{
-    const r=await fetch('/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-    const data=await r.json();
-    if(data.order_id){
-      const savedTotal=data.total;
-      cart=[];cartStore=null;
-      updateCartUI();
-      showToast('Order placed!');
-      openTracker(data.order_id,savedTotal);
-    }else{
-      showToast('Failed: '+(data.error||'Try again'));
-    }
-  }catch(e){
-    showToast('Network error. Please try again.');
+  try {
+    const r = await fetch('/api/orders', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
+    const data = await r.json();
+    if (!r.ok) { toast('❌ ' + (data.error || 'Order failed')); return; }
+    const oid = data.order_id;
+    cart = []; currentStoreId = null; currentStore = null; appliedPromo = null; promoDiscount = 0; selectedTip = 0;
+    updateCartUI();
+    closeAllDrawers();
+    // Save address
+    if (addr) saveCurrAddrIfNew(addr);
+    openTracker(oid);
+    showNotification('🛍️ Order placed!', 'Your order is being prepared.');
+  } catch(e) {
+    toast('Network error, please retry');
   }
 }
 
-// CARD PAYMENT
-function fmtCard(el){let v=el.value.replace(/\D/g,'').substring(0,16);el.value=v.replace(/(.{4})/g,'$1 ').trim();}
-function fmtExpiry(el){let v=el.value.replace(/\D/g,'').substring(0,4);if(v.length>2)v=v.substring(0,2)+'/'+v.substring(2);el.value=v;}
-function closeCard(){document.getElementById('cardOverlay').classList.remove('open');}
-async function confirmCard(){
-  const num=document.getElementById('cardNumber').value.replace(/\s/g,'');
-  const exp=document.getElementById('cardExpiry').value;
-  const cvv=document.getElementById('cardCvv').value;
-  const name=document.getElementById('cardName').value.trim();
-  if(num.length<16||!exp||cvv.length<3||!name){showToast('Please fill in all card details');return;}
-  const btn=document.getElementById('btnPayCard');
-  btn.textContent='Processing...';btn.disabled=true;
-  await new Promise(r=>setTimeout(r,1500));
-  btn.textContent='Approved!';btn.style.background='#059954';
-  await new Promise(r=>setTimeout(r,600));
-  btn.textContent='Pay';btn.disabled=false;btn.style.background='';
-  closeCard();
-  await doPlaceOrder(_pendingAddr);
-}
-
-// GPAY
-function closeGpay(){document.getElementById('gpayOverlay').classList.remove('open');}
-async function confirmGpay(){
-  const btn=document.querySelector('.btn-gpay');
-  btn.textContent='Processing...';btn.disabled=true;
-  await new Promise(r=>setTimeout(r,1200));
-  btn.innerHTML='<span style="font-weight:800;font-size:18px">G</span> Pay with Google';
-  btn.disabled=false;
-  closeGpay();
-  await doPlaceOrder(_pendingAddr);
-}
-
-// APPLE PAY
-function closeApplePay(){document.getElementById('applepayOverlay').classList.remove('open');}
-async function confirmApplePay(){
-  const btn=document.querySelector('.btn-applepay');
-  btn.textContent='Processing...';btn.disabled=true;
-  await new Promise(r=>setTimeout(r,1200));
-  btn.textContent=' Pay';btn.disabled=false;
-  closeApplePay();
-  await doPlaceOrder(_pendingAddr);
-}
-
-// ORDER TRACKER
-const STATUS_STEPS={placed:0,accepted:1,preparing:2,picked_up:3,delivered:4};
-const STATUS_FILL={placed:'0%',accepted:'25%',preparing:'50%',picked_up:'75%',delivered:'100%'};
-
-function openTracker(orderId,total){
-  currentOrderId=orderId;
-  document.getElementById('trackerSub').textContent='Order #'+orderId+' · £'+Number(total).toFixed(2);
-  document.getElementById('trackerOverlay').classList.add('open');
-  updateTrackerSteps('placed');
-  if(trackerInterval)clearInterval(trackerInterval);
-  pollOrder(orderId,total);
-  trackerInterval=setInterval(()=>pollOrder(orderId,total),5000);
-}
-
-function closeTracker(){
-  document.getElementById('trackerOverlay').classList.remove('open');
-  if(trackerInterval){clearInterval(trackerInterval);trackerInterval=null;}
-}
-
-async function pollOrder(orderId,total){
-  try{
-    const r=await fetch('/api/orders/'+orderId);
-    const o=await r.json();
-    if(o.error)return;
-    updateTrackerSteps(o.status);
-    document.getElementById('trackerInfo').innerHTML=`
-      <p>📍 Delivering to: ${o.customer_address||'—'}</p>
-      <p>📦 Status: <strong>${(o.status||'').replace('_',' ')}</strong></p>
-      ${o.driver_name?`<p>🛵 Driver: ${o.driver_name}</p>`:''}
-    `;
-    if(o.status==='delivered'){
-      clearInterval(trackerInterval);trackerInterval=null;
-      setTimeout(()=>{closeTracker();openRate(orderId);},1200);
+function saveCurrAddrIfNew(addr) {
+  fetch('/api/addresses').then(r=>r.json()).then(addrs => {
+    if (!addrs.find(a => a.address === addr)) {
+      fetch('/api/addresses', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ label:'Delivery', address: addr }) });
     }
-    if(o.status==='cancelled'){
-      clearInterval(trackerInterval);trackerInterval=null;
-      showToast('Order was cancelled.');
-      setTimeout(closeTracker,2000);
-    }
-  }catch(e){}
+  }).catch(()=>{});
 }
 
-function updateTrackerSteps(status){
-  const step=STATUS_STEPS[status]||0;
-  for(let i=0;i<=4;i++)document.getElementById('ts'+i).classList.toggle('done',i<=step);
-  document.getElementById('trackFill').style.width=STATUS_FILL[status]||'0%';
+// ── ORDER TRACKER ─────────────────────────────────────────────────────────
+function openTracker(oid) {
+  trackingOrderId = oid;
+  renderTracker({});
+  openDrawer('trackerDrawer');
+  pollOrder();
+  if (trackerPollInterval) clearInterval(trackerPollInterval);
+  trackerPollInterval = setInterval(pollOrder, 5000);
 }
 
-// MY ORDERS
-async function openOrders(){
-  document.getElementById('ordersDrawer').classList.add('open');
-  document.getElementById('ordersBody').innerHTML='<div class="loading-state"><div class="spinner"></div></div>';
-  try{
-    const r=await fetch('/api/orders');
-    const orders=await r.json();
-    renderOrders(orders);
-  }catch(e){
-    document.getElementById('ordersBody').innerHTML='<div class="loading-state">Failed to load orders.</div>';
+function closeTracker() {
+  closeDrawer('trackerDrawer');
+  if (trackerPollInterval) { clearInterval(trackerPollInterval); trackerPollInterval = null; }
+}
+
+async function pollOrder() {
+  if (!trackingOrderId) return;
+  const r = await fetch(`/api/orders/${trackingOrderId}`);
+  if (!r.ok) return;
+  const o = await r.json();
+  renderTracker(o);
+  if (o.status === 'delivered') {
+    if (trackerPollInterval) { clearInterval(trackerPollInterval); trackerPollInterval = null; }
+    showNotification('🎉 Delivered!', 'Your order has arrived!');
   }
 }
 
-function closeOrders(){document.getElementById('ordersDrawer').classList.remove('open');}
+function renderTracker(o) {
+  const steps = [
+    { key: 'placed',     icon: '📋', title: 'Order Placed',      desc: 'Your order has been received' },
+    { key: 'accepted',   icon: '✅', title: 'Accepted',          desc: 'The restaurant accepted your order' },
+    { key: 'preparing',  icon: '👨‍🍳', title: 'Preparing',        desc: 'Your food is being prepared' },
+    { key: 'picked_up',  icon: '🏍️', title: 'On the way',        desc: 'Driver picked up your order' },
+    { key: 'delivered',  icon: '🎉', title: 'Delivered',         desc: 'Your order has arrived!' },
+  ];
+  const statusOrder = ['placed','accepted','preparing','picked_up','delivered'];
+  const currentIdx = statusOrder.indexOf(o.status || 'placed');
 
-function renderOrders(orders){
-  const body=document.getElementById('ordersBody');
-  if(!orders.length){body.innerHTML='<div class="loading-state">No orders yet.</div>';return;}
-  body.innerHTML=orders.map(o=>{
-    let items=[];try{items=JSON.parse(o.items_json||'[]');}catch(e){}
-    const itemStr=items.map(i=>(i.emoji||'📦')+' '+i.name).slice(0,2).join(', ')+(items.length>2?'...':'');
-    const isActive=!['delivered','cancelled'].includes(o.status);
-    const canRate=o.status==='delivered';
-    const date=o.created_at?new Date((o.created_at||'').replace(' ','T')).toLocaleString():'';
-    return `
-      <div class="order-item" onclick="${isActive?`reopenTracker(${o.id},${o.total})`:''}">
-        <div class="order-item-top">
-          <span class="order-item-id">#${o.id}</span>
-          <span class="order-item-time">${date}</span>
-        </div>
-        <div class="order-item-store">${o.store_name||'Store'}</div>
-        <div class="order-item-items">${itemStr}</div>
-        <div class="order-item-footer">
-          <span class="order-item-total">£${Number(o.total||0).toFixed(2)}</span>
-          <div style="display:flex;gap:6px;align-items:center">
-            <span class="status-pill sp-${o.status}">${(o.status||'').replace('_',' ')}</span>
-            ${canRate?`<button class="order-item-rate" onclick="event.stopPropagation();closeOrders();openRate(${o.id})">⭐ Rate</button>`:''}
-          </div>
-        </div>
-      </div>`;
+  // ETA countdown
+  const created = o.created_at ? new Date(o.created_at.replace(' ','T')+'Z') : new Date();
+  const etaMins = 30;
+  const eta = new Date(created.getTime() + etaMins * 60000);
+  const nowMs = Date.now();
+  const minsLeft = Math.max(0, Math.round((eta - nowMs) / 60000));
+  const countdownHTML = o.status !== 'delivered' && o.status !== 'cancelled' ? `
+    <div class="countdown-bar">
+      <div>
+        <div style="font-size:12px;color:#666">Estimated arrival</div>
+        <div class="countdown-time">${minsLeft} min</div>
+      </div>
+      <div style="font-size:28px">⏱</div>
+    </div>` : '';
+
+  const stepsHTML = steps.map((s, i) => {
+    const done = i < currentIdx;
+    const active = i === currentIdx;
+    return `<div class="tracker-step">
+      <div class="step-circle ${done?'done':''} ${active?'active':''}">${done?'✓':s.icon}</div>
+      <div class="step-info"><div class="step-title" style="color:${active?'#06c167':done?'#333':'#aaa'}">${s.title}</div><div class="step-desc">${s.desc}</div></div>
+    </div>`;
   }).join('');
+
+  const driverHTML = o.driver_name ? `
+    <div style="margin:0 16px 12px;background:#f5f5f5;border-radius:12px;padding:12px;display:flex;align-items:center;gap:10px">
+      <span style="font-size:32px">🏍️</span>
+      <div><div style="font-weight:600">${o.driver_name}</div><div style="font-size:13px;color:#888">${o.driver_phone||''}</div></div>
+      ${o.driver_phone?`<a href="tel:${o.driver_phone}" style="margin-left:auto;background:#06c167;color:#fff;padding:8px 14px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600">📞 Call</a>`:''}
+    </div>` : '';
+
+  const mapHTML = (o.status === 'picked_up' && o.driver_lat) ? `<div class="live-map" id="trackerMap"></div>` : '';
+
+  const chatBtn = o.status && o.status !== 'delivered' && o.status !== 'cancelled' ?
+    `<button class="btn-outline" style="margin:8px 16px" onclick="openChat(${o.id||trackingOrderId})">💬 Chat with store</button>` : '';
+
+  const rateBtn = o.status === 'delivered' ?
+    `<button class="btn-primary" style="margin:8px 16px" onclick="openRating(${o.id||trackingOrderId})">⭐ Rate your order</button>` : '';
+
+  document.getElementById('trackerContent').innerHTML = `
+    ${countdownHTML}
+    ${driverHTML}
+    ${mapHTML}
+    <div class="tracker-steps">${stepsHTML}</div>
+    ${chatBtn}
+    ${rateBtn}
+    <div style="padding:8px 16px 24px">
+      <div style="font-size:13px;color:#888;margin-bottom:8px">Order #${o.id||trackingOrderId} · ${o.store_name||''}</div>
+      ${o.items_json ? renderOrderItems(o.items_json) : ''}
+    </div>`;
+
+  if (mapHTML && o.driver_lat) {
+    setTimeout(() => initTrackerMap(o.driver_lat, o.driver_lng), 100);
+  }
 }
 
-function reopenTracker(orderId,total){closeOrders();openTracker(orderId,total);}
-
-// RATING
-function openRate(orderId){
-  ratingOrderId=orderId;storeRating=5;driverRating=5;
-  updateStars('store',5);updateStars('driver',5);
-  document.getElementById('rateComment').value='';
-  document.getElementById('rateOverlay').classList.add('open');
-}
-function closeRate(){document.getElementById('rateOverlay').classList.remove('open');}
-function setRating(type,val){
-  if(type==='store')storeRating=val;else driverRating=val;
-  updateStars(type,val);
-}
-function updateStars(type,val){
-  document.getElementById(type+'Stars').querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('on',i<val));
-}
-async function submitRate(){
-  try{
-    await fetch('/api/orders/'+ratingOrderId+'/review',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({store_rating:storeRating,driver_rating:driverRating,comment:document.getElementById('rateComment').value})
-    });
-    showToast('Thanks for your review!');
-  }catch(e){showToast('Could not submit review.');}
-  closeRate();
+function initTrackerMap(lat, lng) {
+  if (window._trackerMap) { window._trackerMap.setView([lat,lng],15); return; }
+  const L = window.L;
+  if (!L) {
+    const script = document.createElement('script');
+    script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    script.onload = () => _buildMap(lat, lng);
+    document.head.appendChild(script);
+    const css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+    document.head.appendChild(css);
+  } else { _buildMap(lat, lng); }
 }
 
-// TOAST
-function showToast(msg,dur=3000){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),dur);
+function _buildMap(lat, lng) {
+  const el = document.getElementById('trackerMap');
+  if (!el) return;
+  const map = L.map(el).setView([lat,lng],15);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+  const marker = L.marker([lat,lng]).addTo(map).bindPopup('🏍️ Driver').openPopup();
+  window._trackerMap = map;
+  window._trackerMarker = marker;
 }
 
-applyLang();
-loadStores();
+function renderOrderItems(json) {
+  try {
+    const items = typeof json === 'string' ? JSON.parse(json) : json;
+    return items.map(i => `<div style="font-size:14px;color:#555;padding:2px 0">${i.emoji||'📦'} ${i.name} ×${i.qty}</div>`).join('');
+  } catch(e) { return ''; }
+}
+
+// ── MY ORDERS ─────────────────────────────────────────────────────────────
+async function loadOrders() {
+  const r = await fetch('/api/orders');
+  const orders = await r.json();
+  const el = document.getElementById('ordersList');
+  if (!orders.length) { el.innerHTML = '<div class="empty-state"><div class="es-icon">🛍️</div><p>No orders yet. Start ordering!</p></div>'; return; }
+  el.innerHTML = orders.map(o => renderOrderCard(o)).join('');
+}
+
+function renderOrderCard(o) {
+  const items = (() => { try { const a = typeof o.items_json==='string'?JSON.parse(o.items_json):o.items_json; return a.map(i=>`${i.emoji||''}${i.name} ×${i.qty}`).join(', '); } catch(e){ return ''; } })();
+  const statusClass = 'status-' + (o.status || 'placed');
+  const trackBtn = ['placed','accepted','preparing','picked_up'].includes(o.status)
+    ? `<button class="btn-sm btn-sm-green" onclick="openTracker(${o.id})">Track 🚀</button>` : '';
+  const rateBtn = o.status === 'delivered'
+    ? `<button class="btn-sm btn-sm-outline" onclick="openRating(${o.id})">Rate ⭐</button>` : '';
+  const reorderBtn = `<button class="btn-sm btn-sm-outline" onclick="reorder(${o.id})">Reorder 🔄</button>`;
+  const chatBtn = ['placed','accepted','preparing','picked_up'].includes(o.status)
+    ? `<button class="btn-sm btn-sm-outline" onclick="openChat(${o.id})">Chat 💬</button>` : '';
+  return `<div class="order-card">
+    <div class="order-card-top">
+      <div class="order-store">${o.store_name||'Order'}</div>
+      <span class="order-status-chip ${statusClass}">${statusLabel(o.status)}</span>
+    </div>
+    <div class="order-items">${items}</div>
+    <div class="order-meta">
+      <span>£${Number(o.total||0).toFixed(2)}</span>
+      <span style="color:#aaa">${timeAgo(o.created_at)}</span>
+    </div>
+    <div class="order-actions">${trackBtn}${rateBtn}${reorderBtn}${chatBtn}</div>
+  </div>`;
+}
+
+function statusLabel(s) {
+  return {placed:'Placed',accepted:'Accepted',preparing:'Preparing',picked_up:'On the way',delivered:'Delivered',cancelled:'Cancelled'}[s] || s;
+}
+
+async function reorder(oid) {
+  const r = await fetch(`/api/orders/${oid}`);
+  if (!r.ok) return;
+  const o = await r.json();
+  let items;
+  try { items = typeof o.items_json==='string' ? JSON.parse(o.items_json) : o.items_json; } catch(e) { return; }
+  if (!o.store_id) return;
+  // Get store info
+  const sr = await fetch('/api/stores');
+  const all = await sr.json();
+  currentStore = all.find(s => s.id === o.store_id) || null;
+  currentStoreId = o.store_id;
+  cart = [];
+  items.forEach(i => cart.push({ ...i, store_id: o.store_id }));
+  updateCartUI();
+  toast('🔄 Cart restored from previous order');
+  openCheckout();
+}
+
+// ── RATING ────────────────────────────────────────────────────────────────
+function openRating(oid) {
+  ratingOrderId = oid; storeRating = 5; driverRating = 5;
+  renderRating();
+  openDrawer('ratingDrawer');
+}
+
+function closeRating() { closeDrawer('ratingDrawer'); }
+
+function renderRating() {
+  document.getElementById('ratingContent').innerHTML = `
+    <div class="checkout-section">
+      <h3>🏪 Restaurant rating</h3>
+      <div class="stars" id="storeStars">${[1,2,3,4,5].map(i=>`<span class="star ${i<=storeRating?'lit':''}" onclick="setStoreRating(${i})">⭐</span>`).join('')}</div>
+      <h3 style="margin-top:16px">🏍️ Driver rating</h3>
+      <div class="stars" id="driverStars">${[1,2,3,4,5].map(i=>`<span class="star ${i<=driverRating?'lit':''}" onclick="setDriverRating(${i})">⭐</span>`).join('')}</div>
+      <h3 style="margin-top:16px">Leave a comment</h3>
+      <textarea class="input-field" id="ratingComment" rows="3" placeholder="How was your experience?"></textarea>
+      <button class="btn-primary" onclick="submitRating()">Submit Review</button>
+    </div>`;
+}
+
+function setStoreRating(n) { storeRating = n; renderRating(); }
+function setDriverRating(n) { driverRating = n; renderRating(); }
+
+async function submitRating() {
+  const comment = document.getElementById('ratingComment').value;
+  await fetch(`/api/orders/${ratingOrderId}/review`, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ store_rating: storeRating, driver_rating: driverRating, comment })
+  });
+  closeRating();
+  toast('⭐ Thanks for your review!');
+}
+
+// ── CHAT ─────────────────────────────────────────────────────────────────
+function openChat(oid) {
+  chatOrderId = oid;
+  document.getElementById('chatContent').innerHTML = `
+    <div class="chat-box" id="chatBox"></div>
+    <div class="chat-input-row">
+      <input class="chat-input" id="chatMsg" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendChat()">
+      <button class="chat-send" onclick="sendChat()">➤</button>
+    </div>`;
+  openDrawer('chatDrawer');
+  loadChat();
+  if (chatPollInterval) clearInterval(chatPollInterval);
+  chatPollInterval = setInterval(loadChat, 5000);
+}
+
+async function loadChat() {
+  if (!chatOrderId) return;
+  const r = await fetch(`/api/chat/${chatOrderId}`);
+  const msgs = await r.json();
+  const box = document.getElementById('chatBox');
+  if (!box) return;
+  box.innerHTML = msgs.map(m => `
+    <div>
+      <div class="chat-msg ${m.sender_role==='customer'?'mine':'theirs'}">${m.message}</div>
+      <div class="chat-meta" style="text-align:${m.sender_role==='customer'?'right':'left'};margin-bottom:4px">${m.sender_name||m.sender_role} · ${timeAgo(m.created_at)}</div>
+    </div>`).join('');
+  box.scrollTop = box.scrollHeight;
+}
+
+async function sendChat() {
+  const inp = document.getElementById('chatMsg');
+  const msg = inp.value.trim();
+  if (!msg || !chatOrderId) return;
+  inp.value = '';
+  await fetch(`/api/chat/${chatOrderId}`, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ message: msg })
+  });
+  loadChat();
+}
+
+// ── ADDRESS PICKER ─────────────────────────────────────────────────────────
+let pickingAddrForCheckout = false;
+function openAddrPicker(forCheckout = false) {
+  pickingAddrForCheckout = forCheckout;
+  renderAddrPicker();
+  openDrawer('addrDrawer');
+}
+
+async function renderAddrPicker() {
+  const addrs = await (await fetch('/api/addresses')).json();
+  const savedHTML = addrs.length ? addrs.map(a => `
+    <div class="addr-suggestion" onclick="selectAddress('${a.address.replace(/'/g,"\\'")}')">
+      <div style="font-weight:600">${a.label}</div>
+      <div style="color:#888;font-size:13px">${a.address}</div>
+    </div>`).join('') : '';
+
+  document.getElementById('addrDrawerContent').innerHTML = `
+    <div>
+      <label style="font-size:13px;color:#888">Search for address</label>
+      <input class="input-field" id="addrSearch" placeholder="Start typing your address..." oninput="addrAutoComplete(this.value)">
+      <div id="addrSuggestions" class="addr-suggestions" style="display:none"></div>
+    </div>
+    ${addrs.length ? `<div style="margin-top:16px"><h4 style="margin-bottom:8px">💾 Saved addresses</h4>${savedHTML}</div>` : ''}
+    <button class="btn-primary" style="margin-top:16px" onclick="useCurrentLocation()">📍 Use my location</button>`;
+}
+
+async function addrAutoComplete(q) {
+  if (q.length < 3) { document.getElementById('addrSuggestions').style.display='none'; return; }
+  clearTimeout(addrSuggestTimeout);
+  addrSuggestTimeout = setTimeout(async () => {
+    try {
+      const r = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=5&countrycodes=gb`, { headers:{'Accept-Language':'en'} });
+      const data = await r.json();
+      const box = document.getElementById('addrSuggestions');
+      if (!data.length) { box.style.display='none'; return; }
+      box.innerHTML = data.map(d => `<div class="addr-suggestion" onclick="selectAddress('${d.display_name.replace(/'/g,"\\'")}')">${d.display_name}</div>`).join('');
+      box.style.display = 'block';
+    } catch(e) {}
+  }, 500);
+}
+
+function selectAddress(addr) {
+  currentAddress = addr;
+  localStorage.setItem('sw_addr', addr);
+  document.getElementById('currentAddrLabel').textContent = addr;
+  if (pickingAddrForCheckout && document.getElementById('addrInput')) {
+    document.getElementById('addrInput').value = addr;
+    if (document.getElementById('coAddr')) document.getElementById('coAddr').textContent = addr;
+  }
+  closeDrawer('addrDrawer');
+  saveCurrAddrIfNew(addr);
+}
+
+function useCurrentLocation() {
+  if (!navigator.geolocation) { toast('Geolocation not supported'); return; }
+  navigator.geolocation.getCurrentPosition(async pos => {
+    const { latitude: lat, longitude: lng } = pos.coords;
+    try {
+      const r = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+      const d = await r.json();
+      selectAddress(d.display_name);
+    } catch(e) {
+      selectAddress(`${lat.toFixed(4)}, ${lng.toFixed(4)}`);
+    }
+  }, () => toast('Location access denied'));
+}
+
+// ── SAVED ADDRESSES ────────────────────────────────────────────────────────
+async function openSavedAddresses() {
+  const addrs = await (await fetch('/api/addresses')).json();
+  document.getElementById('savedAddrContent').innerHTML = `
+    ${addrs.map(a => `<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f0f0f0">
+      <span style="font-size:20px">📍</span>
+      <div style="flex:1"><div style="font-weight:600">${a.label}</div><div style="font-size:13px;color:#888">${a.address}</div></div>
+      <button class="btn-sm btn-sm-outline" onclick="deleteAddr(${a.id})">🗑️</button>
+    </div>`).join('')}
+    <div style="margin-top:16px">
+      <h4 style="margin-bottom:8px">Add address</h4>
+      <input class="input-field" id="newAddrLabel" placeholder="Label (Home, Work...)" value="Home">
+      <input class="input-field" id="newAddrText" placeholder="Full address">
+      <button class="btn-primary" onclick="saveNewAddr()">Save Address</button>
+    </div>`;
+  openDrawer('savedAddrDrawer');
+}
+
+async function deleteAddr(id) {
+  await fetch('/api/addresses/' + id, { method:'DELETE' });
+  openSavedAddresses();
+}
+
+async function saveNewAddr() {
+  const label = document.getElementById('newAddrLabel').value.trim();
+  const address = document.getElementById('newAddrText').value.trim();
+  if (!address) { toast('Enter an address'); return; }
+  await fetch('/api/addresses', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ label, address }) });
+  toast('📍 Address saved');
+  openSavedAddresses();
+}
+
+// ── PROMO WALLET ───────────────────────────────────────────────────────────
+function openPromoWallet() {
+  document.getElementById('promoContent').innerHTML = `
+    <div style="background:#f0fdf4;border-radius:12px;padding:14px;margin-bottom:12px">
+      <div style="font-weight:700;margin-bottom:4px">🎉 WELCOME10</div>
+      <div style="font-size:13px;color:#666">10% off your first order</div>
+    </div>
+    <div style="background:#f0fdf4;border-radius:12px;padding:14px;margin-bottom:12px">
+      <div style="font-weight:700;margin-bottom:4px">💰 SAVE5</div>
+      <div style="font-size:13px;color:#666">£5 off orders over £15</div>
+    </div>
+    <div style="margin-top:16px">
+      <h4 style="margin-bottom:8px">Enter a code</h4>
+      <div class="promo-row">
+        <input class="promo-input" id="walletPromoInput" placeholder="Your promo code">
+        <button class="btn-sm btn-sm-green" onclick="toast('Add to cart to apply!')">Apply</button>
+      </div>
+    </div>`;
+  openDrawer('promoDrawer');
+}
+
+// ── EDIT PROFILE ───────────────────────────────────────────────────────────
+async function openEditProfile() {
+  const r = await fetch('/api/profile');
+  const u = await r.json();
+  document.getElementById('editProfileContent').innerHTML = `
+    <input class="input-field" id="ep_name" placeholder="Full name" value="${u.name||''}">
+    <input class="input-field" id="ep_phone" placeholder="Phone number" value="${u.phone||''}">
+    <input class="input-field" id="ep_address" placeholder="Default address" value="${u.address||''}">
+    <h4 style="margin:12px 0 8px">Change password</h4>
+    <input class="input-field" type="password" id="ep_curr" placeholder="Current password">
+    <input class="input-field" type="password" id="ep_new" placeholder="New password">
+    <button class="btn-primary" onclick="saveProfile()">Save Changes</button>`;
+  openDrawer('editProfileDrawer');
+}
+
+async function saveProfile() {
+  const body = {
+    name: document.getElementById('ep_name').value,
+    phone: document.getElementById('ep_phone').value,
+    address: document.getElementById('ep_address').value,
+  };
+  const cp = document.getElementById('ep_curr').value;
+  const np = document.getElementById('ep_new').value;
+  if (np) { body.current_password = cp; body.new_password = np; }
+  const r = await fetch('/api/profile', { method:'PATCH', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+  const d = await r.json();
+  if (d.error) { toast('❌ ' + d.error); return; }
+  toast('✅ Profile updated');
+  closeDrawer('editProfileDrawer');
+  loadProfile();
+}
+
+// ── PROFILE PAGE ───────────────────────────────────────────────────────────
+async function loadProfile() {
+  const r = await fetch('/api/profile');
+  if (!r.ok) return;
+  const u = await r.json();
+  document.getElementById('profileName').textContent = u.name || 'Customer';
+  document.getElementById('profileEmail').textContent = u.email || '';
+  document.getElementById('loyaltyPts').textContent = u.loyalty_points || 0;
+}
+
+// ── NOTIFICATIONS ─────────────────────────────────────────────────────────
+async function requestNotifPerms() {
+  if (!('Notification' in window)) { toast('Notifications not supported'); return; }
+  const perm = await Notification.requestPermission();
+  if (perm === 'granted') toast('🔔 Notifications enabled!');
+  else toast('Notifications blocked');
+}
+
+function showNotification(title, body) {
+  if (Notification.permission === 'granted') {
+    new Notification(title, { body, icon: '/static/icon.png' });
+  }
+}
+
+// ── DRAWER HELPERS ────────────────────────────────────────────────────────
+function openDrawer(id) {
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById(id).classList.add('open');
+}
+function closeDrawer(id) {
+  document.getElementById(id).classList.remove('open');
+  const anyOpen = document.querySelector('.drawer.open');
+  if (!anyOpen) document.getElementById('overlay').classList.remove('open');
+  if (id === 'chatDrawer' && chatPollInterval) { clearInterval(chatPollInterval); chatPollInterval = null; }
+}
+function closeAllDrawers() {
+  document.querySelectorAll('.drawer').forEach(d => d.classList.remove('open'));
+  document.getElementById('overlay').classList.remove('open');
+}
+
+// ── UTILS ─────────────────────────────────────────────────────────────────
+function timeAgo(ts) {
+  if (!ts) return '';
+  const d = new Date(ts.replace ? ts.replace(' ','T')+'Z' : ts);
+  const s = Math.floor((Date.now() - d) / 1000);
+  if (s < 60) return 'just now';
+  if (s < 3600) return Math.floor(s/60) + 'm ago';
+  if (s < 86400) return Math.floor(s/3600) + 'h ago';
+  return Math.floor(s/86400) + 'd ago';
+}
+
+function copyPromo(code) {
+  navigator.clipboard.writeText(code).catch(()=>{});
+  toast('📋 Code copied: ' + code);
+}
 </script>
 </body>
 </html>
