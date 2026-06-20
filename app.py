@@ -777,7 +777,7 @@ def api_promo():
     conn = get_db()
     store = conn.execute("SELECT id FROM stores WHERE manager_id=?", (session['uid'],)).fetchone()
     if request.method == 'GET':
-        rows = conn.execute("SELECT * FROM promo_codes WHERE created_by=? OR store_id=? ORDER BY created_at DESC",
+        rows = conn.execute("SELECT * FROM promo_codes WHERE (created_by IS NULL OR created_by=? OR store_id=?) ORDER BY created_at DESC",
                             (session['uid'], store['id'] if store else -1)).fetchall()
         conn.close()
         return jsonify([dict(r) for r in rows])
